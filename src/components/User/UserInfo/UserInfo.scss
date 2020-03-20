@@ -1,65 +1,31 @@
-.name {
+.jumbotron {
+    width: 100%;
+    height: 10px;
+}
+
+.rightPart {
+    margin-top: auto;
+    margin-bottom: auto;
     text-align: center;
 }
 
 .avatar {
-    width: 70%;
-    height: auto;
+    align-self: center;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
 }
 
-.task-name {
-    font-size: 62px;
-    font-family: Constantia, serif;
-    height: 100px
+.person-name {
+    font-size: 20px;
 }
 
-.side-images {
-    display: flex;
+.person-description {
+    font-size: 17px;
 }
 
-.task-image-wrapper {
-    width: 20%;
-}
-
-.task-image-wrapper img {
-    width: 100%;
-}
-
-.task-info {
+input {
+    font-size: 18px;
     text-align: center;
-}
-
-.task-participants {
-    font-family: Constantia, serif;
-    height: 50px
-}
-
-.task-organizer {
-    font-family: Constantia, serif;
-    height: 50px
-}
-
-.participate-button {
-    text-align: center;
-}
-
-textarea {
-    text-align: justify;
     border: none;
-    overflow: hidden;
-    font-weight: 400;
-    font-size: 16px;
-    outline: none;
-    box-shadow: none;
-}
-
-.button {
-    background-color: limegreen;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
 }
