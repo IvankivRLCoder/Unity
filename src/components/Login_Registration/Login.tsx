@@ -10,19 +10,19 @@ function Login() {
             <div className="signin-form col-md-6 col-xs-12">
                 <h2 className="form-title">Login</h2>
                 <form method="POST" className="register-form" id="login-form">
-                    <div className="form-group">
-                        <label><i className="fas fa-user material-icons-name"></i></label>
+                    <div className="form-group form-div">
+                        <label className="label-icon"><i className="fas fa-user material-icons-name"></i></label>
                         <input type="text" className="form" id="your_name" placeholder="Your Name"/>
                     </div>
-                    <div className="form-group">
-                        <label><i className="fas fa-lock"></i></label>
+                    <div className="form-group form-div">
+                        <label className="label-icon"><i className="fas fa-lock"></i></label>
                         <input type="password" className="form" id="your_pass" placeholder="Password"/>
                     </div>
-                    <div className="form-group  remmeber">
+                    <div className="form-group form-div remmeber">
                         <input type="checkbox" id="remember-me" className="agree-term" />
-                        <label className="label-agree-term">Remember me</label>
+                        <label className="label-icon label-agree-term">Remember me</label>
                     </div>
-                    <div className="form-group form-button">
+                    <div className="form-group form-div form-button">
                         <input type="submit" id="signin" className="form-submit" value="Log in"/>
                     </div>
                 </form>

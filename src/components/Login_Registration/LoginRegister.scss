@@ -85,7 +85,7 @@ figure {
     text-decoration: underline;
 }
 
-.form-group {
+.form-div {
     position: relative;
     overflow: hidden;
     &:last-child {
@@ -117,7 +117,7 @@ figure {
     margin-left:5%;
 }
 
-label {
+.label-icon {
     position: absolute;
     top: 50%;
     color: #222;
@@ -168,6 +168,16 @@ label {
                 transition-duration: 0.3s;
                 transition-property: transform;
                 transition-timing-function: ease-out;
+
+                &.fa-facebook-f {
+                    background: #3b5998;
+                }
+                &.fa-twitter {
+                    background: #1da0f2;
+                }
+                &.fa-google {
+                    background: #e72734;
+                }
             }
         }
         &:hover {
@@ -179,12 +189,4 @@ label {
         }
     }
 }
-.fa-facebook-f {
-    background: #3b5998;
-}
-.fa-twitter {
-    background: #1da0f2;
-}
-.fa-google {
-    background: #e72734;
-}
+

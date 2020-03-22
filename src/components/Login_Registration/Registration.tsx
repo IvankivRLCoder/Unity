@@ -10,23 +10,23 @@ function Login() {
             <div className="signin-form col-md-6 col-xs-12">
                 <h2 className="form-title">Sign Up</h2>
                 <form method="POST" className="register-form" id="login-form">
-                    <div className="form-group">
-                        <label><i className="fas fa-user material-icons-name"></i></label>
+                    <div className="form-group form-div">
+                        <label className="label-icon"><i className="fas fa-user material-icons-name"></i></label>
                         <input type="text" className="form" id="your_name" placeholder="Your Name"/>
                     </div>
-                    <div className="form-group">
-                        <label className="email"><i className="fas fa-envelope"></i></label>
+                    <div className="form-group form-div">
+                        <label className="label-icon email"><i className="fas fa-envelope"></i></label>
                         <input type="email" className="form" placeholder="Email"/>
                     </div>
-                    <div className="form-group">
-                        <label><i className="fas fa-lock"></i></label>
+                    <div className="form-group form-div">
+                        <label className="label-icon"><i className="fas fa-lock"></i></label>
                         <input type="password" className="form" placeholder="Password"/>
                     </div>
-                    <div className="form-group">
-                        <label><i className="fas fa-lock"></i></label>
+                    <div className="form-group form-div">
+                        <label className="label-icon"><i className="fas fa-lock"></i></label>
                         <input type="password" className="form" placeholder="Confirm password"/>
                     </div>
-                    <div className="form-group form-button">
+                    <div className="form-group form-div form-button">
                         <input type="submit" id="signin" className="form-submit" value="Register"/>
                     </div>
                 </form>
