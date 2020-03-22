@@ -1,14 +1,14 @@
 import React from 'react';
 import Task from './Task/Task';
-import Navbar from './Navbar/Navbar';
+import Sidebar from './Sidebar/Sidebar';
 
-function Start() {
+function Main() {
     return (
         <div id="user_page">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-3 ">
-                        <Navbar/>
+                        <Sidebar/>
                     </div>
                     <div className="col-md-9 col-sm-12">
                         <Task/>
@@ -23,4 +23,4 @@ function Start() {
     );
 }
 
-export default Start;
+export default Main;
