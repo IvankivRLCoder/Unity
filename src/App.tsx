@@ -12,9 +12,6 @@ import './App.scss';
 function App() {
   return (
     <Layout>
-        <Route path="/" exact>
-            <h1>Hello</h1>
-        </Route>
         <Route path="/user" exact component={User} />
         <Route path="/login" exact component={Login} />
         <Route path="/registration" exact component={Registration} />    
