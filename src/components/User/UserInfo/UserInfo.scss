@@ -1,0 +1,23 @@
+.user-info-block {
+  background: white;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  padding: 30px;
+  font-size: 18px;
+  text-align: center;
+
+  .user-info-img {
+    width: 40%;
+    border-radius: 100%;
+  }
+
+  .user-name {
+    margin-top: 30px;
+    font-size: 30px;
+  }
+
+  .user-description {
+    margin-top: 15px;
+  }
+
+}

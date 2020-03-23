@@ -7,7 +7,6 @@ function Tree() {
 
     return (
         <div className="tree-block">
-
             <div className="tree-img">
                 <img className="tree-img-colorful" src={tree} alt="Tree" style={{height: '100%'}}/>
                 <img className="tree-img-grayscale" src={tree} alt="Tree"/>

@@ -6,9 +6,9 @@ function Footer() {
         <footer>
             <div className="container-fluid">
                 <ul className="footer_nav">
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Privacy policy</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/privacy">Privacy policy</a></li>
+                    <li><a href="/faq">FAQ</a></li>
                 </ul>
                 <p>&copy; All rights reserved</p>
             </div>

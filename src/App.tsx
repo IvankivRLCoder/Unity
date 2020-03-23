@@ -4,6 +4,7 @@ import User from './components/User/User';
 import Login from './components/Login_Registration/Login';
 import Registration from './components/Login_Registration/Registration';
 import Main from './components/StartPage/Main';
+import Task from './components/Task/Task';
 
 import Layout from './hoc/Layout/Layout';
 
@@ -16,9 +17,9 @@ function App() {
         <Route path="/login" exact component={Login} />
         <Route path="/registration" exact component={Registration} />    
         <Route path="/" exact component={Main} />
+        <Route path="/task" exact component={Task}/>
     </Layout>
-
-  );
+    );
 }
 
 export default App;
