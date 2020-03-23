@@ -12,22 +12,23 @@
   align-items: center;
   justify-content: center;
   padding: 15px 15px;
+
+  figure {
+    text-align: center;
+    margin: 0;
+  }
 }
 
 .form-title {
   margin-bottom: 33px;
   line-height: 1.66;
+  outline: none;
   margin: 0;
   padding: 0;
   font-weight: bold;
   color: #222;
-  font-family: Poppins;
+  font-family: Roboto;
   font-size: 36px;
-}
-
-figure {
-  text-align: center;
-  margin: 0;
 }
 
 .form-submit {
@@ -44,7 +45,6 @@ figure {
   &:hover {
     background: darken(#6dabe4, 10%);
   }
-
 }
 
 .image {
@@ -57,12 +57,19 @@ figure {
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   font-size: 18px;
   color: #222;
-  background: #f8f8f8;
-  font-weight: 400;
-  font-family: Poppins;
+  font-family: Roboto;
+}
+
+.main {
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  background: #fff;
+  box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
 }
 
 #signin {
@@ -80,6 +87,15 @@ figure {
   text-decoration: underline;
 }
 
+.form-div {
+  position: relative;
+  overflow: hidden;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+}
+
 .remmeber {
   text-align: left;
 }
@@ -87,16 +103,16 @@ figure {
 .form {
   width: 90%;
   border: none;
+  outline: none;
   border-bottom: 1px solid #999;
   padding: 6px 30px;
-  font-family: Poppins;
-  font: 400 13px Arial;
+  font-family: Roboto;
+  font: 400 13px Roboto;
   box-sizing: border-box;
 
   &:focus {
     border-bottom: 1px solid #222;
   }
-
 }
 
 .agree-term {
@@ -104,11 +120,11 @@ figure {
   margin-left: 5%;
 }
 
-label {
+.label-icon {
   position: absolute;
   top: 50%;
   color: #222;
-  font-family: Poppins;
+  font-family: Roboto;
   transform: translateY(-50%);
 }
 
@@ -160,8 +176,19 @@ label {
         transition-duration: 0.3s;
         transition-property: transform;
         transition-timing-function: ease-out;
-      }
 
+        &.fa-facebook-f {
+          background: #3b5998;
+        }
+
+        &.fa-twitter {
+          background: #1da0f2;
+        }
+
+        &.fa-google {
+          background: #e72734;
+        }
+      }
     }
 
     &:hover {
@@ -169,23 +196,8 @@ label {
         i {
           transform: scale(1.3) translateZ(0);
         }
-
       }
-
     }
-
   }
-
 }
 
-.zmdi-facebook {
-  background: #3b5998;
-}
-
-.zmdi-twitter {
-  background: #1da0f2;
-}
-
-.zmdi-google {
-  background: #e72734;
-}
