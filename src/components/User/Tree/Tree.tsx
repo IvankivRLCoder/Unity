@@ -12,23 +12,16 @@ function Tree() {
                 <img className="tree-img-grayscale" src={tree} alt="Tree"/>
             </div>
             <div className="container-fluid achievements">
-                <div className="row achievement-row">
-                    <div className="achievement achievement-left col-3">
-                        <Achievement/>
-                        <Achievement/>
-                        <Achievement/>
-                        <Achievement/>
-                        <Achievement/>
-                    </div>
-                    <div className="col-6"></div>
-                    <div className="achievement achievement-right col-3">
-                        <Achievement/>
-                        <Achievement/>
-                        <Achievement/>
-                        <Achievement/>
-                        <Achievement/>
-                    </div>
-                </div>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
+                <Achievement/>
             </div>
         </div>
 
