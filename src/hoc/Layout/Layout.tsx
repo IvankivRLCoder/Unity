@@ -9,9 +9,7 @@ class Layout extends Component {
             <div className="App">
                 <Header/>
                 <div className="content">
-                    <div className="container-fluid">
-                        {this.props.children}
-                    </div>
+                    {this.props.children}
                 </div>
                 <Footer/>
             </div>

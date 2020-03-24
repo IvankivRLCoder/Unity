@@ -11,8 +11,7 @@ function Login() {
                         <h2 className="form-title">Login</h2>
                         <form method="POST" className="register-form" id="login-form">
                             <div className="form-group form-div">
-                                <label className="label-icon"><i
-                                    className="fas fa-user material-icons-name"></i></label>
+                                <label className="label-icon"><i className="fas fa-user material-icons-name"></i></label>
                                 <input type="text" className="form" id="your_name" placeholder="Your Name"/>
                             </div>
                             <div className="form-group form-div">
@@ -36,8 +35,7 @@ function Login() {
                                 </li>
                             </ul>
                         </div>
-                        <span className="login-label">Not a member?</span><a href="/registration"
-                                                                             className="signin-image-link">Sign Up</a>
+                        <span className="login-label">Not a member?</span><a href="/registration" className="signin-image-link">Sign Up</a>
                     </div>
                     <div className="signin-image col-md-6 col-xs-12">
                         <figure><img src={photo} className="image" alt="sing in"/></figure>

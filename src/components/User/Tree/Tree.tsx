@@ -11,7 +11,7 @@ function Tree() {
                 <img className="tree-img-colorful" src={tree} alt="Tree" style={{height: '100%'}}/>
                 <img className="tree-img-grayscale" src={tree} alt="Tree"/>
             </div>
-            <div className="container-fluid achievements">
+            <div className="achievements">
                 <Achievement/>
                 <Achievement/>
                 <Achievement/>
