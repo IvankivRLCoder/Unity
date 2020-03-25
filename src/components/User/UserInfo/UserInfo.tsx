@@ -9,10 +9,7 @@ function UserInfo() {
             <h3 className="user-name">Nazar Koval</h3>
             <p className="user-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quisnostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecatcupidatat non proident, sunt in culpa qui officia deserunt mollit
-                anim id est laborum.
+                quisnostrud exercitation ullamco laboris nisi ut aliquip ex ea
             </p>
         </div>
     );
