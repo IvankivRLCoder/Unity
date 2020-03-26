@@ -16,16 +16,16 @@ import java.util.stream.Collectors;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping(value = "/register")
     public UserViewModel registration(UserViewModel userViewModel) {
-        return new UserViewModel(userService.addUser(new User(userViewModel)));
+        return new UserViewModel(userService.save(new User(userViewModel)));
     }
 
     @PostMapping(value = "/login")
     public String login(UserViewModel userViewModel) {
-        UserViewModel neededUser = userService.getUsers().stream().filter(user -> {
+        UserViewModel neededUser = userService.getAll().stream().filter(user -> {
             return user.getEmail().equals(userViewModel.getEmail()) &&
                     user.getPassword().equals(userViewModel.getPassword());
         }).map(UserViewModel::new).findFirst().orElse(null);
