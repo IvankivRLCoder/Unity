@@ -6,7 +6,7 @@
   border-radius: 10px;
   position: relative;
   overflow: hidden;
-  width: 100%;
+
 
   .task-img {
     img {
@@ -22,10 +22,10 @@
   }
   .priority{
     position: absolute;
-    top:-5% *1.41;
-    right:-5% *1.41;
-    width: 15% *1.41;
-    height: 15% *1.41;
+    top:0;
+    right:-15vw;
+    width: 30vw;
+    height:10vh;
     //border-bottom: #cda062 solid 3px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
     transform: rotate(45deg);

@@ -5,7 +5,7 @@ import './Task.scss';
 function Task(props: { priority: any; }) {
     return (
         <div className='main-task-block'>
-            <div className="priority" style={{background:props.priority}}/>
+            <div className="priority" />
             <div className='container' >
                 <div className='row'>
                     <div className='col-md-4  '>
