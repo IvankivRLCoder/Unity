@@ -7,16 +7,11 @@ function Task() {
         <div className="task-page">
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-12">
-                        <h1 className="task-name default-task-block">Task name</h1>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                        <div className="main-task-photo default-task-block">
-                            <img src={task} alt="Avatar"/>
-                        </div>
-                    </div>
-                    <div className="col-12 col-md-8">
-                        <div className="task-additional-info default-task-block">
+                    <div className="col-12 col-md-12 col-lg-5">
+                        <div className="task-photos default-task-block">
+                            <div className="main-task-photo">
+                                <img src={task} alt="Avatar"/>
+                            </div>
                             <div className="other-task-images">
                                 <div className="row">
                                     <div className="col">
@@ -44,9 +39,15 @@ function Task() {
                                             <img src={task} alt="Avatar"/>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div className="col-12 col-md-12 col-lg-7">
+                        <div className="task-additional-info default-task-block">
+                            <h1 className="task-name">
+                                Task name
+                            </h1>
                             <h3 className="task-participants">
                                 3/10 participants
                             </h3>
@@ -70,9 +71,10 @@ function Task() {
                                 consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum
                                 dolore
                                 eu fugiat nulla pariatur</p>
-                            <button className="btn participate-btn">Participate</button>
+                            <button className="btn participate-btn">
+                                Participate
+                            </button>
                         </div>
-
                     </div>
                 </div>
             </div>
