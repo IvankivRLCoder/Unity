@@ -1,70 +1,56 @@
 package com.example.model;
 
-import com.example.view.UserViewModel;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "userTable")
+@Table(name = "user")
 public class User {
 
     @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name= "increment", strategy= "increment")
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "user_name")
     private String name;
 
-    @Column
+    @Column(name = "surname")
     private String surname;
 
-    @Column
+    @Column(name = "email")
     private String email;
 
-    @Column
+    @Column(name = "password")
     private String password;
 
-    public String getName() {
-        return name;
-    }
+    @Column(name = "phone")
+    private String phoneNumber;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
 
-    public String getSurname() {
-        return surname;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "trust_level")
+    private TrustLevel trustLevel;
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
+    @Column(name = "is_blocked")
+    private boolean blocked;
 
-    public String getEmail() {
-        return email;
-    }
+    @OneToMany(mappedBy = "creator")
+    private Set<Task> createdTasks = new HashSet<>();
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @OneToMany(mappedBy = "user")
+    private Set<UserTask> participatedTasks = new HashSet<>();
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public User(){};
-
-    public User(UserViewModel userViewModel) {
-        setName(userViewModel.getName());
-        setSurname(userViewModel.getSurname());
-        setEmail(userViewModel.getEmail());
-        setPassword(userViewModel.getPassword());
-    }
 }
