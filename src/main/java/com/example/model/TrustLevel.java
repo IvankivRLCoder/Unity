@@ -29,4 +29,16 @@ public enum TrustLevel {
         }
     }
 
+    public static Boolean isTrustLevel(String name) {
+        Optional<TrustLevel> trustLevel = Arrays
+                .stream(values())
+                .filter(x -> x.getLevelOfTrust().equalsIgnoreCase(name))
+                .findFirst();
+        return trustLevel.isPresent();
+    }
+
+    public String getLevelOfTrust() {
+        return levelOfTrust;
+    }
+
 }

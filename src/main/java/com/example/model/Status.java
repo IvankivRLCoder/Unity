@@ -29,4 +29,17 @@ public enum Status {
             throw new UnsupportedOperationException("Unsupported gender: " + name);
         }
     }
+
+    public static Boolean isStatus(String name) {
+        Optional<Status> status = Arrays
+                .stream(values())
+                .filter(x -> x.getStatus().equalsIgnoreCase(name))
+                .findFirst();
+        return status.isPresent();
+    }
+
+    public String getStatus() {
+        return taskStatus;
+    }
+
 }

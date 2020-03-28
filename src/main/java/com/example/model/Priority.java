@@ -30,4 +30,16 @@ public enum Priority {
         }
     }
 
+    public static Boolean isPriority(String name) {
+        Optional<Priority> priority = Arrays
+                .stream(values())
+                .filter(x -> x.getPriority().equalsIgnoreCase(name))
+                .findFirst();
+        return priority.isPresent();
+    }
+
+    public String getPriority() {
+        return taskPriority;
+    }
+
 }
