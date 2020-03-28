@@ -1,0 +1,35 @@
+.main-task-block {
+  padding: 2%;
+  margin: 5% ;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  background: white;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+
+
+  .task-img {
+    img {
+      width: 100%;
+    }
+  }
+  &:hover{
+
+    cursor: pointer;
+    box-shadow: none;
+    transition: 0.3s;
+
+  }
+  .priority{
+    position: absolute;
+    top:0;
+    right:-15vw;
+    width: 30vw;
+    height:10vh;
+    //border-bottom: #cda062 solid 3px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    transform: rotate(45deg);
+    background: #e72734;
+  }
+
+}
