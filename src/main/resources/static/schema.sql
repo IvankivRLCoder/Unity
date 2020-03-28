@@ -1,7 +1,7 @@
-CREATE TABLE IF NOT EXISTS user
+CREATE TABLE IF NOT EXISTS volunteer
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    user_name       VARCHAR (20)        NOT NULL,
+    volunteer_name  VARCHAR (20)        NOT NULL,
     surname         VARCHAR (20)        NOT NULL,
     email           VARCHAR (30) UNIQUE NOT NULL,
     password        VARCHAR (30)        NOT NULL,
@@ -30,49 +30,45 @@ CREATE TABLE IF NOT EXISTS task
     status          VARCHAR (30)       NOT NULL,
     priority        VARCHAR (30)       NOT NULL,
     category_id     INT                NOT NULL,
-    сreator_id      INT                NOT NULL,
 
     CONSTRAINT fk_category
         FOREIGN KEY (category_id)
-            REFERENCES category (id),
-
-    CONSTRAINT fk_user
-        FOREIGN KEY (creator_id)
-            REFERENCES user (id)
+            REFERENCES category (id)
 );
 
-CREATE TABLE IF NOT EXISTS user_task
+CREATE TABLE IF NOT EXISTS volunteer_task
 (
-    user_id             INT NOT NULL,
+    volunteer_id        INT NOT NULL,
     task_id             INT NOT NULL,
+    is_creator          BOOLEAN DEFAULT FALSE,
     participation_date  DATE NOT NULL,
     comment             VARCHAR (50) NOT NULL,
     approved            BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (user_id, task_id),
+    PRIMARY KEY (volunteer_id, task_id),
 
-    CONSTRAINT fk_user_user_task
-        FOREIGN KEY (user_id)
-            REFERENCES user (id),
+    CONSTRAINT fk_volunteer_volunteer_task
+        FOREIGN KEY (volunteer_id)
+            REFERENCES volunteer (id),
 
-    CONSTRAINT fk_task_user_task
+    CONSTRAINT fk_task_volunteer_task
         FOREIGN KEY (task_id)
             REFERENCES task (id)
 );
 
-INSERT INTO category (category_name, description)
-VALUES ('Disabled', 'Helping disabled people'),
-       ('Elderly', 'Helping elderly'),
-       ('Fundraising', 'Raising funds');
+INSERT INTO category (id, category_name, description)
+VALUES (1, 'Disabled', 'Helping disabled people'),
+       (2, 'Elderly', 'Helping elderly'),
+       (3, 'Fundraising', 'Raising funds');
 
-INSERT INTO user(user_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked)
-VALUES ('Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'High', false),
-       ('Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'Medium', true);
+INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked)
+VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'High', false),
+       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'Medium', true);
 
-INSERT INTO task(task_name, description, creation_date, title, is_active, participants, status, priority, category_id)
-VALUES ('Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'Status 1', 'High', 1),
-       ('Task 2', 'Task number 2', '2020-3-27', 'Title 2', false, 20, 'Status 2', 'Low', 3);
+INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id)
+VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'Status 1', 'High', 1),
+       (2,'Task 2', 'Task number 2', '2020-3-27', 'Title 2', false, 20, 'Status 2', 'Low', 3);
 
-INSERT INTO user_task (user_id, task_id, participation_date, comment, approved)
-VALUES (1, 1, CURRENT_DATE(), 'first user - first task', true ),
-       (1, 2, '2020-7-27', 'first user - second task', false ),
-       (2, 2, '2000-3-03', 'second user - second task', true );
+INSERT INTO volunteer_task (volunteer_id, task_id, is_creator, participation_date, comment, approved)
+VALUES (1, 1, true, CURRENT_DATE(), 'first user - first task', true ),
+       (1, 2, false, '2020-7-27', 'first user - second task', false ),
+       (2, 2, true, '2000-3-03', 'second user - second task', true );

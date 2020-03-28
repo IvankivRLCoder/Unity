@@ -12,11 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString(exclude = {"user", "task"})
 @Entity
-@Table(name = "user_task")
+@Table(name = "volunteer_task")
 public class UserTask implements Serializable {
 
     @Id
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "volunteer_id")
     @ManyToOne
     private User user;
 
@@ -24,6 +24,9 @@ public class UserTask implements Serializable {
     @JoinColumn(name = "task_id")
     @ManyToOne
     private Task task;
+
+    @JoinColumn(name = "is_creator")
+    private boolean userCreator;
 
     @Column(name = "participation_date")
     private LocalDate participationDate;

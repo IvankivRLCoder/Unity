@@ -1,9 +1,6 @@
 package com.example.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,15 +11,16 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"participatedTasks"})
 @Entity
-@Table(name = "user")
+@Table(name = "volunteer")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name")
+    @Column(name = "volunteer_name")
     private String name;
 
     @Column(name = "surname")
@@ -46,9 +44,6 @@ public class User {
 
     @Column(name = "is_blocked")
     private boolean blocked;
-
-    @OneToMany(mappedBy = "creator")
-    private Set<Task> createdTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<UserTask> participatedTasks = new HashSet<>();

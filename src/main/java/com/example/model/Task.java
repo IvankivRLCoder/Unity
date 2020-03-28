@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"creator"})
+@ToString(exclude = {"userTasks"})
 @Entity
 @Table(name = "task")
 public class Task {
@@ -46,10 +46,6 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
-    private User creator;
 
     @OneToMany(mappedBy = "task")
     private Set<UserTask> userTasks = new HashSet<>();
