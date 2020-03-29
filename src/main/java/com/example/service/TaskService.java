@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    MainTaskDto createTask(TaskDto taskDto);
+    TaskDto createTask(TaskDto taskDto);
 
     MainTaskDto getTaskById(long id);
 
@@ -15,6 +15,6 @@ public interface TaskService {
 
     void deleteTask(long id);
 
-    MainTaskDto updateTask(TaskDto taskDto, long id);
+    TaskDto updateTask(TaskDto taskDto, long id);
 
 }

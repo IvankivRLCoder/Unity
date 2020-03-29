@@ -7,9 +7,9 @@ import java.util.Optional;
 
 @Getter
 public enum TrustLevel {
-    LOW("Low"),
-    MEDIUM("Medium"),
-    HIGH("High");
+    RELIABLE("Reliable"),
+    DOUBTFUL("Doubtful"),
+    NOVICE("Novice");
 
     private String levelOfTrust;
 

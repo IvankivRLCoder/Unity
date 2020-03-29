@@ -16,7 +16,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskDao taskDao;
 
     @Override
-    public MainTaskDto createTask(TaskDto taskDto) {
+    public TaskDto createTask(TaskDto taskDto) {
         return null;
     }
 
@@ -36,7 +36,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public MainTaskDto updateTask(TaskDto taskDto, long id) {
+    public TaskDto updateTask(TaskDto taskDto, long id) {
         return null;
     }
 

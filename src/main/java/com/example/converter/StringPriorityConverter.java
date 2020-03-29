@@ -3,7 +3,9 @@ package com.example.converter;
 import com.example.model.Priority;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StringPriorityConverter implements Converter<String, Priority> {
 
     @Override

@@ -16,7 +16,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryDao categoryDao;
 
     @Override
-    public MainCategoryDto createCategory(CategoryDto categoryDto) {
+    public CategoryDto createCategory(CategoryDto categoryDto) {
         return null;
     }
 

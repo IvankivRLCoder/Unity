@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
 
     @Override
-    public MainUserDto createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         return null;
     }
 
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainUserDto updateUser(UserDto userDto, long id) {
+    public UserDto updateUser(UserDto userDto, long id) {
         return null;
     }
 
