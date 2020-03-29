@@ -55,7 +55,7 @@ public class UserDto {
     @NotNull(message = "{user.trust.level.null}")
     @NotBlank(message = "{user.trust.level.blank}")
     @TrustLevelType
-    @ApiModelProperty(example = "Reliable")
+    @ApiModelProperty(example = "Novice")
     private String trustLevel;
 
     @NotNull(message = "{user.blocked.null}")

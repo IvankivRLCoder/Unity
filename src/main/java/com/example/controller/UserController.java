@@ -28,10 +28,10 @@ public class UserController {
     @ApiOperation(value = "Add new user")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New user created", response = UserDto.class),
+            @ApiResponse(code = 201, message = "New user created", response = MainUserDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public MainUserDto createUser(@RequestBody UserDto userDto) {
         return userService.createUser(userDto);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "User successfully deleted"),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public void deleteUser(@PathVariable long id) {
+    public void deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
     }
 
@@ -50,11 +50,11 @@ public class UserController {
     @ApiOperation(value = "Update user by id")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User successfully updated", response = UserDto.class),
+            @ApiResponse(code = 200, message = "User successfully updated", response = MainUserDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable long id) {
+    public MainUserDto updateUser(@RequestBody UserDto userDto, @PathVariable int id) {
         return userService.updateUser(userDto, id);
     }
 
@@ -62,10 +62,10 @@ public class UserController {
     @ApiOperation(value = "Get user by id")
     @ResponseStatus(HttpStatus.FOUND)
     @ApiResponses(value = {
-            @ApiResponse(code = 302, message = "User found", response = MainUserDto.class),
+            @ApiResponse(code = 200, message = "User found", response = MainUserDto.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public MainUserDto getUserById(@PathVariable long id) {
+    public MainUserDto getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
 

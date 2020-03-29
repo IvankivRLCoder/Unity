@@ -29,7 +29,7 @@ public class CategoryController {
             @ApiResponse(code = 201, message = "New category created", response = CategoryDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
+    public MainCategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
         return categoryService.createCategory(categoryDto);
     }
 
@@ -40,7 +40,7 @@ public class CategoryController {
             @ApiResponse(code = 200, message = "Category successfully deleted"),
             @ApiResponse(code = 404, message = "Non-existing category id", response = ApiError.class)
     })
-    public void deleteCategory(@PathVariable long id) {
+    public void deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
     }
 
@@ -48,10 +48,10 @@ public class CategoryController {
     @ResponseStatus(HttpStatus.FOUND)
     @ApiOperation(value = "Get category by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 302, message = "Category found", response = MainCategoryDto.class),
+            @ApiResponse(code = 200, message = "Category found", response = MainCategoryDto.class),
             @ApiResponse(code = 404, message = "Non-existing category id", response = ApiError.class)
     })
-    public MainCategoryDto getCategoryById(@PathVariable long id) {
+    public MainCategoryDto getCategoryById(@PathVariable int id) {
         return categoryService.getCategoryById(id);
     }
 

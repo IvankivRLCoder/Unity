@@ -19,6 +19,5 @@ public class MainCategoryDto {
     private int id;
     private String name;
     private String description;
-    private Set<MainTaskDto> tasks = new HashSet<>();
 
 }

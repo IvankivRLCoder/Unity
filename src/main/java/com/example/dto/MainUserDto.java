@@ -17,7 +17,7 @@ import java.util.Set;
 @ApiModel(description = "Model that represents User. Used only for GET requests")
 public class MainUserDto {
 
-    private Long id;
+    private int id;
     private String name;
     private String surname;
     private String email;
@@ -26,8 +26,6 @@ public class MainUserDto {
     private String dateOfBirth;
     private TrustLevel trustLevel;
     private boolean blocked;
-    //???
-    private Set<MainTaskDto> createdTasks = new HashSet<>();
-    private Set<MainUserTaskDto> participatedTasks = new HashSet<>();
+    private Set<MainTaskUserDto> participatedTasks = new HashSet<>();
 
 }

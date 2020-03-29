@@ -1,9 +1,6 @@
 package com.example.config;
 
-import com.example.converter.StringLocalDateConverter;
-import com.example.converter.StringPriorityConverter;
-import com.example.converter.StringStatusConverter;
-import com.example.converter.StringTrustLevelConverter;
+import com.example.converter.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +13,7 @@ public class MapperConfig {
     private final StringStatusConverter stringStatusConverter;
     private final StringPriorityConverter stringPriorityConverter;
     private final StringLocalDateConverter stringLocalDateConverter;
+//    private final UserTaskListConverter userTaskListConverter;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -25,7 +23,7 @@ public class MapperConfig {
         modelMapper.addConverter(stringStatusConverter);
         modelMapper.addConverter(stringPriorityConverter);
         modelMapper.addConverter(stringLocalDateConverter);
-
+//        modelMapper.addConverter(userTaskListConverter);
 
         return modelMapper;
     }

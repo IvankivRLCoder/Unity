@@ -22,7 +22,7 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public Category getById(long id) {
+    public Category getById(int id) {
         return entityManager.find(Category.class, id);
     }
 

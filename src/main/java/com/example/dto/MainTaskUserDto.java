@@ -17,9 +17,9 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @Builder
 @ApiModel(description = "Transitive table representation. Used for business logic")
-public class MainUserTaskDto {
+public class MainTaskUserDto {
 
-    private UserDto user;
+    private MainTaskDto task;
 
     private boolean isCreator;
 

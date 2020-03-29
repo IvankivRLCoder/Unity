@@ -4,7 +4,7 @@ import com.example.model.Category;
 
 public interface CategoryDao extends MainDao<Category> {
 
-    Category getById(long id);
+    Category getById(int id);
 
     void delete(Category category);
 

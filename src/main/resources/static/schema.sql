@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS volunteer
     password        VARCHAR (30)        NOT NULL,
     phone           VARCHAR (11) UNIQUE NOT NULL,
     date_of_birth   DATE                NOT NULL,
-    trust_level     VARCHAR (20)        NOT NULL,
+    trust_level     VARCHAR (32)        NOT NULL,
     is_blocked      BOOLEAN             DEFAULT FALSE
 );
 
@@ -61,14 +61,14 @@ VALUES (1, 'Disabled', 'Helping disabled people'),
        (3, 'Fundraising', 'Raising funds');
 
 INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked)
-VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'High', false),
-       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'Medium', true);
+VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'NOVICE', false),
+       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true);
 
 INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id)
-VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'Status 1', 'High', 1),
-       (2,'Task 2', 'Task number 2', '2020-3-27', 'Title 2', false, 20, 'Status 2', 'Low', 3);
+VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1),
+       (2,'Task 2', 'Task number 2', '2020-03-27', 'Title 2', false, 20, 'ACTIVE', 'LOW', 3);
 
 INSERT INTO volunteer_task (volunteer_id, task_id, is_creator, participation_date, comment, approved)
 VALUES (1, 1, true, CURRENT_DATE(), 'first user - first task', true ),
-       (1, 2, false, '2020-7-27', 'first user - second task', false ),
-       (2, 2, true, '2000-3-03', 'second user - second task', true );
+       (1, 2, false, '2020-07-27', 'first user - second task', false ),
+       (2, 2, true, '2000-03-03', 'second user - second task', true );

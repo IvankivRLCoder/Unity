@@ -42,7 +42,7 @@ public class TaskDto {
     @NotNull(message = "{task.creation.null}")
     @NotBlank(message = "{task.creation.blank}")
     @LocalDateType
-    @ApiModelProperty(example = "2020-2-2", notes = "Date must be valid")
+    @ApiModelProperty(example = "2020-02-02", notes = "Date must be valid")
     private String creationDate;
 
     @NotNull(message = "{task.title.null}")
@@ -68,7 +68,7 @@ public class TaskDto {
     private Priority priority;
 
     @CategoryType
-    private CategoryDto category;
+    private MainCategoryDto category;
 
     @ApiModelProperty(notes = "Field from transitive table between User and Task. Used for business logic")
     private Set<MainUserTaskDto> userTasks = new HashSet<>();

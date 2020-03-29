@@ -4,7 +4,7 @@ import com.example.model.User;
 
 public interface UserDao extends MainDao<User> {
 
-    User getById(long id);
+    User getById(int id);
 
     User update(User user);
 

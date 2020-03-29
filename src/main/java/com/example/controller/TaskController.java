@@ -29,7 +29,7 @@ public class TaskController {
             @ApiResponse(code = 201, message = "New task created", response = TaskDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public TaskDto createTask(@RequestBody TaskDto taskDto) {
+    public MainTaskDto createTask(@RequestBody TaskDto taskDto) {
         return taskService.createTask(taskDto);
     }
 
@@ -40,7 +40,7 @@ public class TaskController {
             @ApiResponse(code = 200, message = "Task successfully deleted"),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public void deleteTask(@PathVariable long id) {
+    public void deleteTask(@PathVariable int id) {
         taskService.deleteTask(id);
     }
 
@@ -52,7 +52,7 @@ public class TaskController {
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public TaskDto updateTask(@RequestBody TaskDto taskDto, @PathVariable long id) {
+    public MainTaskDto updateTask(@RequestBody TaskDto taskDto, @PathVariable int id) {
         return taskService.updateTask(taskDto, id);
     }
 
@@ -60,10 +60,10 @@ public class TaskController {
     @ResponseStatus(HttpStatus.FOUND)
     @ApiOperation(value = "Get task by id")
     @ApiResponses(value = {
-            @ApiResponse(code = 302, message = "Task found", response = MainTaskDto.class),
+            @ApiResponse(code = 200, message = "Task found", response = MainTaskDto.class),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public MainTaskDto getTaskById(@PathVariable long id) {
+    public MainTaskDto getTaskById(@PathVariable int id) {
         return taskService.getTaskById(id);
     }
 

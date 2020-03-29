@@ -29,7 +29,7 @@ public class TaskDaoImpl implements TaskDao {
     }
 
     @Override
-    public Task getById(long id) {
+    public Task getById(int id) {
         return entityManager.find(Task.class, id);
     }
 

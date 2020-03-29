@@ -18,7 +18,7 @@ import java.util.Set;
 @ApiModel(description = "Model that represents Task. Used only for GET requests")
 public class MainTaskDto {
 
-    private Long id;
+    private int id;
     private String name;
     private String description;
     private String creationDate;
@@ -27,7 +27,6 @@ public class MainTaskDto {
     private Status status;
     private Priority priority;
     private MainCategoryDto category;
-    private MainUserDto creator;
     private Set<MainUserTaskDto> userTasks = new HashSet<>();
 
 }

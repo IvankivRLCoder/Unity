@@ -4,7 +4,7 @@ import com.example.model.Task;
 
 public interface TaskDao extends MainDao<Task> {
 
-    Task getById(long id);
+    Task getById(int id);
 
     Task update(Task task);
 

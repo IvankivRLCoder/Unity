@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -18,7 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(name = "volunteer_name")
     private String name;
@@ -48,4 +49,25 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserTask> participatedTasks = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return blocked == user.blocked &&
+                Objects.equals(id, user.id) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                Objects.equals(dateOfBirth, user.dateOfBirth) &&
+                trustLevel == user.trustLevel &&
+                Objects.equals(participatedTasks, user.participatedTasks);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

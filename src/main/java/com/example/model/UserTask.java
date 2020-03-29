@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -26,7 +27,7 @@ public class UserTask implements Serializable {
     private Task task;
 
     @JoinColumn(name = "is_creator")
-    private boolean userCreator;
+    private boolean isCreator;
 
     @Column(name = "participation_date")
     private LocalDate participationDate;
@@ -37,4 +38,21 @@ public class UserTask implements Serializable {
     @Column(name = "approved")
     private boolean approved;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserTask userTask = (UserTask) o;
+        return isCreator == userTask.isCreator &&
+                approved == userTask.approved &&
+                Objects.equals(user, userTask.user) &&
+                Objects.equals(task, userTask.task) &&
+                Objects.equals(participationDate, userTask.participationDate) &&
+                Objects.equals(comment, userTask.comment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user);
+    }
 }
