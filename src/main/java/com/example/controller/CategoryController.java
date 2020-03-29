@@ -45,7 +45,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get category by id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Category found", response = MainCategoryDto.class),

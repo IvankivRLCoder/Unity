@@ -57,7 +57,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get task by id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Task found", response = MainTaskDto.class),

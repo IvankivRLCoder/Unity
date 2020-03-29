@@ -2,6 +2,7 @@ package com.example.dto;
 
 import com.example.model.Priority;
 import com.example.model.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,8 @@ public class MainTaskDto {
     private Status status;
     private Priority priority;
     private MainCategoryDto category;
+
+    @JsonIgnore
     private Set<MainUserTaskDto> userTasks = new HashSet<>();
 
 }

@@ -53,7 +53,7 @@ public class TaskDto {
 
     @Size(min = 1, max = 100, message = "{task.participants.size}")
     @ApiModelProperty(example = "7")
-    private int numberOfParticipants;
+    private int possibleNumberOfParticipants;
 
     @NotNull(message = "{task.status.null}")
     @NotBlank(message = "{task.status.blank}")

@@ -60,7 +60,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get user by id")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User found", response = MainUserDto.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
