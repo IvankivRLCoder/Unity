@@ -1,7 +1,8 @@
 package com.example.controller;
 
-import com.example.dto.MainTaskDto;
-import com.example.dto.TaskDto;
+import com.example.dto.task.MainTaskDto;
+import com.example.dto.task.OnlyTaskDto;
+import com.example.dto.task.TaskDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
 import io.swagger.annotations.Api;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +31,7 @@ public class TaskController {
             @ApiResponse(code = 201, message = "New task created", response = TaskDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public MainTaskDto createTask(@RequestBody TaskDto taskDto) {
+    public OnlyTaskDto createTask(@Valid @RequestBody TaskDto taskDto) {
         return taskService.createTask(taskDto);
     }
 
@@ -52,12 +54,12 @@ public class TaskController {
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public MainTaskDto updateTask(@RequestBody TaskDto taskDto, @PathVariable int id) {
+    public MainTaskDto updateTask(@Valid @RequestBody TaskDto taskDto, @PathVariable int id) {
         return taskService.updateTask(taskDto, id);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get task by id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Task found", response = MainTaskDto.class),

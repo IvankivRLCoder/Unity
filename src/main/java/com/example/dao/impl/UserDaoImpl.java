@@ -55,4 +55,11 @@ public class UserDaoImpl implements UserDao {
                 .getResultList();
     }
 
+    @Override
+    public User getByPhoneNumber(String phoneNumber) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber", User.class)
+                .setParameter("phoneNumber", phoneNumber)
+                .getSingleResult();
+    }
+
 }

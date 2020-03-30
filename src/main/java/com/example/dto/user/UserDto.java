@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.example.dto.user;
 
 import com.example.validation.LocalDateType;
 import com.example.validation.TrustLevelType;
@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -37,12 +35,12 @@ public class UserDto {
     private String password;
 
     @NotNull(message = "{user.email.null}")
+    @Size(max = 30, message = "{user.email.size}")
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "{user.email.regex}")
     @ApiModelProperty(example = "210372@ukr.net", notes = "Latin characters, numbers and specific symbols, size minimum 9 maximum 30, not blank")
     private String email;
 
-    @Pattern(regexp = "^((\\+38)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$",
-            message = "{user.phoneNumber.regex}")
+    @Pattern(regexp = "^((\\+38)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{10}$", message = "{user.phoneNumber.regex}")
     @ApiModelProperty(example = "0980258933", notes = "Size minimum 7,maximum 10. Only numeric characters, country code is optional")
     private String phoneNumber;
 

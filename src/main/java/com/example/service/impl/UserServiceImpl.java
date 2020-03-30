@@ -1,8 +1,9 @@
 package com.example.service.impl;
 
 import com.example.dao.UserDao;
-import com.example.dto.MainUserDto;
-import com.example.dto.UserDto;
+import com.example.dto.user.MainUserDto;
+import com.example.dto.user.RegisteredUserDto;
+import com.example.dto.user.UserDto;
 import com.example.model.User;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public MainUserDto createUser(UserDto userDto) {
+    public RegisteredUserDto createUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
-        return modelMapper.map(userDao.save(user), MainUserDto.class);
+        return modelMapper.map(userDao.save(user), RegisteredUserDto.class);
     }
 
     @Override

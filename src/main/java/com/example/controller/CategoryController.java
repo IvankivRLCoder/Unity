@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.example.dto.CategoryDto;
-import com.example.dto.MainCategoryDto;
+import com.example.dto.category.CategoryDto;
+import com.example.dto.category.MainCategoryDto;
 import com.example.error.ApiError;
 import com.example.service.CategoryService;
 import io.swagger.annotations.Api;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class CategoryController {
             @ApiResponse(code = 201, message = "New category created", response = CategoryDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public MainCategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
+    public MainCategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         return categoryService.createCategory(categoryDto);
     }
 
@@ -45,7 +46,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get category by id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Category found", response = MainCategoryDto.class),

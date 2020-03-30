@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.example.dto.user;
 
 import com.example.model.TrustLevel;
 import io.swagger.annotations.ApiModel;

@@ -1,5 +1,6 @@
-package com.example.dto;
+package com.example.dto.task;
 
+import com.example.dto.category.MainCategoryDto;
 import com.example.model.Priority;
 import com.example.model.Status;
 import com.example.validation.CategoryType;
@@ -8,7 +9,6 @@ import com.example.validation.PriorityType;
 import com.example.validation.StatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.nashorn.internal.objects.NativeObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -58,19 +58,19 @@ public class TaskDto {
     @NotNull(message = "{task.status.null}")
     @NotBlank(message = "{task.status.blank}")
     @StatusType
-    @ApiModelProperty(example = "Active")
+    @ApiModelProperty(example = "ACTIVE")
     private Status status;
 
     @NotNull(message = "{task.priority.null}")
     @NotBlank(message = "{task.priority.blank}")
     @PriorityType
-    @ApiModelProperty(example = "Critical")
+    @ApiModelProperty(example = "CRITICAL")
     private Priority priority;
 
     @CategoryType
     private MainCategoryDto category;
 
     @ApiModelProperty(notes = "Field from transitive table between User and Task. Used for business logic")
-    private Set<MainUserTaskDto> userTasks = new HashSet<>();
+    private Set<UserTaskDto> userTasks = new HashSet<>();
 
 }

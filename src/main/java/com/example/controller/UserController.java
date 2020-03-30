@@ -1,9 +1,9 @@
 package com.example.controller;
 
-import com.example.dto.MainUserDto;
-import com.example.dto.UserDto;
+import com.example.dto.user.MainUserDto;
+import com.example.dto.user.RegisteredUserDto;
+import com.example.dto.user.UserDto;
 import com.example.error.ApiError;
-import com.example.model.User;
 import com.example.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/Unity/users")
@@ -31,7 +31,7 @@ public class UserController {
             @ApiResponse(code = 201, message = "New user created", response = MainUserDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public MainUserDto createUser(@RequestBody UserDto userDto) {
+    public RegisteredUserDto createUser(@Valid @RequestBody UserDto userDto) {
         return userService.createUser(userDto);
     }
 
@@ -60,7 +60,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Get user by id")
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User found", response = MainUserDto.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)

@@ -1,13 +1,14 @@
 package com.example.service;
 
-import com.example.dto.MainTaskDto;
-import com.example.dto.TaskDto;
+import com.example.dto.task.MainTaskDto;
+import com.example.dto.task.OnlyTaskDto;
+import com.example.dto.task.TaskDto;
 
 import java.util.List;
 
 public interface TaskService {
 
-    MainTaskDto createTask(TaskDto taskDto);
+    OnlyTaskDto createTask(TaskDto taskDto);
 
     MainTaskDto getTaskById(int id);
 

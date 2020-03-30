@@ -1,7 +1,9 @@
-package com.example.dto;
+package com.example.dto.task;
 
+import com.example.dto.category.MainCategoryDto;
 import com.example.model.Priority;
 import com.example.model.Status;
+import com.example.validation.LocalDateType;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

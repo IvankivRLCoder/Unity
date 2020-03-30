@@ -1,8 +1,9 @@
 package com.example.service.impl;
 
 import com.example.dao.TaskDao;
-import com.example.dto.MainTaskDto;
-import com.example.dto.TaskDto;
+import com.example.dto.task.MainTaskDto;
+import com.example.dto.task.OnlyTaskDto;
+import com.example.dto.task.TaskDto;
 import com.example.model.Task;
 import com.example.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class TaskServiceImpl implements TaskService {
     private final ModelMapper modelMapper;
 
     @Override
-    public MainTaskDto createTask(TaskDto taskDto) {
+    public OnlyTaskDto createTask(TaskDto taskDto) {
         Task task = modelMapper.map(taskDto, Task.class);
-        return modelMapper.map(taskDao.save(task), MainTaskDto.class);
+        return modelMapper.map(taskDao.save(task), OnlyTaskDto.class);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
         Task newTask = modelMapper.map(taskDto, Task.class);
 
         task.setCategory(newTask.getCategory());
-//        task.setCreationDate(newTask.getCreationDate());
+        task.setCreationDate(newTask.getCreationDate());
         task.setDescription(newTask.getDescription());
         task.setName(newTask.getName());
         task.setPriority(newTask.getPriority());

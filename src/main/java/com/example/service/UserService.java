@@ -1,13 +1,14 @@
 package com.example.service;
 
-import com.example.dto.MainUserDto;
-import com.example.dto.UserDto;
+import com.example.dto.user.MainUserDto;
+import com.example.dto.user.RegisteredUserDto;
+import com.example.dto.user.UserDto;
 
 import java.util.List;
 
 public interface UserService {
 
-    MainUserDto createUser(UserDto userDto);
+    RegisteredUserDto createUser(UserDto userDto);
 
     MainUserDto getUserById(int id);
 

@@ -25,7 +25,7 @@ public enum TrustLevel {
         if (trustLevel.isPresent()) {
             return trustLevel.get();
         } else {
-            throw new UnsupportedOperationException("Unsupported gender: " + name);
+            throw new UnsupportedOperationException("Unsupported trust level: " + name);
         }
     }
 

@@ -26,7 +26,7 @@ public enum Priority {
         if (optionalPriority.isPresent()) {
             return optionalPriority.get();
         } else {
-            throw new UnsupportedOperationException("Unsupported gender: " + name);
+            throw new UnsupportedOperationException("Unsupported priority: " + name);
         }
     }
 

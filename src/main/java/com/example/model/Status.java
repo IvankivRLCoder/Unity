@@ -26,7 +26,7 @@ public enum Status {
         if (statusOptional.isPresent()) {
             return statusOptional.get();
         } else {
-            throw new UnsupportedOperationException("Unsupported gender: " + name);
+            throw new UnsupportedOperationException("Unsupported status: " + name);
         }
     }
 

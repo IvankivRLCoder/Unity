@@ -1,5 +1,6 @@
-package com.example.dto;
+package com.example.dto.task;
 
+import com.example.dto.user.UserDto;
 import com.example.validation.LocalDateType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,15 +18,14 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @Builder
 @ApiModel(description = "Transitive table representation. Used for business logic")
-public class MainTaskUserDto {
-
-    private MainTaskDto task;
+public class UserTaskDto {
 
     private boolean isCreator;
 
     @NotNull(message = "{user.task.creation.null}")
     @NotBlank(message = "{user.task.creation.blank}")
     @LocalDateType
+    @ApiModelProperty(example = "2000-12-01")
     private String participationDate;
 
     @NotNull
@@ -38,5 +38,6 @@ public class MainTaskUserDto {
     @NotNull(message = "{user.task.approved.null}")
     @ApiModelProperty(example = "false", notes = "Field to find out whether user is approved for task by task`s creator")
     private boolean approved;
+
 
 }
