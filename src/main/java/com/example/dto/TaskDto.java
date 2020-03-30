@@ -6,6 +6,7 @@ import com.example.validation.CategoryType;
 import com.example.validation.LocalDateType;
 import com.example.validation.PriorityType;
 import com.example.validation.StatusType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import jdk.nashorn.internal.objects.NativeObject;
@@ -59,13 +60,13 @@ public class TaskDto {
     @NotBlank(message = "{task.status.blank}")
     @StatusType
     @ApiModelProperty(example = "Active")
-    private Status status;
+    private String status;
 
     @NotNull(message = "{task.priority.null}")
     @NotBlank(message = "{task.priority.blank}")
     @PriorityType
     @ApiModelProperty(example = "Critical")
-    private Priority priority;
+    private String priority;
 
     @CategoryType
     private MainCategoryDto category;
