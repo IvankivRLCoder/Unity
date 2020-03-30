@@ -1,8 +1,8 @@
 package com.example.service.impl;
 
 import com.example.dao.CategoryDao;
-import com.example.dto.CategoryDto;
-import com.example.dto.MainCategoryDto;
+import com.example.dto.category.CategoryDto;
+import com.example.dto.category.MainCategoryDto;
 import com.example.model.Category;
 import com.example.service.CategoryService;
 import lombok.RequiredArgsConstructor;

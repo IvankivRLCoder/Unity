@@ -1,15 +1,12 @@
-package com.example.dto;
+package com.example.dto.task;
 
-import com.example.model.Priority;
-import com.example.model.Status;
+import com.example.dto.category.MainCategoryDto;
 import com.example.validation.CategoryType;
 import com.example.validation.LocalDateType;
 import com.example.validation.PriorityType;
 import com.example.validation.StatusType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.nashorn.internal.objects.NativeObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,13 +27,13 @@ import java.util.Set;
 public class TaskDto {
 
     @NotNull(message = "{task.name.null}")
-    @Pattern(regexp = "^[a-zA-z]{7,25}$", message = "{task.name.regex}")
+    @Pattern(regexp = "^[a-zA-z]{7,25}$")
     @ApiModelProperty(example = "Helping elderly", notes = "Minimum 7 characters, maximum 25, not blank")
     private String name;
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
-    @Pattern(regexp = "^[a-zA-z]{15,150}$")
+    @Pattern(regexp = "^[a-zA-z]{10,150}$")
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 
@@ -52,20 +49,19 @@ public class TaskDto {
     @ApiModelProperty(example = "Some task title", notes = "Not blank")
     private String title;
 
-    @Size(min = 1, max = 100, message = "{task.participants.size}")
     @ApiModelProperty(example = "7")
     private int possibleNumberOfParticipants;
 
     @NotNull(message = "{task.status.null}")
     @NotBlank(message = "{task.status.blank}")
     @StatusType
-    @ApiModelProperty(example = "Active")
+    @ApiModelProperty(example = "ACTIVE")
     private String status;
 
     @NotNull(message = "{task.priority.null}")
     @NotBlank(message = "{task.priority.blank}")
     @PriorityType
-    @ApiModelProperty(example = "Critical")
+    @ApiModelProperty(example = "CRITICAL")
     private String priority;
 
     @CategoryType

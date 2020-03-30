@@ -12,4 +12,6 @@ public interface UserDao extends MainDao<User> {
 
     User getByEmail(String email);
 
+    User getByPhoneNumber(String phoneNumber);
+
 }

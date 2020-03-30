@@ -1,5 +1,6 @@
-package com.example.dto;
+package com.example.dto.task;
 
+import com.example.dto.category.MainCategoryDto;
 import com.example.model.Priority;
 import com.example.model.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,11 +26,9 @@ public class MainTaskDto {
     private String creationDate;
     private String title;
     private int numberOfParticipants;
-    private Status status;
-    private Priority priority;
+    private String status;
+    private String priority;
     private MainCategoryDto category;
-
-    @JsonIgnore
     private Set<MainUserTaskDto> userTasks = new HashSet<>();
 
 }
