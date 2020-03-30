@@ -1,8 +1,9 @@
 package com.example.controller;
 
+import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
-import com.example.dto.user.RegisteredUserDto;
 import com.example.dto.user.UserDto;
+import com.example.dto.usertask.UserTaskDto;
 import com.example.error.ApiError;
 import com.example.service.UserService;
 import io.swagger.annotations.Api;
@@ -31,7 +32,7 @@ public class UserController {
             @ApiResponse(code = 201, message = "New user created", response = MainUserDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public RegisteredUserDto createUser(@Valid @RequestBody UserDto userDto) {
+    public MainUserDto createUser(@Valid @RequestBody UserDto userDto) {
         return userService.createUser(userDto);
     }
 
@@ -74,6 +75,20 @@ public class UserController {
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
     public List<MainUserDto> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/{id}/tasks")
+    @ApiOperation(value = "View a list of all tasks by user id")
+    @ApiResponse(code = 200, message = "List of all users", response = MainTaskUserDto.class)
+    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
+        return userService.getAllTasksByUserId(id);
+    }
+
+    @PostMapping("/{userId}/tasks/{taskId}")
+    @ApiOperation(value = "Take part in task")
+    @ApiResponse(code = 200, message = "List of all users", response = UserTaskDto.class)
+    public UserTaskDto takePartInTask(@PathVariable int userId, @PathVariable int taskId, @Valid @RequestBody UserTaskDto userTaskDto) {
+        return userService.takePartInTask(userId, taskId, userTaskDto);
     }
 
 }

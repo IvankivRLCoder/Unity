@@ -23,6 +23,8 @@ public class CategoryValidator implements ConstraintValidator<CategoryType, Main
     public boolean isValid(MainCategoryDto categoryDto, ConstraintValidatorContext constraintValidatorContext) {
         if (categoryDto != null) {
             List<Category> allCategory = categoryDao.getAll();
+            System.out.println(categoryDto);
+            allCategory.forEach(System.out::println);
             return allCategory.contains(mapper.map(categoryDto, Category.class));
         }
         return true;

@@ -1,14 +1,10 @@
 package com.example.dto.user;
 
-import com.example.model.TrustLevel;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -24,8 +20,7 @@ public class MainUserDto {
     private String password;
     private String phoneNumber;
     private String dateOfBirth;
-    private TrustLevel trustLevel;
+    private String trustLevel;
     private boolean blocked;
-    private Set<MainTaskUserDto> participatedTasks = new HashSet<>();
 
 }

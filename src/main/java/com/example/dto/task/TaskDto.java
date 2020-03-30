@@ -1,9 +1,6 @@
 package com.example.dto.task;
 
-import com.example.converter.StringTrustLevelConverter;
 import com.example.dto.category.MainCategoryDto;
-import com.example.model.Priority;
-import com.example.model.Status;
 import com.example.validation.CategoryType;
 import com.example.validation.LocalDateType;
 import com.example.validation.PriorityType;
@@ -17,10 +14,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -67,8 +61,5 @@ public class TaskDto {
 
     @CategoryType
     private MainCategoryDto category;
-
-    @ApiModelProperty(notes = "Field from transitive table between User and Task. Used for business logic")
-    private Set<MainUserTaskDto> userTasks = new HashSet<>();
 
 }

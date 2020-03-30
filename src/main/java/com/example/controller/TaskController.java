@@ -1,8 +1,10 @@
 package com.example.controller;
 
 import com.example.dto.task.MainTaskDto;
-import com.example.dto.task.OnlyTaskDto;
+import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.user.MainTaskUserDto;
+import com.example.dto.user.MainUserDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
 import io.swagger.annotations.Api;
@@ -31,7 +33,7 @@ public class TaskController {
             @ApiResponse(code = 201, message = "New task created", response = TaskDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public OnlyTaskDto createTask(@Valid @RequestBody TaskDto taskDto) {
+    public MainTaskDto createTask(@Valid @RequestBody TaskDto taskDto) {
         return taskService.createTask(taskDto);
     }
 
@@ -75,6 +77,13 @@ public class TaskController {
     @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskDto.class)
     public List<MainTaskDto> getAllTasks() {
         return taskService.getAllTasks();
+    }
+
+    @GetMapping("/tasks/{id}")
+    @ApiOperation(value = "View a list of all users")
+    @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
+    public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id) {
+        return taskService.getAllUsersByTaskId(id);
     }
 
 }

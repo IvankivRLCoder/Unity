@@ -1,10 +1,15 @@
 package com.example.service.impl;
 
+import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
+import com.example.dao.UserTaskDao;
+import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
-import com.example.dto.user.RegisteredUserDto;
 import com.example.dto.user.UserDto;
+import com.example.dto.usertask.UserTaskDto;
+import com.example.model.Task;
 import com.example.model.User;
+import com.example.model.UserTask;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,12 +25,16 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
+    private final TaskDao taskDao;
+
+    private final UserTaskDao userTaskDao;
+
     private final ModelMapper modelMapper;
 
     @Override
-    public RegisteredUserDto createUser(UserDto userDto) {
+    public MainUserDto createUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
-        return modelMapper.map(userDao.save(user), RegisteredUserDto.class);
+        return modelMapper.map(userDao.save(user), MainUserDto.class);
     }
 
     @Override
@@ -60,12 +69,36 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
     }
 
+    @Override
+    public List<MainTaskUserDto> getAllTasksByUserId(int id) {
+        return userDao.getById(id).getParticipatedTasks().stream()
+                .map(userTask -> modelMapper.map(userTask, MainTaskUserDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
+        UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);
+        userTask.setUser(getById(userId));
+        userTask.setTask(getTaskById(taskId));
+        return modelMapper.map(userTaskDao.save(userTask), UserTaskDto.class);
+    }
+
+
     private User getById(int id) {
         User user = userDao.getById(id);
         if (user == null) {
             throw new EntityNotFoundException("User is not found with id = " + id);
         }
         return user;
+    }
+
+    private Task getTaskById(int id) {
+        Task task = taskDao.getById(id);
+        if (task == null) {
+            throw new EntityNotFoundException("Task is not found with id = " + id);
+        }
+        return task;
     }
 
 }

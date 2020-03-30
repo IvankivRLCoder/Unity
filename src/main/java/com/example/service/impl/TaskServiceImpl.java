@@ -2,7 +2,7 @@ package com.example.service.impl;
 
 import com.example.dao.TaskDao;
 import com.example.dto.task.MainTaskDto;
-import com.example.dto.task.OnlyTaskDto;
+import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.model.Task;
 import com.example.service.TaskService;
@@ -23,9 +23,9 @@ public class TaskServiceImpl implements TaskService {
     private final ModelMapper modelMapper;
 
     @Override
-    public OnlyTaskDto createTask(TaskDto taskDto) {
+    public MainTaskDto createTask(TaskDto taskDto) {
         Task task = modelMapper.map(taskDto, Task.class);
-        return modelMapper.map(taskDao.save(task), OnlyTaskDto.class);
+        return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
 
     @Override
@@ -58,6 +58,13 @@ public class TaskServiceImpl implements TaskService {
         task.setTitle(newTask.getTitle());
 
         return modelMapper.map(taskDao.update(task), MainTaskDto.class);
+    }
+
+    @Override
+    public List<MainUserTaskDto> getAllUsersByTaskId(int id) {
+        return taskDao.getById(id).getUserTasks().stream()
+                .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
+                .collect(Collectors.toList());
     }
 
     private Task getById(int id) {

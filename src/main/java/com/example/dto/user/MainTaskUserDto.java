@@ -1,6 +1,6 @@
 package com.example.dto.user;
 
-import com.example.dto.task.OnlyTaskDto;
+import com.example.dto.task.TaskDto;
 import com.example.validation.LocalDateType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,7 +20,7 @@ import javax.validation.constraints.Pattern;
 @ApiModel(description = "Transitive table representation. Used for business logic")
 public class MainTaskUserDto {
 
-    private OnlyTaskDto task;
+    private TaskDto task;
 
     private boolean isCreator;
 
