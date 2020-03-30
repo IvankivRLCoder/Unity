@@ -1,6 +1,7 @@
 import React, {Component, FormEvent} from 'react';
 import photo from './signin-image.jpg';
 import './LoginRegister.scss';
+import Input from "../../utils/UI/Input/Input";
 
 class Login extends Component {
     render() {
@@ -12,24 +13,18 @@ class Login extends Component {
                             <div className="text-center sign-form">
                                 <h2 className="form-title">Login</h2>
                                 <form method="POST" className="register-form" id="login-form" onSubmit={(event: FormEvent<HTMLFormElement>) => {event.preventDefault();window.location.href="/"}}>
-                                    <div className="form-group">
-                                        <div className="form-div">
-                                            <label className="label-icon" htmlFor="email"><i
-                                                className="fas fa-envelope material-icons-name"/></label>
-                                            <input type="text" className="sign-form-input form-control" id="email"
-                                                   placeholder="Email"/>
-                                        </div>
-                                        <p className="sign-form-error-text"/>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="form-div">
-                                            <label className="label-icon" htmlFor="pass"><i
-                                                className="fas fa-lock"/></label>
-                                            <input type="password" className="sign-form-input form-control" id="pass"
-                                                   placeholder="Password"/>
-                                        </div>
-                                        <p className="sign-form-error-text"/>
-                                    </div>
+                                    <Input
+                                        type={'text'}
+                                        placeholder={'Email'}
+                                        iconClassName={'fas fa-envelope'}
+                                        errorMessage={''}
+                                    />
+                                    <Input
+                                        type={'password'}
+                                        placeholder={'Password'}
+                                        iconClassName={'fas fa-lock'}
+                                        errorMessage={''}
+                                    />
                                     <div className="form-check form-group text-left">
                                         <input type="checkbox" className="form-check-input"/>
                                         <label className="remember-label">Remember me</label>
