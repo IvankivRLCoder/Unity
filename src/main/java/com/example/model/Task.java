@@ -34,7 +34,7 @@ public class Task {
     private String title;
 
     @Column(name = "participants")
-    private int numberOfParticipants;
+    private int possibleNumberOfParticipants;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -48,28 +48,34 @@ public class Task {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private Set<UserTask> userTasks = new HashSet<>();
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return numberOfParticipants == task.numberOfParticipants &&
-                Objects.equals(id, task.id) &&
-                Objects.equals(name, task.name) &&
-                Objects.equals(description, task.description) &&
-                Objects.equals(creationDate, task.creationDate) &&
-                Objects.equals(title, task.title) &&
-                status == task.status &&
-                priority == task.priority &&
-                Objects.equals(category, task.category) &&
-                Objects.equals(userTasks, task.userTasks);
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        Task task = (Task) other;
+        return possibleNumberOfParticipants == task.possibleNumberOfParticipants
+                && Objects.equals(id, task.id)
+                && Objects.equals(name, task.name)
+                && Objects.equals(description, task.description)
+                && Objects.equals(creationDate, task.creationDate)
+                && Objects.equals(title, task.title)
+                && status == task.status
+                && priority == task.priority
+                && Objects.equals(category, task.category)
+                && Objects.equals(userTasks, task.userTasks);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

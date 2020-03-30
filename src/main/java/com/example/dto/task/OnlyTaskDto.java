@@ -21,7 +21,7 @@ public class OnlyTaskDto {
     private String creationDate;
     private String title;
     private int numberOfParticipants;
-    private Status status;
-    private Priority priority;
+    private String status;
+    private String priority;
     private MainCategoryDto category;
 }
