@@ -30,7 +30,7 @@ public class UserTaskDto {
 
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^[0-9a-zA-z]{15,150}$")
+    @Pattern(regexp = "^[0-9 a-zA-z]{15,150}$")
     @ApiModelProperty(example = "Some user`s comment", notes = "Latin and numeric characters. Minimum: 15, maximum: 150."
             + " Field which contains user`s suggestions concerning his/her help")
     private String comment;

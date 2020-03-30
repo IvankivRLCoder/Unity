@@ -30,7 +30,7 @@ public class MainCategoryDto {
 
     @NotBlank(message = "{category.description.blank}")
     @NotNull(message = "{category.description.null}")
-    @Pattern(regexp = "^[a-zA-z]{10,150}$")
+    @Pattern(regexp = "^[a-z A-z]{10,150}$")
     @ApiModelProperty(example = "Raising funds", notes = "Minimum 10 characters, maximum 150, not blank")
     private String description;
 

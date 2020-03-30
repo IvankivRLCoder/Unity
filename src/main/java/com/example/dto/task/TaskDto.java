@@ -27,13 +27,13 @@ import java.util.Set;
 public class TaskDto {
 
     @NotNull(message = "{task.name.null}")
-    @Pattern(regexp = "^[a-zA-z]{7,25}$")
+    @Pattern(regexp = "^[a-z A-z]{7,25}$")
     @ApiModelProperty(example = "Helping elderly", notes = "Minimum 7 characters, maximum 25, not blank")
     private String name;
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
-    @Pattern(regexp = "^[a-zA-z]{10,150}$")
+    @Pattern(regexp = "^[a-z A-z]{10,150}$")
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 

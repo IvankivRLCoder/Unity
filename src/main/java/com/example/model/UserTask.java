@@ -39,20 +39,26 @@ public class UserTask implements Serializable {
     private boolean approved;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserTask userTask = (UserTask) o;
-        return isCreator == userTask.isCreator &&
-                approved == userTask.approved &&
-                Objects.equals(user, userTask.user) &&
-                Objects.equals(task, userTask.task) &&
-                Objects.equals(participationDate, userTask.participationDate) &&
-                Objects.equals(comment, userTask.comment);
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()) {
+            return false;
+        }
+
+        UserTask userTask = (UserTask) other;
+        return isCreator == userTask.isCreator
+                && approved == userTask.approved
+                && Objects.equals(user, userTask.user)
+                && Objects.equals(task, userTask.task)
+                && Objects.equals(participationDate, userTask.participationDate)
+                && Objects.equals(comment, userTask.comment);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(user);
     }
+
 }
