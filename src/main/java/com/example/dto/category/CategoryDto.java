@@ -26,7 +26,8 @@ public class CategoryDto {
 
     @NotBlank(message = "{category.description.blank}")
     @NotNull(message = "{category.description.null}")
-    @ApiModelProperty(example = "Raising funds for some needs", notes = "Minimum 10 characters, maximum 150, not blank")
+    @Pattern(regexp = "^[a-z A-z]{10,150}$")
+    @ApiModelProperty(example = "Raising funds", notes = "Minimum 10 characters, maximum 150, not blank")
     private String description;
 
 }

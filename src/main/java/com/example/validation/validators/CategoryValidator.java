@@ -1,6 +1,7 @@
 package com.example.validation.validators;
 
 import com.example.dao.CategoryDao;
+import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
 import com.example.model.Category;
 import com.example.validation.CategoryType;
@@ -23,11 +24,19 @@ public class CategoryValidator implements ConstraintValidator<CategoryType, Main
     public boolean isValid(MainCategoryDto categoryDto, ConstraintValidatorContext constraintValidatorContext) {
         if (categoryDto != null) {
             List<Category> allCategory = categoryDao.getAll();
-            System.out.println(categoryDto);
-            allCategory.forEach(System.out::println);
-            return allCategory.contains(mapper.map(categoryDto, Category.class));
+            Category searchCategory = mapper.map(categoryDto, Category.class);
+            return allCategory.stream().anyMatch(category -> isCategory(searchCategory, category));
         }
         return true;
+    }
+
+    public boolean isCategory(Category searchCategory, Category category){
+        if(searchCategory.getName().equalsIgnoreCase(category.getName())
+                && searchCategory.getDescription().equalsIgnoreCase(category.getDescription())
+                && searchCategory.getId()==category.getId()){
+            return true;
+        }
+        return false;
     }
 
 }
