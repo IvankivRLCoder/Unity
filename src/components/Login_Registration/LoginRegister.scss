@@ -1,17 +1,8 @@
-.signin-form {
-  text-align: center;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding-left: 5%;
-  align-items: center;
-  justify-content: center;
-}
-
 .signin-image {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px 15px;
+  padding: 15px;
 
   figure {
     text-align: center;
@@ -20,7 +11,6 @@
 }
 
 .form-title {
-  margin-bottom: 33px;
   line-height: 1.66;
   outline: none;
   margin: 0;
@@ -62,13 +52,35 @@
   font-family: Roboto;
 }
 
-.main {
-  justify-content: center;
-  align-items: center;
+.sign-main-block {
+  margin: 0 auto;
   width: 80%;
   background: #fff;
   box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
   border-radius: 20px;
+
+  .sign-form {
+    padding: 15px;
+    font-weight: 300;
+
+    .sign-form-error-text {
+      min-height: 15px;
+      width: 100%;
+      margin: 0;
+      padding: 1px 0;
+      line-height: 1;
+      font-size: 10px;
+      color: #e72734;
+    }
+
+    .form-group {
+      margin-bottom: calc(1em - 15px);
+    }
+  }
+
+  .remember-label {
+    font-size: 14px;
+  }
 }
 
 #signin {
@@ -88,50 +100,40 @@
 
 .form-div {
   position: relative;
-  overflow: hidden;
 
   &:last-child {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
-}
 
-.remmeber {
-  text-align: left;
-}
+  .sign-form-input {
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #999;
+    padding: 6px 30px;
+    font: 400 16px Roboto;
+    box-sizing: border-box;
+    transition: 0.5s;
+    border-radius: 0;
+    box-shadow: none;
 
-.form {
-  width: 90%;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid #999;
-  padding: 6px 30px;
-  font-family: Roboto;
-  font: 400 13px Roboto;
-  box-sizing: border-box;
+    &:focus {
+      box-shadow: none;
+      border-bottom: 1px solid #222;
+    }
 
-  &:focus {
-    border-bottom: 1px solid #222;
+    &.error {
+      border-bottom: 1px solid #e72734;
+    }
   }
-}
 
-.agree-term {
-  text-align: left;
-  margin-left: 5%;
-}
-
-.label-icon {
-  position: absolute;
-  top: 50%;
-  color: #222;
-  font-family: Roboto;
-  transform: translateY(-50%);
-}
-
-.label-agree-term {
-  position: relative;
-  font-size: 14px;
-  top: 8px;
-  left: 5px;
+  .label-icon {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    color: #222;
+    font-family: Roboto;
+    transform: translateY(-50%);
+  }
 }
 
 .login-label {

@@ -3,7 +3,7 @@ import './Header.scss';
 
 function Header() {
     return (
-        <nav className="navbar main-navbar">
+        <nav className="navbar main-navbar fixed-top">
             <a className="navbar-brand" href="/"><i className="fas fa-hands-helping"/> Unity</a>
             <div>
                 <ul className="navbar-nav navbar-expand ml-auto">
