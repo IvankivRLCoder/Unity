@@ -15,3 +15,17 @@ Please make sure to update tests as appropriate.
 Backend: Java (Spring boot).
 
 Frontend: HTML, Bootstrap4, CSS, SASS, JS, ReactJS, Underscore.
+
+## How to launch?
+
+To build *.jar you can use the Maven command line:
+
+`mvn package`
+
+To build the image you can use the Docker command line:
+
+`docker build -t springio/gs-spring-boot-docker .`
+
+To run container you can use the Docker command line:
+
+`docker run springio/gs-spring-boot-docker`
