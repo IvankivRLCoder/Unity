@@ -1,51 +1,217 @@
-import React from 'react';
+import React, {Component, FormEvent} from 'react';
 import photo from './signup-image.jpg';
 import './LoginRegister.scss';
+import Input from "../../utils/UI/Input/Input";
+import Validation from "../../utils/Validation/Validation";
 
-function Login() {
-    return (
-    <div className="main-sign-wrapper">
-     <div className="container main">
-        <div className="signin-content row">
-            <div className="signin-form col-md-6 col-xs-12">
-                <h2 className="form-title">Sign Up</h2>
-                <form method="POST" className="register-form" id="login-form">
-                    <div className="form-group form-div">
-                        <label className="label-icon"><i className="fas fa-user material-icons-name"></i></label>
-                        <input type="text" className="form" id="your_name" placeholder="Your Name"/>
+class Registration extends Component {
+
+    state: { [id: string]: any; } = {
+        formControls: {
+            name: {
+                type: 'text',
+                placeholder: 'Name',
+                value: '',
+                valid: false,
+                errorMessage: 'Enter valid name',
+                iconClassName: 'fas fa-user',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 60
+                }
+            },
+            email: {
+                type: 'text',
+                placeholder: 'Email',
+                value: '',
+                valid: false,
+                errorMessage: 'Enter valid email',
+                iconClassName: 'fas fa-envelope',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    email: true
+                }
+            },
+            password: {
+                type: 'password',
+                placeholder: 'Password',
+                value: '',
+                valid: false,
+                errorMessage: 'Enter valid password',
+                iconClassName: 'fas fa-lock',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 8,
+                    maxLength: 30
+                }
+            },
+            repassword: {
+                type: 'password',
+                placeholder: 'Re-password',
+                value: '',
+                valid: false,
+                errorMessage: 'Enter valid repassword',
+                iconClassName: 'fas fa-lock',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    equalTo: 'password'
+                }
+            }
+        }
+    };
+
+    handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+        event.preventDefault();
+
+        let isValid = true;
+        let formControls = {...this.state.formControls};
+
+        Object.keys(formControls).forEach((controlName) => {
+
+            let control = {...formControls[controlName]};
+
+            control.showValidate = true;
+            formControls[controlName] = control;
+
+            if (!control.valid && isValid) {
+                isValid = false;
+            }
+        });
+
+        this.setState({
+            formControls
+        });
+
+        if (isValid) {
+            console.log({
+                name: formControls.name.value,
+                email: formControls.email.value,
+                password: formControls.password.value,
+            });
+        }
+
+    };
+
+    validateControl = (value: string, validation: any) => {
+        if (!validation) {
+            return {isValid: true, errorMessage: ''};
+        }
+
+        let validator = new Validation();
+
+        let isValid = true;
+        let errorMessage = '';
+
+        if (validation.required && isValid) {
+            isValid = !validator.isEmpty(value);
+            if (!isValid) errorMessage = 'Field is required.';
+        }
+
+        if (validation.email && isValid) {
+            isValid = validator.checkEmail(value);
+            if (!isValid) errorMessage = 'Invalid email.';
+        }
+
+        if (validation.minLength && isValid) {
+            isValid = validator.checkMinLength(value, validation.minLength);
+            if (!isValid) errorMessage = 'You should put minimum ' + validation.minLength + ' chars.';
+        }
+
+        if (validation.maxLength && isValid) {
+            isValid = validator.checkMaxLength(value, validation.maxLength);
+            if (!isValid) errorMessage = 'You can put maximum ' + validation.maxLength + ' chars.';
+        }
+
+        if (validation.equalTo && isValid) {
+            isValid = (value === this.state.formControls[validation.equalTo].value);
+            if (!isValid) errorMessage = 'Passwords should be equal.';
+        }
+
+        return {isValid: isValid, errorMessage: errorMessage};
+    };
+
+    onChangeHandler = (event: FormEvent<HTMLInputElement>, controlName: any) => {
+        const formControls = {...this.state.formControls};
+        const control = {...formControls[controlName]};
+
+        control.value = (event.target as HTMLInputElement).value;
+        let validateControlInfo = this.validateControl(control.value, control.validation);
+
+        control.valid = validateControlInfo.isValid;
+        if (validateControlInfo.errorMessage !== '') {
+            control.errorMessage = validateControlInfo.errorMessage;
+        }
+
+        formControls[controlName] = control;
+
+        this.setState({
+            formControls
+        });
+    };
+
+    renderInputs = () => {
+        const inputs = Object.keys(this.state.formControls).map((controlName, index) => {
+            const control = this.state.formControls[controlName];
+            return (
+                <Input
+                    key={controlName + index}
+                    type={control.type}
+                    placeholder={control.placeholder}
+                    valid={control.valid}
+                    iconClassName={control.iconClassName}
+                    showValidate={control.showValidate}
+                    errorMessage={control.errorMessage}
+                    onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, controlName)}
+                />
+            );
+        });
+
+        return inputs;
+    };
+
+    render() {
+        return (
+            <div className="main-sign-wrapper">
+                <div className="container sign-main-block">
+                    <div className="row">
+                        <div className="col-md-6 col-xs-12">
+                            <div className="text-center sign-form">
+                                <h2 className="form-title">Sign Up</h2>
+                                <form method="POST" className="register-form" id="login-form"
+                                      onSubmit={this.handleSubmit}>
+                                    {this.renderInputs()}
+                                    <div className="form-group form-div form-button">
+                                        <input type="submit" id="signin" className="form-submit" value="Register"/>
+                                    </div>
+                                </form>
+                                <div className="social-login">
+                                    <span className="social-label">Or register with</span>
+                                    <ul className="socials">
+                                        <li><a href="https://uk-ua.facebook.com"><i className="fab fa-facebook-f"/></a>
+                                        </li>
+                                        <li><a href="https://twitter.com/?lang=uk"><i className="fab fa-twitter"/></a>
+                                        </li>
+                                        <li><a href="https://www.google.com.ua/?hl=ru"><i
+                                            className="fab fa-google"/></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <span className="login-label">Have account?</span><a href="/login" className="signin-image-link">Sign In</a>
+                            </div>
+                        </div>
+                        <div className="signin-image col-md-6 col-xs-12">
+                            <figure><img src={photo} className="image" alt="sing up"/></figure>
+                        </div>
                     </div>
-                    <div className="form-group form-div">
-                        <label className="label-icon email"><i className="fas fa-envelope"></i></label>
-                        <input type="email" className="form" placeholder="Email"/>
-                    </div>
-                    <div className="form-group form-div">
-                        <label className="label-icon"><i className="fas fa-lock"></i></label>
-                        <input type="password" className="form" placeholder="Password"/>
-                    </div>
-                    <div className="form-group form-div">
-                        <label className="label-icon"><i className="fas fa-lock"></i></label>
-                        <input type="password" className="form" placeholder="Confirm password"/>
-                    </div>
-                    <div className="form-group form-div form-button">
-                        <input type="submit" id="signin" className="form-submit" value="Register"/>
-                    </div>
-                </form>
-                <div className="social-login">
-                    <span className="social-label">Or register with</span>
-                    <ul className="socials">
-                        <li><a href="https://uk-ua.facebook.com"><i className="fab fa-facebook-f"></i></a></li>
-                        <li><a href="https://twitter.com/?lang=uk"><i className="fab fa-twitter"></i></a></li>
-                        <li><a href="https://www.google.com.ua/?hl=ru"><i className="fab fa-google"></i></a></li>
-                    </ul>
                 </div>
-                <span className="login-label">Have account?</span><a href="/login" className="signin-image-link">Sign In</a>
             </div>
-            <div className="signin-image col-md-6 col-xs-12">
-                <figure><img src={photo} className="image" alt="sing up"/></figure>
-            </div>
-        </div>
-    </div>
-</div>);
+        );
+    }
 }
 
-export default Login;
+export default Registration;
