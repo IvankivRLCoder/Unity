@@ -20,13 +20,13 @@ public class CategoryDto {
 
     @NotBlank(message = "{category.name.blank}")
     @NotNull(message = "{category.name.null}")
-    @Pattern(regexp = "^[a-zA-z]{2,20}$", message = "{category.name.regex}")
+    @Pattern(regexp = "^[a-z A-z]{2,20}$", message = "{category.name.regex}")
     @ApiModelProperty(example = "Fundraising", notes = "Minimum 2 characters, maximum 20, not blank")
     private String name;
 
     @NotBlank(message = "{category.description.blank}")
     @NotNull(message = "{category.description.null}")
-    @Pattern(regexp = "^[a-z A-z]{10,150}$")
+    @Pattern(regexp = "^[a-z A-z]{10,150}$", message = "{description.regex}")
     @ApiModelProperty(example = "Raising funds", notes = "Minimum 10 characters, maximum 150, not blank")
     private String description;
 

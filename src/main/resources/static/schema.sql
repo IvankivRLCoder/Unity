@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS volunteer
 CREATE TABLE IF NOT EXISTS category
 (
     id                  INT AUTO_INCREMENT PRIMARY KEY,
-    category_name       VARCHAR (50)       NOT NULL,
-    description         VARCHAR (128)      NOT NULL
+    category_name       VARCHAR (50) UNIQUE NOT NULL,
+    description         VARCHAR (128) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS task

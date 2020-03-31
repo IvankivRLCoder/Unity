@@ -1,7 +1,9 @@
 package com.example.error;
 
+import org.hibernate.JDBCException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +13,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -43,6 +48,18 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
                 .builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleDataIntegrityViolation(){
+        return ApiError
+                .builder()
+                .message("Database error! Possible causes: primary key is NULL or UNIQUE constraint violation")
+                .status(HttpStatus.BAD_REQUEST)
                 .timestamp(LocalDateTime.now())
                 .subErrors(new ArrayList<>())
                 .build();

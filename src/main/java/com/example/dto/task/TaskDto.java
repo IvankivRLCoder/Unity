@@ -12,10 +12,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -25,13 +22,13 @@ import javax.validation.constraints.Size;
 public class TaskDto {
 
     @NotNull(message = "{task.name.null}")
-    @Pattern(regexp = "^[a-z A-z]{7,25}$")
+    @Pattern(regexp = "^[a-z A-z]{7,25}$",  message = "{description.regex}")
     @ApiModelProperty(example = "Helping elderly", notes = "Minimum 7 characters, maximum 25, not blank")
     private String name;
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
-    @Pattern(regexp = "^[a-z A-z]{10,150}$")
+    @Pattern(regexp = "^[a-z A-z]{10,150}$",  message = "{description.regex}")
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 
@@ -47,6 +44,8 @@ public class TaskDto {
     @ApiModelProperty(example = "Some task title", notes = "Not blank")
     private String title;
 
+    @Min(value = 2, message = "{task.participants.minimum}")
+    @Max(value = 100, message = "{task.participants.maximum}")
     @ApiModelProperty(example = "7")
     private int possibleNumberOfParticipants;
 
