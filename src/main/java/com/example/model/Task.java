@@ -48,6 +48,13 @@ public class Task {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+
+    @JoinColumn(name = "is_active")
+    private boolean active;
+
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private Set<UserTask> userTasks = new HashSet<>();
 

@@ -26,9 +26,6 @@ public class UserTask implements Serializable {
     @ManyToOne
     private Task task;
 
-    @JoinColumn(name = "is_creator")
-    private boolean isCreator;
-
     @Column(name = "participation_date")
     private LocalDate participationDate;
 
@@ -48,8 +45,7 @@ public class UserTask implements Serializable {
         }
 
         UserTask userTask = (UserTask) other;
-        return isCreator == userTask.isCreator
-                && approved == userTask.approved
+        return  approved == userTask.approved
                 && Objects.equals(user, userTask.user)
                 && Objects.equals(task, userTask.task)
                 && Objects.equals(participationDate, userTask.participationDate)

@@ -22,8 +22,6 @@ public class MainTaskUserDto {
 
     private TaskDto task;
 
-    private boolean isCreator;
-
     @NotNull(message = "{user.task.creation.null}")
     @NotBlank(message = "{user.task.creation.blank}")
     @LocalDateType
@@ -33,7 +31,7 @@ public class MainTaskUserDto {
     @NotBlank
     @Pattern(regexp = "^[0-9 a-zA-z]{15,150}$")
     @ApiModelProperty(example = "Some user`s comment", notes = "Latin and numeric characters. Minimum: 15, maximum: 150."
-            + " Field which contains user`s suggestions concerning his/her help")
+            + " Field which contains user`s suggestions concerning his/he help")
     private String comment;
 
     @NotNull(message = "{user.task.approved.null}")
