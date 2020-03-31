@@ -1,6 +1,7 @@
 import React from 'react';
 import avatar from './avatar.png';
 import './UserInfo.scss';
+import axios from "axios";
 
 class UserInfo extends React.Component {
     state = {
@@ -11,22 +12,17 @@ class UserInfo extends React.Component {
         editMode: false
     };
 
-    constructor(options:any) {
-        super(options);
-        console.log(options);
-        // this.setState({
-        //     name: options.name,
-        //     surname: options.surname,
-        //     decription: options.description
-        // })
-        this.state.name = options.name;
-        this.state.surname = options.surname;
-        this.state.description = options.description;
+    componentDidMount () {
+        axios.get('http://localhost:3000/mockups/user.json').then(res => {
+            const user = res.data;
+            this.setState({
+                name: user.name,
+                surname: user.surname,
+                description: user.description,
+                editMode: false
+            });
+        });
     }
-
-    handleMode = (event: React.FormEvent<HTMLFormElement>):void => {
-
-    };
 
     render() {
         return (
