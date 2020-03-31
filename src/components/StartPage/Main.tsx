@@ -20,9 +20,7 @@ export class Main extends Component {
     componentDidMount () {
         axios.get('http://localhost:3000/mockups/tasks.json').then(res => {
             const tasks = res.data;
-            console.log(tasks);
             this.setState({tasksFromApi:tasks});
-            console.log(this.state.tasksFromApi);
         });
     }
 
