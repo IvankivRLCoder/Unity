@@ -7,7 +7,9 @@
   position: relative;
   overflow: hidden;
 
-
+  .submain_data{
+    padding-top: 10%;
+  }
   .task-img {
     img {
       width: 100%;
@@ -21,15 +23,14 @@
 
   }
   .priority{
+    background: #e72734;
     position: absolute;
-    top:0;
-    right:-15vw;
-    width: 30vw;
-    height:10vh;
-    //border-bottom: #cda062 solid 3px;
+    top:-25px;
+    right:-100px;
+    width: 200px;
+    height:100px;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
     transform: rotate(45deg);
-    background: #e72734;
   }
 
 }
