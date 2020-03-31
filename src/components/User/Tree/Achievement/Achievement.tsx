@@ -2,19 +2,28 @@ import React from 'react';
 import './Achievement.scss';
 import achievementImage from './achievement.png';
 
-function Achievement() {
-    return (
-        <div className="achievement-wrapper">
-            <div className="achievement">
-                <div className="achievement-img">
-                    <img src={achievementImage} alt=""/>
-                </div>
-                <div className="achievement-description">
-                    <p>Lorem ipsum dolor</p>
-                </div>
+class Achievement extends React.Component {
+    props = {
+        id: 1,
+        name: ''
+    };
+
+    render() {
+        return (
+            <div className="achievement-wrapper">
+                <a href="/task">
+                    <div className="achievement">
+                        <div className="achievement-img">
+                            <img src={achievementImage} alt=""/>
+                        </div>
+                        <div className="achievement-description">
+                            <p>{this.props.name}</p>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 export default Achievement;
