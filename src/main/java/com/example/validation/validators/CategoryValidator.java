@@ -1,11 +1,9 @@
 package com.example.validation.validators;
 
 import com.example.dao.CategoryDao;
-import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
 import com.example.model.Category;
 import com.example.validation.CategoryType;
-import com.example.validation.PriorityType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 
@@ -30,13 +28,10 @@ public class CategoryValidator implements ConstraintValidator<CategoryType, Main
         return true;
     }
 
-    public boolean isCategory(Category searchCategory, Category category){
-        if(searchCategory.getName().equalsIgnoreCase(category.getName())
+    private boolean isCategory(Category searchCategory, Category category) {
+        return searchCategory.getName().equalsIgnoreCase(category.getName())
                 && searchCategory.getDescription().equalsIgnoreCase(category.getDescription())
-                && searchCategory.getId()==category.getId()){
-            return true;
-        }
-        return false;
+                && searchCategory.getId() == category.getId();
     }
 
 }

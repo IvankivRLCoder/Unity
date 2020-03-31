@@ -5,7 +5,6 @@ import com.example.validation.LocalDateType;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeParseException;
 
 public class LocalDateValidator implements ConstraintValidator<LocalDateType, String> {
@@ -22,4 +21,5 @@ public class LocalDateValidator implements ConstraintValidator<LocalDateType, St
             return false;
         }
     }
+
 }

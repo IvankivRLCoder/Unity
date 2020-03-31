@@ -38,7 +38,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
 
     @ExceptionHandler(OverflowingTaskException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleOverflowingTask(OverflowingTaskException exception){
+    protected ApiError handleOverflowingTask(OverflowingTaskException exception) {
         return ApiError
                 .builder()
                 .status(HttpStatus.BAD_REQUEST)
