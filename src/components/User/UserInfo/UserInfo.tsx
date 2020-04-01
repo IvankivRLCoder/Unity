@@ -38,7 +38,7 @@ class UserInfo extends React.Component {
                     </div>
                 </div>
                 <div className={"user-info-block " + (this.state.editMode ? 'show' : 'hide')}>
-                    <img src={avatar} className="user-info-img" alt="Avatar"/>
+                    <input type="file"/>
                     <div className={"row"} style={{paddingTop: "15px"}}>
                         <div className={"col-md-6"}>
                             <input className={"form-control "} placeholder={"Name"} defaultValue={this.state.name}/>

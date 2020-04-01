@@ -14,13 +14,8 @@ class User extends React.Component {
                             <UserInfo/>
                         </div>
                     </div>
-                    <div className="col-lg-4 col-12 order-1 order-lg-2">
-                        <UserInfo/>
-                    </div>
                 </div>
-            </div>
-        </div>
-    );
+            </div>)};
 }
 
 export default User;
