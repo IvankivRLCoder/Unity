@@ -1,0 +1,13 @@
+{
+  "name": "Nazar",
+  "surname": "Koval",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quisnostrud exercitation ullamco laboris nisi ut aliquip ex ea",
+  "achievements": [{
+    "id": 1,
+    "name": "Hero"
+  }, {
+    "id": 2,
+    "name": "Helper"
+  }],
+  "totalAmount": 10
+}
