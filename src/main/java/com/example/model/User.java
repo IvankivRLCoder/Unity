@@ -46,6 +46,10 @@ public class User {
     @Column(name = "is_blocked")
     private boolean blocked;
 
+    //TODO TODO!!!!!!!!!!!!!!!!!!!!!!
+    @OneToMany(mappedBy = "creator")
+    private Set<Task> createdTasks = new HashSet<>();
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserTask> participatedTasks = new HashSet<>();
 

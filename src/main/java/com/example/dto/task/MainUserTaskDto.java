@@ -22,8 +22,6 @@ public class MainUserTaskDto {
 
     private UserDto user;
 
-    private boolean isCreator;
-
     @NotNull(message = "{user.task.creation.null}")
     @NotBlank(message = "{user.task.creation.blank}")
     @LocalDateType

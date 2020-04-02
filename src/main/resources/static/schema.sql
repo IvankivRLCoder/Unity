@@ -33,17 +33,22 @@ CREATE TABLE IF NOT EXISTS task
     status          VARCHAR (30)       NOT NULL,
     priority        VARCHAR (30)       NOT NULL,
     category_id     INT                NOT NULL,
+    creator_id      INT                NOT NULL,
 
     CONSTRAINT fk_category
         FOREIGN KEY (category_id)
-            REFERENCES category (id)
+            REFERENCES category (id),
+
+    CONSTRAINT fk_creator
+        FOREIGN KEY (creator_id)
+            REFERENCES volunteer (id)
+
 );
 
 CREATE TABLE IF NOT EXISTS volunteer_task
 (
     volunteer_id        INT NOT NULL,
     task_id             INT NOT NULL,
-    is_creator          BOOLEAN DEFAULT FALSE,
     participation_date  DATE NOT NULL,
     comment             VARCHAR (50) NOT NULL,
     approved            BOOLEAN DEFAULT FALSE,
@@ -67,11 +72,11 @@ INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_o
 VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'NOVICE', false),
        (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true);
 
-INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id)
-VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1),
-       (2,'Task 2', 'Task number 2', '2020-03-27', 'Title 2', false, 20, 'ACTIVE', 'LOW', 3);
+INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id, creator_id)
+VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1, 1),
+       (2,'Task 2', 'Task number 2', '2020-03-27', 'Title 2', false, 20, 'ACTIVE', 'LOW', 3, 2);
 
-INSERT INTO volunteer_task (volunteer_id, task_id, is_creator, participation_date, comment, approved)
-VALUES (1, 1, true, CURRENT_DATE(), 'first user - first task', true ),
-       (1, 2, false, '2020-07-27', 'first user - second task', false ),
-       (2, 2, true, '2000-03-03', 'second user - second task', true );
+INSERT INTO volunteer_task (volunteer_id, task_id, participation_date, comment, approved)
+VALUES (1, 1, CURRENT_DATE(), 'first user - first task', true ),
+       (1, 2, '2020-07-27', 'first user - second task', false ),
+       (2, 2, '2000-03-03', 'second user - second task', true );
