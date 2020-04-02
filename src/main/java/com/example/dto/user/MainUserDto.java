@@ -1,10 +1,13 @@
 package com.example.dto.user;
 
+import com.example.dto.task.TaskDto;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +24,7 @@ public class MainUserDto {
     private String phoneNumber;
     private String dateOfBirth;
     private String trustLevel;
+    private Set<TaskDto> createdTasks;
     private boolean blocked;
 
 }
