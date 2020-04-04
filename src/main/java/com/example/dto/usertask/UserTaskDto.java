@@ -1,6 +1,7 @@
 package com.example.dto.usertask;
 
 import com.example.validation.LocalDateType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -19,14 +20,11 @@ import javax.validation.constraints.Pattern;
 @ApiModel(description = "Transitive table representation. Used for business logic")
 public class UserTaskDto {
 
-    @NotNull(message = "{user.task.iscreator.null}")
-    @ApiModelProperty(example = "false", notes = "Field to find out whether user is approved for task by task`s creator")
-    private boolean isCreator;
-
-    @NotNull(message = "{user.task.creation.null}")
-    @NotBlank(message = "{user.task.creation.blank}")
-    @LocalDateType
-    @ApiModelProperty(example = "2000-05-30", notes = "minimum 12, maximum 100")
+    @JsonIgnore
+//    @NotNull(message = "{user.task.creation.null}")
+//    @NotBlank(message = "{user.task.creation.blank}")
+//    @LocalDateType
+//    @ApiModelProperty(example = "2000-05-30", notes = "minimum 12, maximum 100")
     private String participationDate;
 
     @NotNull

@@ -22,4 +22,6 @@ public interface UserService {
     List<MainTaskUserDto> getAllTasksByUserId(int id);
 
     UserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
+
+    UserTaskDto approveUserForTask(int userId, int taskId, boolean approved);
 }
