@@ -43,6 +43,17 @@ class Header extends React.Component{
                             <div className={"col-lg-4"}>
                                 <img src={avatar} style={{"width": "70%"}}/>
                                 <input style={{"paddingTop": "10px"}} type={"file"}/>
+                                <div className={"row"} style={{"paddingTop": "10px"}}>
+                                    <div className={"col-lg-4"}>
+                                        <img src={avatar} style={{"width": "100%"}}/>
+                                    </div>
+                                    <div className={"col-lg-4"}>
+                                        <img src={avatar} style={{"width": "100%"}}/>
+                                    </div>
+                                    <div className={"col-lg-4"}>
+                                        <img src={avatar} style={{"width": "100%"}}/>
+                                    </div>
+                                </div>
                             </div>
                             <div className={"col-lg-8"}>
                                 <div className="form-group">
@@ -51,7 +62,7 @@ class Header extends React.Component{
                                 </div>
                                 <div className="form-group">
                                     <label>Task description</label>
-                                    <textarea className="form-control"/>
+                                    <textarea style={{"height" : "150px"}} className="form-control"/>
                                 </div>
                             </div>
                         </div>
