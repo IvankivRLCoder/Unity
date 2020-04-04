@@ -1,0 +1,36 @@
+.main-task-block {
+  padding: 2%;
+  margin: 5% ;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  background: white;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+
+  .submain_data{
+    padding-top: 10%;
+  }
+  .task-img {
+    img {
+      width: 100%;
+    }
+  }
+  &:hover{
+
+    cursor: pointer;
+    box-shadow: none;
+    transition: 0.3s;
+
+  }
+  .priority{
+    background: #e72734;
+    position: absolute;
+    top:-25px;
+    right:-100px;
+    width: 200px;
+    height:100px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    transform: rotate(45deg);
+  }
+
+}
