@@ -33,14 +33,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public MainCategoryDto getCategoryById(int id, ApiKeyDto apiKeyDto) {
-        userService.getByApiKey(apiKeyDto.getApiKey());
+    public MainCategoryDto getCategoryById(int id) {
         return modelMapper.map(getById(id), MainCategoryDto.class);
     }
 
     @Override
-    public List<MainCategoryDto> getAllCategories(ApiKeyDto apiKeyDto) {
-        userService.getByApiKey(apiKeyDto.getApiKey());
+    public List<MainCategoryDto> getAllCategories() {
         return categoryDao.getAll()
                 .stream()
                 .map(category -> modelMapper.map(category, MainCategoryDto.class))

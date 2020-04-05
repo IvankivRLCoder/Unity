@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface UserService {
 
-    MainUserDto getUserById(int id, ApiKeyDto apiKeyDto);
+    MainUserDto getUserById(int id);
 
-    List<MainUserDto> getAllUsers(ApiKeyDto apiKeyDto);
+    List<MainUserDto> getAllUsers();
 
     void deleteUser(int id, ApiKeyDto apiKeyDto);
 
     MainUserDto updateUser(UserDto userDto, int id);
 
-    List<MainTaskUserDto> getAllTasksByUserId(int id, ApiKeyDto apiKeyDto);
+    List<MainTaskUserDto> getAllTasksByUserId(int id);
 
     UserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
 

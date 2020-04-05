@@ -67,23 +67,23 @@ public class TaskController {
             @ApiResponse(code = 200, message = "Task found", response = MainTaskDto.class),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public MainTaskDto getTaskById(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
-        return taskService.getTaskById(id, apiKeyDto);
+    public MainTaskDto getTaskById(@PathVariable int id) {
+        return taskService.getTaskById(id);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the tasks")
     @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskDto.class)
-    public List<MainTaskDto> getAllTasks(@RequestBody ApiKeyDto apiKeyDto) {
-        return taskService.getAllTasks(apiKeyDto);
+    public List<MainTaskDto> getAllTasks() {
+        return taskService.getAllTasks();
     }
 
     @GetMapping("/users/{id}")
     @ApiOperation(value = "View a list of all participants of the task by id")
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
-    public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
-        return taskService.getAllUsersByTaskId(id, apiKeyDto);
+    public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id) {
+        return taskService.getAllUsersByTaskId(id);
     }
 
 }

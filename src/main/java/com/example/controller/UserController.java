@@ -56,22 +56,22 @@ public class UserController {
             @ApiResponse(code = 200, message = "User found", response = MainUserDto.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public MainUserDto getUserById(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
-        return userService.getUserById(id, apiKeyDto);
+    public MainUserDto getUserById(@PathVariable int id) {
+        return userService.getUserById(id);
     }
 
     @GetMapping("/")
     @ApiOperation(value = "View a list of all users")
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
-    public List<MainUserDto> getAllUsers(@RequestBody ApiKeyDto apiKeyDto) {
-        return userService.getAllUsers(apiKeyDto);
+    public List<MainUserDto> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}/tasks")
     @ApiOperation(value = "View a list of all tasks by user id")
     @ApiResponse(code = 200, message = "List of all users", response = MainTaskUserDto.class)
-    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
-        return userService.getAllTasksByUserId(id, apiKeyDto);
+    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
+        return userService.getAllTasksByUserId(id);
     }
 
     @PostMapping("/{userId}/tasks/{taskId}")

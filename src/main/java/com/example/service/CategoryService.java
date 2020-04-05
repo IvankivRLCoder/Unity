@@ -10,9 +10,9 @@ public interface CategoryService {
 
     MainCategoryDto createCategory(CategoryDto categoryDto);
 
-    MainCategoryDto getCategoryById(int id, ApiKeyDto apiKeyDto);
+    MainCategoryDto getCategoryById(int id);
 
-    List<MainCategoryDto> getAllCategories(ApiKeyDto apiKeyDto);
+    List<MainCategoryDto> getAllCategories();
 
     void deleteCategory(int id, ApiKeyDto apiKeyDto);
 

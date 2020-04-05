@@ -53,16 +53,16 @@ public class CategoryController {
             @ApiResponse(code = 200, message = "Category found", response = MainCategoryDto.class),
             @ApiResponse(code = 404, message = "Non-existing category id", response = ApiError.class)
     })
-    public MainCategoryDto getCategoryById(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
-        return categoryService.getCategoryById(id, apiKeyDto);
+    public MainCategoryDto getCategoryById(@PathVariable int id) {
+        return categoryService.getCategoryById(id);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the categories")
     @ApiResponse(code = 200, message = "List of all categories", response = MainCategoryDto.class)
-    public List<MainCategoryDto> getAllCategories(@RequestBody ApiKeyDto apiKeyDto) {
-        return categoryService.getAllCategories(apiKeyDto);
+    public List<MainCategoryDto> getAllCategories() {
+        return categoryService.getAllCategories();
     }
 
 }

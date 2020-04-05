@@ -39,14 +39,12 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public MainUserDto getUserById(int id, ApiKeyDto apiKeyDto) {
-        id = getByApiKey(apiKeyDto.getApiKey());
+    public MainUserDto getUserById(int id) {
         return modelMapper.map(getById(id), MainUserDto.class);
     }
 
     @Override
-    public List<MainUserDto> getAllUsers(ApiKeyDto apiKeyDto) {
-        getByApiKey(apiKeyDto.getApiKey());
+    public List<MainUserDto> getAllUsers() {
         return userDao.getAll().stream().map(user -> modelMapper.map(user, MainUserDto.class)).collect(Collectors.toList());
     }
 
@@ -75,8 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<MainTaskUserDto> getAllTasksByUserId(int id, ApiKeyDto apiKeyDto) {
-        getByApiKey(apiKeyDto.getApiKey());
+    public List<MainTaskUserDto> getAllTasksByUserId(int id) {
         return userDao.getById(id).getParticipatedTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainTaskUserDto.class))
                 .collect(Collectors.toList());
@@ -109,9 +106,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public int getByApiKey(String apiKey){
-        User user = null;
+        User user;
         try {
-            userDao.getByApiKey(encode(apiKey));
+            user = userDao.getByApiKey(encode(apiKey));
         } catch (NoResultException | EmptyResultDataAccessException exception) {
             throw new BadCredentialsException("User credentials are incorrect");
         }

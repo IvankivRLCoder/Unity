@@ -11,14 +11,14 @@ public interface TaskService {
 
     MainTaskDto createTask(TaskDto taskDto, int userId);
 
-    MainTaskDto getTaskById(int id, ApiKeyDto apiKeyDto);
+    MainTaskDto getTaskById(int id);
 
-    List<MainTaskDto> getAllTasks(ApiKeyDto apiKeyDto);
+    List<MainTaskDto> getAllTasks();
 
     void deleteTask(int id, ApiKeyDto apiKeyDto);
 
     MainTaskDto updateTask(TaskDto taskDto, int id);
 
-    List<MainUserTaskDto> getAllUsersByTaskId(int id, ApiKeyDto apiKeyDto);
+    List<MainUserTaskDto> getAllUsersByTaskId(int id);
 
 }

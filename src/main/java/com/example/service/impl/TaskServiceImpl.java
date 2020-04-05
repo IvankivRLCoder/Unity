@@ -40,14 +40,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public MainTaskDto getTaskById(int id, ApiKeyDto apiKeyDto) {
-        userService.getByApiKey(apiKeyDto.getApiKey());
+    public MainTaskDto getTaskById(int id) {
         return modelMapper.map(getByTaskId(id), MainTaskDto.class);
     }
 
     @Override
-    public List<MainTaskDto> getAllTasks(ApiKeyDto apiKeyDto) {
-        userService.getByApiKey(apiKeyDto.getApiKey());
+    public List<MainTaskDto> getAllTasks() {
         return taskDao.getAll().stream().map(task -> modelMapper.map(task, MainTaskDto.class)).collect(Collectors.toList());
     }
 
@@ -76,8 +74,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<MainUserTaskDto> getAllUsersByTaskId(int id, ApiKeyDto apiKeyDto) {
-        userService.getByApiKey(apiKeyDto.getApiKey());
+    public List<MainUserTaskDto> getAllUsersByTaskId(int id) {
         return taskDao.getById(id).getUserTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
                 .collect(Collectors.toList());
