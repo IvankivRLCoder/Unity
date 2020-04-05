@@ -42,4 +42,13 @@ public class UserTaskDaoImpl implements UserTaskDao {
                 .getResultList();
     }
 
+    @Override
+    public UserTask getByUsedAndTask(int userId, int taskId){
+        return entityManager
+                .createQuery("SELECT u FROM UserTask u WHERE u.user.id = :userId AND u.task.id = :taskId", UserTask.class)
+                .setParameter("userId", userId)
+                .setParameter("taskId", taskId)
+                .getSingleResult();
+    }
+
 }

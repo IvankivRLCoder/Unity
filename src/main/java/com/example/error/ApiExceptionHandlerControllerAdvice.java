@@ -73,6 +73,42 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
                 .build();
     }
 
+    @ExceptionHandler(UserIsParticipantAlreadyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleUserIsParticipantAlready(UserIsParticipantAlreadyException exception){
+        return ApiError
+                .builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(TaskIsNotActiveException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleTaskIsNotActive(TaskIsNotActiveException exception){
+        return ApiError
+                .builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(UserIsCreatorException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleUserIsCreator(UserIsCreatorException exception){
+        return ApiError
+                .builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiError handleDataIntegrityViolation(){

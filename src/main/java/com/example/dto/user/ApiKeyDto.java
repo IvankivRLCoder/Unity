@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class ApiKeyDto {
+
     @NotNull(message = "{user.api.key.null}")
     @NotBlank(message = "{user.api.key.blank}")
     private String apiKey;
+
 }

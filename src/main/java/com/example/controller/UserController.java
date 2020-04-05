@@ -1,10 +1,12 @@
 package com.example.controller;
 
+import com.example.dto.task.CreatedTaskDto;
+import com.example.dto.task.MainTaskDto;
+import com.example.dto.task.TaskDto;
 import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UserDto;
-import com.example.dto.usertask.UserTaskDto;
 import com.example.error.ApiError;
 import com.example.service.UserService;
 import io.swagger.annotations.Api;
@@ -25,6 +27,16 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    @PostMapping("/{id}/tasks")
+    @ApiOperation(value = "All created tasks")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created tasks", response = TaskDto.class),
+            @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
+    })
+    public List<CreatedTaskDto> getAllCreatedTasks(@PathVariable int id, @Valid ApiKeyDto apiKeyDto) {
+        return userService.getAllCreatedTasks(apiKeyDto);
+    }
 
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete user by id")
@@ -69,16 +81,9 @@ public class UserController {
 
     @GetMapping("/{id}/tasks")
     @ApiOperation(value = "View a list of all tasks by user id")
-    @ApiResponse(code = 200, message = "List of all users", response = MainTaskUserDto.class)
+    @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskUserDto.class)
     public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
         return userService.getAllTasksByUserId(id);
-    }
-
-    @PostMapping("/{userId}/tasks/{taskId}")
-    @ApiOperation(value = "Take part in task")
-    @ApiResponse(code = 200, message = "List of all users", response = UserTaskDto.class)
-    public UserTaskDto takePartInTask(@PathVariable int userId, @PathVariable int taskId, @Valid @RequestBody UserTaskDto userTaskDto) {
-        return userService.takePartInTask(userId, taskId, userTaskDto);
     }
 
 }

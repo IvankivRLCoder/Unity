@@ -1,5 +1,8 @@
 package com.example.service;
 
+import com.example.dto.task.CreatedTaskDto;
+import com.example.dto.task.MainUserTaskDto;
+import com.example.dto.task.TaskDto;
 import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
@@ -20,12 +23,16 @@ public interface UserService {
 
     List<MainTaskUserDto> getAllTasksByUserId(int id);
 
-    UserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
+    MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
 
     int getByApiKey(String apiKey);
 
     String encode(String str);
 
     String decode(String str);
+
+    MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto);
+
+    List<CreatedTaskDto> getAllCreatedTasks(ApiKeyDto apiKeyDto);
 
 }

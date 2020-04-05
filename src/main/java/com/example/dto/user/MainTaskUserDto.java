@@ -1,5 +1,6 @@
 package com.example.dto.user;
 
+import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.validation.LocalDateType;
 import io.swagger.annotations.ApiModel;
@@ -20,18 +21,10 @@ import javax.validation.constraints.Pattern;
 @ApiModel(description = "Transitive table representation. Used for business logic")
 public class MainTaskUserDto {
 
-    private TaskDto task;
+    private MainTaskDto task;
 
-    @NotNull(message = "{user.task.creation.null}")
-    @NotBlank(message = "{user.task.creation.blank}")
-    @LocalDateType
     private String participationDate;
 
-    @NotNull
-    @NotBlank
-    @Pattern(regexp = "^[0-9 a-zA-z]{15,150}$")
-    @ApiModelProperty(example = "Some user`s comment", notes = "Latin and numeric characters. Minimum: 15, maximum: 150."
-            + " Field which contains user`s suggestions concerning his/he help")
     private String comment;
 
     @NotNull(message = "{user.task.approved.null}")

@@ -69,15 +69,19 @@ VALUES (1, 'Disabled', 'Helping disabled people'),
        (2, 'Elderly', 'Helping elderly'),
        (3, 'Fundraising', 'Raising funds');
 
+
 INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked, api_key)
 VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'NOVICE', false, null),
-       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true, null);
+       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true, null),
+       (3,'Test', 'One', 'test1@gmail.com', 'Kaban228', '0990095275', '2000-12-17', 'NOVICE', false, null),
+       (4,'Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', '2000-12-17', 'NOVICE', false, null);
 
 INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id, creator_id)
 VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1, 1),
-       (2,'Task 2', 'Task number 2', '2020-03-27', 'Title 2', false, 20, 'ACTIVE', 'LOW', 3, 2);
+       (2,'Task 2', 'Task number 2', '2020-03-27', 'Title 2', false, 20, 'ACTIVE', 'LOW', 3, 2),
+       (3,'Task 3', 'Task number 3', CURRENT_DATE(), 'Title 3', false, 2, 'ACTIVE', 'LOW', 2, 2);
 
 INSERT INTO volunteer_task (volunteer_id, task_id, participation_date, comment, approved)
-VALUES (1, 1, CURRENT_DATE(), 'first user - first task', true ),
-       (1, 2, '2020-07-27', 'first user - second task', false ),
-       (2, 2, '2000-03-03', 'second user - second task', true );
+VALUES (1, 2, CURRENT_DATE(), 'first user - first task', true ),
+       (1, 3, '2020-07-27', 'first user - second task', false ),
+       (2, 1, '2000-03-03', 'second user - second task', true );
