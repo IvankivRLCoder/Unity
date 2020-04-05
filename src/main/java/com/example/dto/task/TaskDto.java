@@ -64,4 +64,8 @@ public class TaskDto {
     @CategoryType
     private MainCategoryDto category;
 
+    @NotNull(message = "{user.api.key.null}")
+    @NotBlank(message = "{user.api.key.blank}")
+    private String apiKey;
+
 }

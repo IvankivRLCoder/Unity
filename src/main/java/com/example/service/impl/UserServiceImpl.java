@@ -3,19 +3,26 @@ package com.example.service.impl;
 import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
 import com.example.dao.UserTaskDao;
+import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UserDto;
 import com.example.dto.usertask.UserTaskDto;
+import com.example.error.BadCredentialsException;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.model.UserTask;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,29 +39,27 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
 
     @Override
-    public MainUserDto createUser(UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        return modelMapper.map(userDao.save(user), MainUserDto.class);
-    }
-
-    @Override
-    public MainUserDto getUserById(int id) {
+    public MainUserDto getUserById(int id, ApiKeyDto apiKeyDto) {
+        id = getByApiKey(apiKeyDto.getApiKey());
         return modelMapper.map(getById(id), MainUserDto.class);
     }
 
     @Override
-    public List<MainUserDto> getAllUsers() {
+    public List<MainUserDto> getAllUsers(ApiKeyDto apiKeyDto) {
+        getByApiKey(apiKeyDto.getApiKey());
         return userDao.getAll().stream().map(user -> modelMapper.map(user, MainUserDto.class)).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(int id, ApiKeyDto apiKeyDto) {
+        id = getByApiKey(apiKeyDto.getApiKey());
         User user = getById(id);
         userDao.delete(user);
     }
 
     @Override
     public MainUserDto updateUser(UserDto userDto, int id) {
+        id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
         User newUser = modelMapper.map(userDto, User.class);
         oldUser.setBlocked(newUser.isBlocked());
@@ -70,7 +75,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<MainTaskUserDto> getAllTasksByUserId(int id) {
+    public List<MainTaskUserDto> getAllTasksByUserId(int id, ApiKeyDto apiKeyDto) {
+        getByApiKey(apiKeyDto.getApiKey());
         return userDao.getById(id).getParticipatedTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainTaskUserDto.class))
                 .collect(Collectors.toList());
@@ -78,6 +84,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
+        getByApiKey(userTaskDto.getApiKey());
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);
         userTask.setUser(getById(userId));
         userTask.setTask(getTaskById(taskId));
@@ -99,6 +106,33 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("Task is not found with id = " + id);
         }
         return task;
+    }
+
+    public int getByApiKey(String apiKey){
+        User user = null;
+        try {
+            userDao.getByApiKey(encode(apiKey));
+        } catch (NoResultException | EmptyResultDataAccessException exception) {
+            throw new BadCredentialsException("User credentials are incorrect");
+        }
+        return user.getId();
+    }
+
+    public String encode(String str) {
+        BASE64Encoder encoder = new BASE64Encoder();
+        str = encoder.encodeBuffer(str.getBytes());
+        return str;
+    }
+
+
+    public String decode(String str) {
+        BASE64Decoder decoder = new BASE64Decoder();
+        try {
+            str = new String(decoder.decodeBuffer(str));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
 }

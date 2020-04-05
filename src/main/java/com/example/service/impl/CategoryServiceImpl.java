@@ -3,8 +3,10 @@ package com.example.service.impl;
 import com.example.dao.CategoryDao;
 import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
+import com.example.dto.user.ApiKeyDto;
 import com.example.model.Category;
 import com.example.service.CategoryService;
+import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,19 +23,24 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final ModelMapper modelMapper;
 
+    private final UserService userService;
+
     @Override
     public MainCategoryDto createCategory(CategoryDto categoryDto) {
+        userService.getByApiKey(categoryDto.getApiKey());
         Category category = modelMapper.map(categoryDto, Category.class);
         return modelMapper.map(categoryDao.save(category), MainCategoryDto.class);
     }
 
     @Override
-    public MainCategoryDto getCategoryById(int id) {
+    public MainCategoryDto getCategoryById(int id, ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         return modelMapper.map(getById(id), MainCategoryDto.class);
     }
 
     @Override
-    public List<MainCategoryDto> getAllCategories() {
+    public List<MainCategoryDto> getAllCategories(ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         return categoryDao.getAll()
                 .stream()
                 .map(category -> modelMapper.map(category, MainCategoryDto.class))
@@ -41,7 +48,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(int id) {
+    public void deleteCategory(int id, ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         categoryDao.delete(getById(id));
     }
 

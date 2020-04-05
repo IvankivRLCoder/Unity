@@ -30,4 +30,8 @@ public class CategoryDto {
     @ApiModelProperty(example = "Raising funds", notes = "Minimum 10 characters, maximum 150, not blank")
     private String description;
 
+    @NotNull(message = "{user.api.key.null}")
+    @NotBlank(message = "{user.api.key.blank}")
+    private String apiKey;
+
 }

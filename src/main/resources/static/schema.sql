@@ -2,13 +2,14 @@ CREATE TABLE IF NOT EXISTS volunteer
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     volunteer_name  VARCHAR (20)        NOT NULL,
-    surname         VARCHAR (20)        NOT NULL,
+    surname         VARCHAR (20),
     email           VARCHAR (30) UNIQUE NOT NULL,
     password        VARCHAR (30)        NOT NULL,
-    phone           VARCHAR (11) UNIQUE NOT NULL,
-    date_of_birth   DATE                NOT NULL,
-    trust_level     VARCHAR (32)        NOT NULL,
-    is_blocked      BOOLEAN             DEFAULT FALSE
+    phone           VARCHAR (11) UNIQUE,
+    date_of_birth   DATE,
+    trust_level     VARCHAR (32),
+    is_blocked      BOOLEAN             DEFAULT FALSE,
+    api_key         VARCHAR (50) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS category
@@ -68,9 +69,9 @@ VALUES (1, 'Disabled', 'Helping disabled people'),
        (2, 'Elderly', 'Helping elderly'),
        (3, 'Fundraising', 'Raising funds');
 
-INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked)
-VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'NOVICE', false),
-       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true);
+INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked, api_key)
+VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'NOVICE', false, null),
+       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true, null);
 
 INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id, creator_id)
 VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1, 1),

@@ -19,10 +19,6 @@ import javax.validation.constraints.Pattern;
 @ApiModel(description = "Transitive table representation. Used for business logic")
 public class UserTaskDto {
 
-    @NotNull(message = "{user.task.iscreator.null}")
-    @ApiModelProperty(example = "false", notes = "Field to find out whether user is approved for task by task`s creator")
-    private boolean isCreator;
-
     @NotNull(message = "{user.task.creation.null}")
     @NotBlank(message = "{user.task.creation.blank}")
     @LocalDateType
@@ -39,4 +35,9 @@ public class UserTaskDto {
     @NotNull(message = "{user.task.approved.null}")
     @ApiModelProperty(example = "false", notes = "Field to find out whether user is approved for task by task`s creator")
     private boolean approved;
+
+    @NotNull(message = "{user.api.key.null}")
+    @NotBlank(message = "{user.api.key.blank}")
+    private String apiKey;
+
 }

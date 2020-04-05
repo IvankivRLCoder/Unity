@@ -62,4 +62,11 @@ public class UserDaoImpl implements UserDao {
                 .getSingleResult();
     }
 
+    @Override
+    public User getByApiKey(String apiKey) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.apiKey = :apiKey", User.class)
+                .setParameter("apiKey", apiKey)
+                .getSingleResult();
+    }
+
 }

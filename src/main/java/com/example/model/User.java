@@ -46,6 +46,9 @@ public class User {
     @Column(name = "is_blocked")
     private boolean blocked;
 
+    @Column(name = "api_key")
+    private String apiKey;
+
     //TODO TODO!!!!!!!!!!!!!!!!!!!!!!
     @OneToMany(mappedBy = "creator")
     private Set<Task> createdTasks = new HashSet<>();

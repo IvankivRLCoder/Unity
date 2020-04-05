@@ -14,4 +14,6 @@ public interface UserDao extends MainDao<User> {
 
     User getByPhoneNumber(String phoneNumber);
 
+    User getByApiKey(String apiKey);
+
 }

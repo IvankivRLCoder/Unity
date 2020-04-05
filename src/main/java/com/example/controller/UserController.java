@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UserDto;
@@ -25,17 +26,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/")
-    @ApiOperation(value = "Add new user")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New user created", response = MainUserDto.class),
-            @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
-    })
-    public MainUserDto createUser(@Valid @RequestBody UserDto userDto) {
-        return userService.createUser(userDto);
-    }
-
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete user by id")
     @ResponseStatus(HttpStatus.OK)
@@ -43,8 +33,8 @@ public class UserController {
             @ApiResponse(code = 200, message = "User successfully deleted"),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public void deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
+    public void deleteUser(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        userService.deleteUser(id, apiKeyDto);
     }
 
     @PutMapping("/{id}")
@@ -66,22 +56,22 @@ public class UserController {
             @ApiResponse(code = 200, message = "User found", response = MainUserDto.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public MainUserDto getUserById(@PathVariable int id) {
-        return userService.getUserById(id);
+    public MainUserDto getUserById(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        return userService.getUserById(id, apiKeyDto);
     }
 
     @GetMapping("/")
     @ApiOperation(value = "View a list of all users")
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
-    public List<MainUserDto> getAllUsers() {
-        return userService.getAllUsers();
+    public List<MainUserDto> getAllUsers(@RequestBody ApiKeyDto apiKeyDto) {
+        return userService.getAllUsers(apiKeyDto);
     }
 
     @GetMapping("/{id}/tasks")
     @ApiOperation(value = "View a list of all tasks by user id")
     @ApiResponse(code = 200, message = "List of all users", response = MainTaskUserDto.class)
-    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
-        return userService.getAllTasksByUserId(id);
+    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        return userService.getAllTasksByUserId(id, apiKeyDto);
     }
 
     @PostMapping("/{userId}/tasks/{taskId}")

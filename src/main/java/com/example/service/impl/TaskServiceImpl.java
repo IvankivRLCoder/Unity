@@ -5,9 +5,11 @@ import com.example.dao.UserDao;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.user.ApiKeyDto;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.service.TaskService;
+import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,10 +26,13 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserDao userDao;
 
+    private final UserService userService;
+
     private final ModelMapper modelMapper;
 
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
+        userId = userService.getByApiKey(taskDto.getApiKey());
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
         task.setActive(true);
@@ -35,22 +40,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public MainTaskDto getTaskById(int id) {
+    public MainTaskDto getTaskById(int id, ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         return modelMapper.map(getByTaskId(id), MainTaskDto.class);
     }
 
     @Override
-    public List<MainTaskDto> getAllTasks() {
+    public List<MainTaskDto> getAllTasks(ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         return taskDao.getAll().stream().map(task -> modelMapper.map(task, MainTaskDto.class)).collect(Collectors.toList());
     }
 
     @Override
-    public void deleteTask(int id) {
+    public void deleteTask(int id, ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         taskDao.delete(getByTaskId(id));
     }
 
     @Override
     public MainTaskDto updateTask(TaskDto taskDto, int id) {
+        userService.getByApiKey(taskDto.getApiKey());
         Task task = getByTaskId(id);
         Task newTask = modelMapper.map(taskDto, Task.class);
 
@@ -67,7 +76,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<MainUserTaskDto> getAllUsersByTaskId(int id) {
+    public List<MainUserTaskDto> getAllUsersByTaskId(int id, ApiKeyDto apiKeyDto) {
+        userService.getByApiKey(apiKeyDto.getApiKey());
         return taskDao.getById(id).getUserTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
                 .collect(Collectors.toList());

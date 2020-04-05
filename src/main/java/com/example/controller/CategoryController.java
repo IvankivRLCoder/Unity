@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
+import com.example.dto.user.ApiKeyDto;
 import com.example.error.ApiError;
 import com.example.service.CategoryService;
 import io.swagger.annotations.Api;
@@ -41,8 +42,8 @@ public class CategoryController {
             @ApiResponse(code = 200, message = "Category successfully deleted"),
             @ApiResponse(code = 404, message = "Non-existing category id", response = ApiError.class)
     })
-    public void deleteCategory(@PathVariable int id) {
-        categoryService.deleteCategory(id);
+    public void deleteCategory(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        categoryService.deleteCategory(id, apiKeyDto);
     }
 
     @GetMapping("/{id}")
@@ -52,16 +53,16 @@ public class CategoryController {
             @ApiResponse(code = 200, message = "Category found", response = MainCategoryDto.class),
             @ApiResponse(code = 404, message = "Non-existing category id", response = ApiError.class)
     })
-    public MainCategoryDto getCategoryById(@PathVariable int id) {
-        return categoryService.getCategoryById(id);
+    public MainCategoryDto getCategoryById(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        return categoryService.getCategoryById(id, apiKeyDto);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the categories")
     @ApiResponse(code = 200, message = "List of all categories", response = MainCategoryDto.class)
-    public List<MainCategoryDto> getAllCategories() {
-        return categoryService.getAllCategories();
+    public List<MainCategoryDto> getAllCategories(@RequestBody ApiKeyDto apiKeyDto) {
+        return categoryService.getAllCategories(apiKeyDto);
     }
 
 }

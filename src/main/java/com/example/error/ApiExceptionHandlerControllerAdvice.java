@@ -1,6 +1,5 @@
 package com.example.error;
 
-import org.hibernate.JDBCException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,16 +12,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -32,6 +28,30 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
     @ExceptionHandler(EntityNotFountException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ApiError handleEntityNotFound(EntityNotFountException exception) {
+        return ApiError
+                .builder()
+                .status(HttpStatus.NOT_FOUND)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleEntityAlreadyExists(EntityAlreadyExistsException exception) {
+        return ApiError
+                .builder()
+                .status(HttpStatus.NOT_FOUND)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleBadCredential(BadCredentialsException exception) {
         return ApiError
                 .builder()
                 .status(HttpStatus.NOT_FOUND)

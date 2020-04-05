@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainUserDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
@@ -43,8 +44,8 @@ public class TaskController {
             @ApiResponse(code = 200, message = "Task successfully deleted"),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public void deleteTask(@PathVariable int id) {
-        taskService.deleteTask(id);
+    public void deleteTask(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        taskService.deleteTask(id, apiKeyDto);
     }
 
     @PutMapping("/{id}")
@@ -66,23 +67,23 @@ public class TaskController {
             @ApiResponse(code = 200, message = "Task found", response = MainTaskDto.class),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public MainTaskDto getTaskById(@PathVariable int id) {
-        return taskService.getTaskById(id);
+    public MainTaskDto getTaskById(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        return taskService.getTaskById(id, apiKeyDto);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the tasks")
     @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskDto.class)
-    public List<MainTaskDto> getAllTasks() {
-        return taskService.getAllTasks();
+    public List<MainTaskDto> getAllTasks(@RequestBody ApiKeyDto apiKeyDto) {
+        return taskService.getAllTasks(apiKeyDto);
     }
 
     @GetMapping("/users/{id}")
     @ApiOperation(value = "View a list of all participants of the task by id")
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
-    public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id) {
-        return taskService.getAllUsersByTaskId(id);
+    public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id, @RequestBody ApiKeyDto apiKeyDto) {
+        return taskService.getAllUsersByTaskId(id, apiKeyDto);
     }
 
 }

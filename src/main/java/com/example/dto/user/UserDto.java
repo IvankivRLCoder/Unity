@@ -31,12 +31,6 @@ public class UserDto {
     @ApiModelProperty(example = "Koval", notes = "Minimum 2 characters, maximum 20, not blank")
     private String surname;
 
-    @NotNull(message = "{user.password.null}")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,30}$", message = "{user.password.regex}")
-    @ApiModelProperty(example = "012b44A3", notes = "Only latin letter, size minimum 8 maximum 30, "
-            + "at least one uppercase letter, one lowercase letter and one number")
-    private String password;
-
     @NotNull(message = "{user.email.null}")
     @Size(max = 30, message = "{user.email.size}")
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "{user.email.regex}")
@@ -62,5 +56,9 @@ public class UserDto {
     @NotNull(message = "{user.blocked.null}")
     @ApiModelProperty(example = "true", notes = "Field to find out whether user is blocked")
     private boolean blocked;
+
+    @NotNull(message = "{user.api.key.null}")
+    @NotBlank(message = "{user.api.key.blank}")
+    private String apiKey;
 
 }
