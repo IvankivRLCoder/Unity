@@ -79,16 +79,9 @@ public class UserController {
 
     @GetMapping("/{id}/tasks")
     @ApiOperation(value = "View a list of all tasks by user id")
-    @ApiResponse(code = 200, message = "List of all users", response = MainTaskUserDto.class)
+    @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskUserDto.class)
     public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
         return userService.getAllTasksByUserId(id);
-    }
-
-    @PostMapping("/{userId}/tasks/{taskId}")
-    @ApiOperation(value = "Take part in task")
-    @ApiResponse(code = 200, message = "List of all users", response = UserTaskDto.class)
-    public UserTaskDto takePartInTask(@PathVariable int userId, @PathVariable int taskId, @Valid @RequestBody UserTaskDto userTaskDto) {
-        return userService.takePartInTask(userId, taskId, userTaskDto);
     }
 
 }

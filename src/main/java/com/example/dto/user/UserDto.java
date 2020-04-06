@@ -47,6 +47,9 @@ public class UserDto {
     @ApiModelProperty(example = "0980258933", notes = "Size minimum 7,maximum 10. Only numeric characters, country code is optional")
     private String phoneNumber;
 
+    //TODO ADD VALIDATION
+    private String photo;
+
     @NotNull(message = "{user.birthday.null}")
     @NotBlank(message = "{user.birthday.blank}")
     @LocalDateType

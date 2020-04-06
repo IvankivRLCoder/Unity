@@ -32,8 +32,8 @@ public class TaskController {
             @ApiResponse(code = 201, message = "New task created", response = TaskDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public MainTaskDto createTask(@Valid @RequestBody TaskDto taskDto) {
-        return taskService.createTask(taskDto);
+    public MainTaskDto createTask(@Valid @RequestBody TaskDto taskDto, @RequestParam int userId) {
+        return taskService.createTask(taskDto, userId);
     }
 
     @DeleteMapping("/{id}")

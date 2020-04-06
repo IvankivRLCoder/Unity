@@ -5,6 +5,7 @@ import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UserDto;
 import com.example.dto.usertask.UserTaskDto;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -22,4 +23,6 @@ public interface UserService {
     List<MainTaskUserDto> getAllTasksByUserId(int id);
 
     UserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
+
+    UserTaskDto approveUserForTask(int userId, int taskId, boolean approved);
 }

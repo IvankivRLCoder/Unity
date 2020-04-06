@@ -36,6 +36,9 @@ public class User {
     @Column(name = "phone")
     private String phoneNumber;
 
+    @Column(name = "photo_name")
+    private String photo;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
