@@ -17,19 +17,6 @@ public class UserDaoImpl implements UserDao {
 
     @Transactional
     @Override
-    public User save(User user) {
-        entityManager.persist(user);
-        return user;
-    }
-
-    @Transactional
-    @Override
-    public User getById(int id) {
-        return entityManager.find(User.class, id);
-    }
-
-    @Transactional
-    @Override
     public User update(User user) {
         entityManager.merge(user);
         return user;
@@ -41,9 +28,45 @@ public class UserDaoImpl implements UserDao {
         entityManager.remove(user);
     }
 
+    @Override
+    public User getByEmail(String email) {
+        return entityManager
+                .createQuery("SELECT u FROM User u WHERE u.email=:email", User.class)
+                .setParameter("email", email)
+                .getSingleResult();
+    }
+
+    @Override
+    public User getById(int id) {
+        return entityManager.find(User.class, id);
+    }
+
     @Transactional
     @Override
-    public List<User> getAll() {
-        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+    public User save(User user) {
+        entityManager.persist(user);
+        return user;
     }
+
+    @Override
+    public List<User> getAll() {
+        return entityManager
+                .createQuery("SELECT u FROM User u", User.class)
+                .getResultList();
+    }
+
+    @Override
+    public User getByPhoneNumber(String phoneNumber) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber", User.class)
+                .setParameter("phoneNumber", phoneNumber)
+                .getSingleResult();
+    }
+
+    @Override
+    public User getByApiKey(String apiKey) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.apiKey = :apiKey", User.class)
+                .setParameter("apiKey", apiKey)
+                .getSingleResult();
+    }
+
 }
