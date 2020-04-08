@@ -79,7 +79,7 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}/users")
     @ApiOperation(value = "View a list of all participants of the task by id")
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
     public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id) {

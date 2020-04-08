@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -87,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
-        int id = getByApiKey(userTaskDto.getApiKey());
+        userId = getByApiKey(userTaskDto.getApiKey());
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);
         User participant = getById(userId);
         Task participatedTask = getTaskById(taskId);
@@ -152,7 +151,7 @@ public class UserServiceImpl implements UserService {
         try {
             userTask = userTaskDao.getByUsedAndTask(userId, taskId);
         } catch (NoResultException exception) {
-            throw new EntityNotFoundException("User is not found with id = " + userId + " or task with id = " + taskId);
+            throw new EntityNotFountException("User is not found with id = " + userId + " or task with id = " + taskId);
         }
 
         return userTask;
@@ -161,7 +160,7 @@ public class UserServiceImpl implements UserService {
     private User getById(int id) {
         User user = userDao.getById(id);
         if (user == null) {
-            throw new EntityNotFoundException("User is not found with id = " + id);
+            throw new EntityNotFountException("User is not found with id = " + id);
         }
         return user;
     }
@@ -169,7 +168,7 @@ public class UserServiceImpl implements UserService {
     private Task getTaskById(int id) {
         Task task = taskDao.getById(id);
         if (task == null) {
-            throw new EntityNotFoundException("Task is not found with id = " + id);
+            throw new EntityNotFountException("Task is not found with id = " + id);
         }
         return task;
     }
