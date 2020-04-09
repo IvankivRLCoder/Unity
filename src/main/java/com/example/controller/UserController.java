@@ -1,12 +1,11 @@
 package com.example.controller;
 
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.CreatedTaskDto;
-import com.example.dto.task.MainTaskDto;
+import com.example.dto.task.GetTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.ApiKeyDto;
-import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
-import com.example.dto.user.UserDto;
+import com.example.dto.user.UpdateUserDto;
 import com.example.error.ApiError;
 import com.example.service.UserService;
 import io.swagger.annotations.Api;
@@ -53,11 +52,11 @@ public class UserController {
     @ApiOperation(value = "Update user by id")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "User successfully updated", response = MainUserDto.class),
+            @ApiResponse(code = 200, message = "User successfully updated", response = UpdateUserDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
-    public MainUserDto updateUser(@RequestBody UserDto userDto, @PathVariable int id) {
+    public MainUserDto updateUser(@RequestBody UpdateUserDto userDto, @PathVariable int id) {
         return userService.updateUser(userDto, id);
     }
 
@@ -79,11 +78,13 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}/tasks")
-    @ApiOperation(value = "View a list of all tasks by user id")
-    @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskUserDto.class)
-    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
-        return userService.getAllTasksByUserId(id);
+
+    @PostMapping("/tasks/done")
+    @ApiOperation(value = "View a list of done tasks by user id")
+    @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
+    public List<GetTaskDto> getDoneTasks(@RequestBody ApiKeyDto apiKeyDto) {
+        return userService.getDoneTasks(apiKeyDto);
     }
+
 
 }

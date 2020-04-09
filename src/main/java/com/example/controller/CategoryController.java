@@ -1,8 +1,8 @@
 package com.example.controller;
 
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
-import com.example.dto.user.ApiKeyDto;
 import com.example.error.ApiError;
 import com.example.service.CategoryService;
 import io.swagger.annotations.Api;

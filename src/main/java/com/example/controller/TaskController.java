@@ -1,10 +1,8 @@
 package com.example.controller;
 
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.MainTaskDto;
-import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.ApiKeyDto;
-import com.example.dto.user.MainUserDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
 import io.swagger.annotations.Api;
@@ -77,13 +75,6 @@ public class TaskController {
     @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskDto.class)
     public List<MainTaskDto> getAllTasks() {
         return taskService.getAllTasks();
-    }
-
-    @GetMapping("/users/{id}")
-    @ApiOperation(value = "View a list of all participants of the task by id")
-    @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
-    public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable int id) {
-        return taskService.getAllUsersByTaskId(id);
     }
 
 }

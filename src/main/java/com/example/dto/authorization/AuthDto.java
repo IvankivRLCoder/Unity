@@ -1,4 +1,4 @@
-package com.example.dto.user;
+package com.example.dto.authorization;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class AuthDto {
     @NotNull(message = "{user.name.null}")
     @Pattern(regexp = "^[a-zA-z]{2,20}$", message = "{user.name.regex}")
     @ApiModelProperty(example = "Ivan", notes = "Minimum 2 characters, maximum 20, not blank")
-    private String name;
+    private String firstName;
 
     @NotNull
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "{user.email.regex}")

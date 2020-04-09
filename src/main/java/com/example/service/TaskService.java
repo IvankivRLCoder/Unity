@@ -1,9 +1,9 @@
 package com.example.service;
 
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.ApiKeyDto;
 
 import java.util.List;
 

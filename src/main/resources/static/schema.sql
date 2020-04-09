@@ -1,11 +1,13 @@
 CREATE TABLE IF NOT EXISTS volunteer
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    volunteer_name  VARCHAR (20)        NOT NULL,
-    surname         VARCHAR (20),
+    first_name      VARCHAR (20)        NOT NULL,
+    last_name       VARCHAR (20),
     email           VARCHAR (30) UNIQUE NOT NULL,
     password        VARCHAR (30)        NOT NULL,
     phone           VARCHAR (11) UNIQUE,
+    about_user      VARCHAR (2048),
+    photo           VARCHAR (2048),
     date_of_birth   DATE,
     trust_level     VARCHAR (32),
     is_blocked      BOOLEAN             DEFAULT FALSE,
@@ -69,12 +71,11 @@ VALUES (1, 'Disabled', 'Helping disabled people'),
        (2, 'Elderly', 'Helping elderly'),
        (3, 'Fundraising', 'Raising funds');
 
-
-INSERT INTO volunteer(id,volunteer_name, surname, email, password, phone, date_of_birth, trust_level, is_blocked, api_key)
-VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', '2001-01-20', 'NOVICE', false, null),
-       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', '2000-12-17', 'NOVICE', true, null),
-       (3,'Test', 'One', 'test1@gmail.com', 'Kaban228', '0990095275', '2000-12-17', 'NOVICE', false, null),
-       (4,'Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', '2000-12-17', 'NOVICE', false, null);
+INSERT INTO volunteer(id, first_name, last_name, email, password, phone, photo, date_of_birth, trust_level, is_blocked)
+VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', 'photo 1', '2001-01-20', 'NOVICE', false),
+       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', 'photo 2','2000-12-17', 'NOVICE', true),
+       (3,'Test', 'One', 'test1@gmail.com', 'Kaban228', '0990095275', 'photo 3','2000-12-17', 'NOVICE', false),
+       (4,'Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', 'photo 4','2000-12-17', 'NOVICE', false);
 
 INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id, creator_id)
 VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1, 1),

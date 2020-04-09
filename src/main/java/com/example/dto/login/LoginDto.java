@@ -1,4 +1,4 @@
-package com.example.dto.user;
+package com.example.dto.login;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

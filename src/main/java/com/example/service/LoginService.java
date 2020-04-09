@@ -1,11 +1,10 @@
 package com.example.service;
 
-import com.example.dto.user.LoginDto;
-
-import java.util.HashMap;
+import com.example.dto.login.LoginDto;
+import com.example.dto.login.MainLoginDto;
 
 public interface LoginService {
 
-    HashMap<String, String> login(LoginDto loginDto);
+    MainLoginDto login(LoginDto loginDto);
 
 }

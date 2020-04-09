@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.user.AuthDto;
+import com.example.dto.authorization.AuthDto;
 import com.example.error.ApiError;
 import com.example.service.RegistrationService;
 import io.swagger.annotations.Api;
