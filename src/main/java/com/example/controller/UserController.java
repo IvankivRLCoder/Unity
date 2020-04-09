@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.task.CreatedTaskDto;
+import com.example.dto.task.GetTaskDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.dto.user.ApiKeyDto;
@@ -77,6 +78,14 @@ public class UserController {
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
     public List<MainUserDto> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+
+    @PostMapping("/tasks/done")
+    @ApiOperation(value = "View a list of done tasks by user id")
+    @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
+    public List<GetTaskDto> getDoneTasks(@RequestBody ApiKeyDto apiKeyDto) {
+        return userService.getDoneTasks(apiKeyDto);
     }
 
 

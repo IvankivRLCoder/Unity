@@ -4,6 +4,7 @@ import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
 import com.example.dao.UserTaskDao;
 import com.example.dto.task.CreatedTaskDto;
+import com.example.dto.task.GetTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
@@ -11,6 +12,7 @@ import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UserDto;
 import com.example.dto.usertask.UserTaskDto;
 import com.example.error.*;
+import com.example.model.Status;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.model.UserTask;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -66,11 +69,18 @@ public class UserServiceImpl implements UserService {
         User newUser = modelMapper.map(userDto, User.class);
         oldUser.setBlocked(newUser.isBlocked());
         oldUser.setDateOfBirth(newUser.getDateOfBirth());
+        if (!oldUser.getEmail().equalsIgnoreCase(newUser.getEmail())) {
+            try {
+                getByEmail(newUser.getEmail());
+                throw new UniqueConstraintViolation("Email already exists");
+            } catch (EntityNotFoundException exception) {
+            }
+        }
         oldUser.setEmail(newUser.getEmail());
-        oldUser.setName(newUser.getName());
+        oldUser.setFirstName(newUser.getFirstName());
         oldUser.setPassword(newUser.getPassword());
-        oldUser.setPhoneNumber(newUser.getPhoneNumber());
-        oldUser.setSurname(newUser.getSurname());
+        oldUser.setPhoneNumber(encode(newUser.getPhoneNumber()));
+        oldUser.setLastName(newUser.getLastName());
         oldUser.setTrustLevel(newUser.getTrustLevel());
 
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
@@ -122,11 +132,13 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(userTaskDao.save(userTask), MainTaskUserDto.class);
     }
 
-    //TODO: errorHandling after realization auth
     @Override
     public MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto) {
         int id = getByApiKey(apiKeyDto.getApiKey());
         Task task = getTaskById(taskId);
+        if (task.getStatus() == Status.DONE) {
+            throw new TaskDoneException("Task already done");
+        }
         if (task.getCreator().getId() != id) {
             throw new BadCredentialsException("This user can not approve");
         }
@@ -134,12 +146,12 @@ public class UserServiceImpl implements UserService {
         if (!isParticipant) {
             throw new EntityNotFountException("User is not participant: " + userId);
         }
-        if(approved){
+        if (approved) {
             long participants = task.getUserTasks()
                     .stream()
                     .filter(UserTask::isApproved)
                     .count();
-            if(participants==task.getPossibleNumberOfParticipants()){
+            if (participants == task.getPossibleNumberOfParticipants()) {
                 throw new OverflowingTaskException("Task is full of participants.");
             }
         }
@@ -157,6 +169,16 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<GetTaskDto> getDoneTasks(ApiKeyDto apiKeyDto) {
+        int id = getByApiKey(apiKeyDto.getApiKey());
+        User user = getById(id);
+        return user.getParticipatedTasks().stream()
+                .filter(task -> task.getTask().getStatus() == Status.DONE && task.isApproved())
+                .map(userTask -> modelMapper.map(userTask.getTask(), GetTaskDto.class))
+                .collect(Collectors.toList());
+    }
+
     private UserTask getByUserIdAndTaskId(int userId, int taskId) {
 
         UserTask userTask;
@@ -167,6 +189,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return userTask;
+    }
+
+    private User getByEmail(String email) {
+        try {
+            return userDao.getByEmail(email);
+        } catch (NoResultException | EmptyResultDataAccessException ex) {
+            throw new EntityNotFoundException("User wa not found with email: " + email);
+        }
     }
 
     private User getById(int id) {

@@ -1,11 +1,13 @@
 CREATE TABLE IF NOT EXISTS volunteer
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
-    volunteer_name  VARCHAR (20)        NOT NULL,
-    surname         VARCHAR (20),
+    first_name      VARCHAR (20)        NOT NULL,
+    last_name       VARCHAR (20),
     email           VARCHAR (30) UNIQUE NOT NULL,
     password        VARCHAR (30)        NOT NULL,
     phone           VARCHAR (11) UNIQUE,
+    about_user      VARCHAR (2048),
+    photo           VARCHAR (2048),
     date_of_birth   DATE,
     trust_level     VARCHAR (32),
     is_blocked      BOOLEAN             DEFAULT FALSE,

@@ -31,6 +31,11 @@ public class UserDto {
     @ApiModelProperty(example = "Koval", notes = "Minimum 2 characters, maximum 20, not blank")
     private String surname;
 
+    @NotNull(message = "{user.about.user.null}")
+    @Pattern(regexp = "^[a-zA-z]{2,255}$", message = "{user.about.user.regex}")
+    @ApiModelProperty(example = "Lorem ipsum kfldkflsdkl", notes = "Minimum 2 characters, maximum 255, not blank")
+    private String aboutUser;
+
     @NotNull(message = "{user.email.null}")
     @Size(max = 30, message = "{user.email.size}")
     @Pattern(regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "{user.email.regex}")
@@ -41,8 +46,6 @@ public class UserDto {
     @ApiModelProperty(example = "0980258933", notes = "Size minimum 7,maximum 10. Only numeric characters, country code is optional")
     private String phoneNumber;
 
-    @NotNull(message = "{user.birthday.null}")
-    @NotBlank(message = "{user.birthday.blank}")
     @LocalDateType
     @ApiModelProperty(example = "2000-05-30", notes = "minimum 12, maximum 100")
     private String dateOfBirth;

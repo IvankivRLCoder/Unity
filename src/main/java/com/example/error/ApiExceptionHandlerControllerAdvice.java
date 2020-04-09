@@ -37,6 +37,30 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
                 .build();
     }
 
+    @ExceptionHandler(TaskDoneException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ApiError handleTaskDone(TaskDoneException exception) {
+        return ApiError
+                .builder()
+                .status(HttpStatus.NOT_FOUND)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(UniqueConstraintViolation.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ApiError handleUnigueConstraintViolation(UniqueConstraintViolation exception) {
+        return ApiError
+                .builder()
+                .status(HttpStatus.NOT_FOUND)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
     @ExceptionHandler(EntityAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiError handleEntityAlreadyExists(EntityAlreadyExistsException exception) {

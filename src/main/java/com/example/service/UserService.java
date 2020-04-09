@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.task.CreatedTaskDto;
+import com.example.dto.task.GetTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.dto.user.ApiKeyDto;
@@ -34,5 +35,7 @@ public interface UserService {
     MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto);
 
     List<CreatedTaskDto> getAllCreatedTasks(ApiKeyDto apiKeyDto);
+
+    List<GetTaskDto> getDoneTasks(ApiKeyDto apiKeyDto);
 
 }

@@ -56,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
         user = userDao.update(user);
         ReturnLoginDto returnLoginDto = ReturnLoginDto.builder()
                 .id(user.getId())
-                .name(user.getName())
+                .name(user.getFirstName())
                 .apiKey(uuid.toString()).build();
 
         return returnLoginDto;

@@ -21,20 +21,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "volunteer_name")
-    private String name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "last_surname")
+    private String lastName;
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "photo")
+    private String photo;
 
     @Column(name = "password")
     private String password;
 
     @Column(name = "phone")
     private String phoneNumber;
+
+    @Column(name = "about_user")
+    private String aboutUser;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
@@ -57,25 +63,24 @@ public class User {
     private Set<UserTask> participatedTasks = new HashSet<>();
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (other == null || getClass() != other.getClass()) {
-            return false;
-        }
-
-        User user = (User) other;
-        return blocked == user.blocked
-                && Objects.equals(id, user.id)
-                && Objects.equals(name, user.name)
-                && Objects.equals(surname, user.surname)
-                && Objects.equals(email, user.email)
-                && Objects.equals(password, user.password)
-                && Objects.equals(phoneNumber, user.phoneNumber)
-                && Objects.equals(dateOfBirth, user.dateOfBirth)
-                && trustLevel == user.trustLevel
-                && Objects.equals(participatedTasks, user.participatedTasks);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                blocked == user.blocked &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(photo, user.photo) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
+                Objects.equals(aboutUser, user.aboutUser) &&
+                Objects.equals(dateOfBirth, user.dateOfBirth) &&
+                trustLevel == user.trustLevel &&
+                Objects.equals(apiKey, user.apiKey) &&
+                Objects.equals(createdTasks, user.createdTasks) &&
+                Objects.equals(participatedTasks, user.participatedTasks);
     }
 
     @Override

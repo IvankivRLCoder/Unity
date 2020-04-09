@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "Model that represents Login. Used only for GET requests")
 public class ReturnLoginDto {
     private int id;
-    private String name;
+    private String firstName;
     private String apiKey;
 }

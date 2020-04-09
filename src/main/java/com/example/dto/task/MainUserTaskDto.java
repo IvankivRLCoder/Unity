@@ -1,7 +1,6 @@
 package com.example.dto.task;
 
 import com.example.dto.user.GetUserDto;
-import com.example.dto.user.MainUserDto;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
