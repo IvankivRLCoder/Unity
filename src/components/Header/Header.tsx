@@ -19,9 +19,9 @@ class Header extends Component {
                 <div>
                     <ul className="navbar-nav navbar-expand ml-auto">
                         <li className="nav-item">
-                            <a className="nav-link p-0" style={{"cursor": "pointer"}} onClick={() => this.setState({openedModal: true})}>
+                            <span className="nav-link p-0" style={{"cursor": "pointer"}} onClick={() => this.setState({openedModal: true})}>
                                 <i className="fas fa-plus"/>
-                            </a>
+                            </span>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link p-0" href="/user">

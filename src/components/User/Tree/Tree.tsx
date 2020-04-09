@@ -4,35 +4,52 @@ import './Tree.scss';
 import Achievement from './Achievement/Achievement';
 import axios from "axios";
 
-class Tree extends React.Component{
+export type achievementT = {
+    id: number,
+    name: String
+}
 
-    state = {
-        achievements: [],
-        totalAmount: 0
-    };
+interface IProps {}
+
+interface IState {
+    achievements: achievementT[]
+}
+
+class Tree extends React.Component<IProps, IState> {
+
+    constructor(props: IProps) {
+        super(props);
+
+        this.state ={
+            achievements: []
+        };
+    }
 
     componentDidMount () {
-        axios.get('http://localhost:3000/mockups/user.json').then(res => {
-            const user = res.data;
+        axios.get('http://localhost:3000/mockups/doneTasksByUser.json').then(res => {
+            let loadedAchievements: [achievementT] = res.data;
+            let achievementsToShow: achievementT[] = [];
+            for (let i = 0; i < ((loadedAchievements.length <= 10) ? loadedAchievements.length: 10);i++) {
+                achievementsToShow.push(loadedAchievements[i]);
+            }
+
             this.setState({
-                achievements: user.achievements,
-                totalAmount: user.totalAmount
+                achievements: achievementsToShow
             });
         });
     }
 
     renderAchievements() {
         return this.state.achievements.map((achievement : any) => {
-            return <Achievement name={achievement.name} id={achievement.id}/>
+            return <Achievement name={achievement.name} id={achievement.id} key={achievement.id}/>
         });
     }
 
     render() {
-        console.log(this.state.achievements.length, this.state.totalAmount)
         return (
             <div className="tree-block">
                 <div className="tree-img">
-                    <img className="tree-img-colorful" src={tree} alt="Tree" style={{height: this.state.achievements.length / this.state.totalAmount * 100 + "%"}}/>
+                    <img className="tree-img-colorful" src={tree} alt="Tree" style={{height: (this.state.achievements.length * 10) + "%"}}/>
                     <img className="tree-img-grayscale" src={tree} alt="Tree"/>
                 </div>
                 <div className="achievements">

@@ -1,13 +1,6 @@
 {
-  "name": "Nazar",
-  "surname": "Koval",
+  "firstName": "Nazar",
+  "lastName": "Koval",
   "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quisnostrud exercitation ullamco laboris nisi ut aliquip ex ea",
-  "achievements": [{
-    "id": 1,
-    "name": "Hero"
-  }, {
-    "id": 2,
-    "name": "Helper"
-  }],
-  "totalAmount": 10
+  "photo": "http://localhost:3000/img/avatar.png"
 }
