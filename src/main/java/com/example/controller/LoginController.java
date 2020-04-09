@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.user.AuthDto;
 import com.example.dto.user.LoginDto;
+import com.example.dto.user.ReturnLoginDto;
 import com.example.error.ApiError;
 import com.example.service.LoginService;
 import com.example.service.RegistrationService;
@@ -32,7 +33,7 @@ public class LoginController {
             @ApiResponse(code = 200, message = "User log in"),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public Map<String, String> register(@Valid @RequestBody LoginDto loginDto) {
+    public ReturnLoginDto register(@Valid @RequestBody LoginDto loginDto) {
         return loginService.login(loginDto);
     }
 }

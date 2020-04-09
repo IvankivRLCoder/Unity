@@ -79,11 +79,6 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}/tasks")
-    @ApiOperation(value = "View a list of all tasks by user id")
-    @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskUserDto.class)
-    public List<MainTaskUserDto> getAllTasksByUserId(@PathVariable int id) {
-        return userService.getAllTasksByUserId(id);
-    }
+
 
 }

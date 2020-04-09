@@ -1,8 +1,7 @@
 package com.example.dto.user;
 
+import com.example.dto.task.GetTaskDto;
 import com.example.dto.task.MainTaskDto;
-import com.example.dto.task.TaskDto;
-import com.example.validation.LocalDateType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -10,9 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +18,7 @@ import javax.validation.constraints.Pattern;
 @ApiModel(description = "Transitive table representation. Used for business logic")
 public class MainTaskUserDto {
 
-    private MainTaskDto task;
+    private GetTaskDto task;
 
     private String participationDate;
 

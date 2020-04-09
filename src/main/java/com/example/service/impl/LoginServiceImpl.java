@@ -2,6 +2,7 @@ package com.example.service.impl;
 
 import com.example.dao.UserDao;
 import com.example.dto.user.LoginDto;
+import com.example.dto.user.ReturnLoginDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.model.User;
@@ -29,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
     private final UserService userService;
 
     @Override
-    public HashMap<String, String> login(LoginDto loginDto) {
+    public ReturnLoginDto login(LoginDto loginDto) {
         User user;
 
         try {
@@ -52,9 +53,13 @@ public class LoginServiceImpl implements LoginService {
             }
             user.setApiKey(userService.encode(uuid.toString()));
         }
-        userDao.update(user);
+        user = userDao.update(user);
+        ReturnLoginDto returnLoginDto = ReturnLoginDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .apiKey(uuid.toString()).build();
 
-        return new HashMap<>(Collections.singletonMap("ApiKey", uuid.toString()));
+        return returnLoginDto;
     }
 
     private User getByEmail(String email) {

@@ -5,7 +5,6 @@ import com.example.dao.UserDao;
 import com.example.dao.UserTaskDao;
 import com.example.dto.task.CreatedTaskDto;
 import com.example.dto.task.MainUserTaskDto;
-import com.example.dto.task.TaskDto;
 import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
@@ -128,8 +127,21 @@ public class UserServiceImpl implements UserService {
     public MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto) {
         int id = getByApiKey(apiKeyDto.getApiKey());
         Task task = getTaskById(taskId);
-        if(task.getCreator().getId()!=id){
+        if (task.getCreator().getId() != id) {
             throw new BadCredentialsException("This user can not approve");
+        }
+        boolean isParticipant = task.getUserTasks().stream().anyMatch(userTask -> userTask.getUser().getId() == userId);
+        if (!isParticipant) {
+            throw new EntityNotFountException("User is not participant: " + userId);
+        }
+        if(approved){
+            long participants = task.getUserTasks()
+                    .stream()
+                    .filter(UserTask::isApproved)
+                    .count();
+            if(participants==task.getPossibleNumberOfParticipants()){
+                throw new OverflowingTaskException("Task is full of participants.");
+            }
         }
         UserTask userTask = getByUserIdAndTaskId(userId, taskId);
         userTask.setApproved(approved);
@@ -141,7 +153,7 @@ public class UserServiceImpl implements UserService {
         int id = getByApiKey(apiKeyDto.getApiKey());
         User user = getById(id);
         return user.getCreatedTasks().stream()
-                .map(task->modelMapper.map(task, CreatedTaskDto.class))
+                .map(task -> modelMapper.map(task, CreatedTaskDto.class))
                 .collect(Collectors.toList());
     }
 
