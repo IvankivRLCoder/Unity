@@ -1,24 +1,18 @@
 package com.example.service.impl;
 
 import com.example.dao.UserDao;
-import com.example.dto.user.LoginDto;
-import com.example.dto.user.ReturnLoginDto;
+import com.example.dto.login.LoginDto;
+import com.example.dto.login.MainLoginDto;
 import com.example.error.BadCredentialsException;
-import com.example.error.EntityNotFountException;
 import com.example.model.User;
 import com.example.service.LoginService;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.UUID;
 
 @Service
@@ -30,12 +24,12 @@ public class LoginServiceImpl implements LoginService {
     private final UserService userService;
 
     @Override
-    public ReturnLoginDto login(LoginDto loginDto) {
+    public MainLoginDto login(LoginDto loginDto) {
         User user;
 
         try {
             user = getByEmail(loginDto.getEmail());
-        } catch(EntityNotFoundException exception) {
+        } catch (EntityNotFoundException exception) {
             throw new BadCredentialsException("User credentials are incorrect");
         }
 
@@ -54,12 +48,10 @@ public class LoginServiceImpl implements LoginService {
             user.setApiKey(userService.encode(uuid.toString()));
         }
         user = userDao.update(user);
-        ReturnLoginDto returnLoginDto = ReturnLoginDto.builder()
+        return MainLoginDto.builder()
                 .id(user.getId())
-                .name(user.getFirstName())
+                .firstName(user.getFirstName())
                 .apiKey(uuid.toString()).build();
-
-        return returnLoginDto;
     }
 
     private User getByEmail(String email) {
@@ -69,7 +61,5 @@ public class LoginServiceImpl implements LoginService {
             throw new EntityNotFoundException("User wa not found with email: " + email);
         }
     }
-
-
 
 }

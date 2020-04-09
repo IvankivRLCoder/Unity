@@ -1,7 +1,7 @@
 package com.example.service.impl;
 
 import com.example.dao.UserDao;
-import com.example.dto.user.AuthDto;
+import com.example.dto.authorization.AuthDto;
 import com.example.error.BadCredentialsException;
 import com.example.model.User;
 import com.example.service.RegistrationService;

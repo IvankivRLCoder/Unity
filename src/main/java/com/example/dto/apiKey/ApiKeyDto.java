@@ -1,4 +1,4 @@
-package com.example.dto.user;
+package com.example.dto.apiKey;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

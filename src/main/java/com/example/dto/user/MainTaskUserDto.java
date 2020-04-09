@@ -19,13 +19,8 @@ import javax.validation.constraints.NotNull;
 public class MainTaskUserDto {
 
     private GetTaskDto task;
-
     private String participationDate;
-
     private String comment;
-
-    @NotNull(message = "{user.task.approved.null}")
-    @ApiModelProperty(example = "false", notes = "Field to find out whether user is approved for task by task`s creator")
     private boolean approved;
 
 }

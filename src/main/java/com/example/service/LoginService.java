@@ -1,10 +1,10 @@
 package com.example.service;
 
-import com.example.dto.user.LoginDto;
-import com.example.dto.user.ReturnLoginDto;
+import com.example.dto.login.LoginDto;
+import com.example.dto.login.MainLoginDto;
 
 public interface LoginService {
 
-    ReturnLoginDto login(LoginDto loginDto);
+    MainLoginDto login(LoginDto loginDto);
 
 }

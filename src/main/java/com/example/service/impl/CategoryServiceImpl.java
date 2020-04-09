@@ -1,9 +1,9 @@
 package com.example.service.impl;
 
 import com.example.dao.CategoryDao;
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
-import com.example.dto.user.ApiKeyDto;
 import com.example.model.Category;
 import com.example.service.CategoryService;
 import com.example.service.UserService;

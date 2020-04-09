@@ -66,7 +66,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
     protected ApiError handleEntityAlreadyExists(EntityAlreadyExistsException exception) {
         return ApiError
                 .builder()
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .message(exception.getMessage())
                 .timestamp(LocalDateTime.now())
                 .subErrors(new ArrayList<>())
@@ -78,7 +78,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
     protected ApiError handleBadCredential(BadCredentialsException exception) {
         return ApiError
                 .builder()
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .message(exception.getMessage())
                 .timestamp(LocalDateTime.now())
                 .subErrors(new ArrayList<>())
@@ -99,7 +99,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
 
     @ExceptionHandler(UserIsParticipantAlreadyException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleUserIsParticipantAlready(UserIsParticipantAlreadyException exception){
+    protected ApiError handleUserIsParticipantAlready(UserIsParticipantAlreadyException exception) {
         return ApiError
                 .builder()
                 .status(HttpStatus.BAD_REQUEST)
@@ -111,7 +111,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
 
     @ExceptionHandler(TaskIsNotActiveException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleTaskIsNotActive(TaskIsNotActiveException exception){
+    protected ApiError handleTaskIsNotActive(TaskIsNotActiveException exception) {
         return ApiError
                 .builder()
                 .status(HttpStatus.BAD_REQUEST)
@@ -123,7 +123,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
 
     @ExceptionHandler(UserIsCreatorException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleUserIsCreator(UserIsCreatorException exception){
+    protected ApiError handleUserIsCreator(UserIsCreatorException exception) {
         return ApiError
                 .builder()
                 .status(HttpStatus.BAD_REQUEST)
@@ -135,7 +135,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleDataIntegrityViolation(){
+    protected ApiError handleDataIntegrityViolation() {
         return ApiError
                 .builder()
                 .message("Database error! Possible causes: primary key is NULL or UNIQUE constraint violation")

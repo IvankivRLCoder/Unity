@@ -1,7 +1,7 @@
 package com.example.controller;
 
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.MainUserTaskDto;
-import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
 import com.example.dto.usertask.UserTaskDto;
@@ -13,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

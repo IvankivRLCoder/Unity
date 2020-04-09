@@ -43,7 +43,7 @@ public class UserTaskDaoImpl implements UserTaskDao {
     }
 
     @Override
-    public UserTask getByUsedAndTask(int userId, int taskId){
+    public UserTask getByUsedAndTask(int userId, int taskId) {
         return entityManager
                 .createQuery("SELECT u FROM UserTask u WHERE u.user.id = :userId AND u.task.id = :taskId", UserTask.class)
                 .setParameter("userId", userId)

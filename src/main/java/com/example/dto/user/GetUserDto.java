@@ -17,6 +17,8 @@ public class GetUserDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String photo;
+    private String aboutUser;
     private String phoneNumber;
     private String dateOfBirth;
     private String trustLevel;

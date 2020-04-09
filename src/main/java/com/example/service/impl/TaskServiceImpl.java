@@ -2,10 +2,10 @@ package com.example.service.impl;
 
 import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.ApiKeyDto;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.service.TaskService;

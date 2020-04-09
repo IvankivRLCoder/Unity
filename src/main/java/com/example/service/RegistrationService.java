@@ -1,6 +1,6 @@
 package com.example.service;
 
-import com.example.dto.user.AuthDto;
+import com.example.dto.authorization.AuthDto;
 
 public interface RegistrationService {
 

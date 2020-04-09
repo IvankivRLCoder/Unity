@@ -1,10 +1,8 @@
 package com.example.controller;
 
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.MainTaskDto;
-import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.ApiKeyDto;
-import com.example.dto.user.MainUserDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
 import io.swagger.annotations.Api;

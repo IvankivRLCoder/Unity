@@ -3,13 +3,13 @@ package com.example.service.impl;
 import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
 import com.example.dao.UserTaskDao;
+import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.CreatedTaskDto;
 import com.example.dto.task.GetTaskDto;
 import com.example.dto.task.MainUserTaskDto;
-import com.example.dto.user.ApiKeyDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
-import com.example.dto.user.UserDto;
+import com.example.dto.user.UpdateUserDto;
 import com.example.dto.usertask.UserTaskDto;
 import com.example.error.*;
 import com.example.model.Status;
@@ -26,10 +26,15 @@ import sun.misc.BASE64Encoder;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -52,7 +57,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<MainUserDto> getAllUsers() {
-        return userDao.getAll().stream().map(user -> modelMapper.map(user, MainUserDto.class)).collect(Collectors.toList());
+        return userDao.getAll()
+                .stream()
+                .map(user -> modelMapper.map(user, MainUserDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,25 +71,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainUserDto updateUser(UserDto userDto, int id) {
+    public MainUserDto updateUser(UpdateUserDto userDto, int id) {
         id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        User newUser = modelMapper.map(userDto, User.class);
-        oldUser.setBlocked(newUser.isBlocked());
-        oldUser.setDateOfBirth(newUser.getDateOfBirth());
-        if (!oldUser.getEmail().equalsIgnoreCase(newUser.getEmail())) {
-            try {
-                getByEmail(newUser.getEmail());
-                throw new UniqueConstraintViolation("Email already exists");
-            } catch (EntityNotFoundException exception) {
-            }
-        }
-        oldUser.setEmail(newUser.getEmail());
-        oldUser.setFirstName(newUser.getFirstName());
-        oldUser.setPassword(newUser.getPassword());
-        oldUser.setPhoneNumber(encode(newUser.getPhoneNumber()));
-        oldUser.setLastName(newUser.getLastName());
-        oldUser.setTrustLevel(newUser.getTrustLevel());
+        String photo = userDto.getPhoto();
+        String fileName = UUID.randomUUID().toString();
+        File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
+        decodeImage(photo, photoFile.getAbsolutePath());
+        oldUser.setPhoto(fileName);
+        oldUser.setFirstName(userDto.getFirstName());
+        oldUser.setLastName(userDto.getLastName());
+//        if (!oldUser.getEmail().equalsIgnoreCase(newUser.getEmail())) {
+//            try {
+//                getByEmail(newUser.getEmail());
+//                throw new UniqueConstraintViolation("Email already exists");
+//            } catch (EntityNotFoundException exception) {
+//            }
+//        }
+//        oldUser.setEmail(newUser.getEmail());
+//        oldUser.setPassword(newUser.getPassword());
+//        oldUser.setPhoneNumber(encode(newUser.getPhoneNumber()));
+//        oldUser.setTrustLevel(newUser.getTrustLevel());
 
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
     }
@@ -242,4 +252,16 @@ public class UserServiceImpl implements UserService {
         return str;
     }
 
+    private void decodeImage(String base64Image, String pathFile) {
+        try (FileOutputStream imageOutFile = new FileOutputStream(pathFile)) {
+            byte[] imageByteArray = Base64.getDecoder().decode(base64Image);
+            imageOutFile.write(imageByteArray);
+        } catch (FileNotFoundException e) {
+            System.err.println("Image not found" + e);
+        } catch (IOException ioe) {
+            System.err.println("Exception while reading the Image " + ioe);
+        }
+    }
+
 }
+
