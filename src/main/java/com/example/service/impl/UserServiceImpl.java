@@ -21,22 +21,14 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +41,8 @@ public class UserServiceImpl implements UserService {
     private final UserTaskDao userTaskDao;
 
     private final ModelMapper modelMapper;
+
+    private final EncodingService encodingService;
 
     @Override
     public MainUserDto getUserById(int id) {
@@ -71,34 +65,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainUserDto updateUser(UpdateUserDto userDto, int id) {
-        id = getByApiKey(userDto.getApiKey());
+    public MainUserDto updateUser(UpdateUserDto userDto) {
+        int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
         String photo = userDto.getPhoto();
         String fileName = UUID.randomUUID().toString();
         File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
-        decodeImage(photo, photoFile.getAbsolutePath());
+        encodingService.decodeImage(photo, photoFile.getAbsolutePath());
         oldUser.setPhoto(fileName);
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
-//        if (!oldUser.getEmail().equalsIgnoreCase(newUser.getEmail())) {
-//            try {
-//                getByEmail(newUser.getEmail());
-//                throw new UniqueConstraintViolation("Email already exists");
-//            } catch (EntityNotFoundException exception) {
-//            }
-//        }
-//        oldUser.setEmail(newUser.getEmail());
-//        oldUser.setPassword(newUser.getPassword());
-//        oldUser.setPhoneNumber(encode(newUser.getPhoneNumber()));
-//        oldUser.setTrustLevel(newUser.getTrustLevel());
-
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
     }
 
     @Override
     public List<MainTaskUserDto> getAllTasksByUserId(int id) {
-        return userDao.getById(id).getParticipatedTasks().stream()
+        return userDao.getById(id).getParticipatedTasks()
+                .stream()
                 .map(userTask -> modelMapper.map(userTask, MainTaskUserDto.class))
                 .collect(Collectors.toList());
     }
@@ -146,16 +129,22 @@ public class UserServiceImpl implements UserService {
     public MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto) {
         int id = getByApiKey(apiKeyDto.getApiKey());
         Task task = getTaskById(taskId);
+
         if (task.getStatus() == Status.DONE) {
             throw new TaskDoneException("Task already done");
         }
+
         if (task.getCreator().getId() != id) {
             throw new BadCredentialsException("This user can not approve");
         }
-        boolean isParticipant = task.getUserTasks().stream().anyMatch(userTask -> userTask.getUser().getId() == userId);
+
+        boolean isParticipant = task.getUserTasks()
+                .stream()
+                .anyMatch(userTask -> userTask.getUser().getId() == userId);
         if (!isParticipant) {
             throw new EntityNotFountException("User is not participant: " + userId);
         }
+
         if (approved) {
             long participants = task.getUserTasks()
                     .stream()
@@ -165,25 +154,26 @@ public class UserServiceImpl implements UserService {
                 throw new OverflowingTaskException("Task is full of participants.");
             }
         }
+
         UserTask userTask = getByUserIdAndTaskId(userId, taskId);
         userTask.setApproved(approved);
         return modelMapper.map(userTaskDao.update(userTask), MainUserTaskDto.class);
     }
 
     @Override
-    public List<CreatedTaskDto> getAllCreatedTasks(ApiKeyDto apiKeyDto) {
-        int id = getByApiKey(apiKeyDto.getApiKey());
+    public List<CreatedTaskDto> getAllCreatedTasks(int id) {
         User user = getById(id);
-        return user.getCreatedTasks().stream()
+        return user.getCreatedTasks()
+                .stream()
                 .map(task -> modelMapper.map(task, CreatedTaskDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<GetTaskDto> getDoneTasks(ApiKeyDto apiKeyDto) {
-        int id = getByApiKey(apiKeyDto.getApiKey());
+    public List<GetTaskDto> getDoneTasks(int id) {
         User user = getById(id);
-        return user.getParticipatedTasks().stream()
+        return user.getParticipatedTasks()
+                .stream()
                 .filter(task -> task.getTask().getStatus() == Status.DONE && task.isApproved())
                 .map(userTask -> modelMapper.map(userTask.getTask(), GetTaskDto.class))
                 .collect(Collectors.toList());
@@ -193,20 +183,12 @@ public class UserServiceImpl implements UserService {
 
         UserTask userTask;
         try {
-            userTask = userTaskDao.getByUsedAndTask(userId, taskId);
+            userTask = userTaskDao.getByUserAndTask(userId, taskId);
         } catch (NoResultException exception) {
             throw new EntityNotFountException("User is not found with id = " + userId + " or task with id = " + taskId);
         }
 
         return userTask;
-    }
-
-    private User getByEmail(String email) {
-        try {
-            return userDao.getByEmail(email);
-        } catch (NoResultException | EmptyResultDataAccessException ex) {
-            throw new EntityNotFoundException("User wa not found with email: " + email);
-        }
     }
 
     private User getById(int id) {
@@ -228,40 +210,11 @@ public class UserServiceImpl implements UserService {
     public int getByApiKey(String apiKey) {
         User user;
         try {
-            user = userDao.getByApiKey(encode(apiKey));
+            user = userDao.getByApiKey(encodingService.encode(apiKey));
         } catch (NoResultException | EmptyResultDataAccessException exception) {
-            throw new BadCredentialsException("User credentials are incorrect");
+            throw new BadCredentialsException("API key is invalid");
         }
         return user.getId();
     }
 
-    public String encode(String str) {
-        BASE64Encoder encoder = new BASE64Encoder();
-        str = encoder.encodeBuffer(str.getBytes());
-        return str;
-    }
-
-
-    public String decode(String str) {
-        BASE64Decoder decoder = new BASE64Decoder();
-        try {
-            str = new String(decoder.decodeBuffer(str));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return str;
-    }
-
-    private void decodeImage(String base64Image, String pathFile) {
-        try (FileOutputStream imageOutFile = new FileOutputStream(pathFile)) {
-            byte[] imageByteArray = Base64.getDecoder().decode(base64Image);
-            imageOutFile.write(imageByteArray);
-        } catch (FileNotFoundException e) {
-            System.err.println("Image not found" + e);
-        } catch (IOException ioe) {
-            System.err.println("Exception while reading the Image " + ioe);
-        }
-    }
-
 }
-

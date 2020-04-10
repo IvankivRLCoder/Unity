@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"participatedTasks"})
+@ToString(exclude = {"participatedTasks", "createdTasks"})
 @Entity
 @Table(name = "volunteer")
 public class User {
@@ -55,7 +55,6 @@ public class User {
     @Column(name = "api_key")
     private String apiKey;
 
-    //TODO TODO!!!!!!!!!!!!!!!!!!!!!!
     @OneToMany(mappedBy = "creator")
     private Set<Task> createdTasks = new HashSet<>();
 
@@ -63,24 +62,28 @@ public class User {
     private Set<UserTask> participatedTasks = new HashSet<>();
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id &&
-                blocked == user.blocked &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(photo, user.photo) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(phoneNumber, user.phoneNumber) &&
-                Objects.equals(aboutUser, user.aboutUser) &&
-                Objects.equals(dateOfBirth, user.dateOfBirth) &&
-                trustLevel == user.trustLevel &&
-                Objects.equals(apiKey, user.apiKey) &&
-                Objects.equals(createdTasks, user.createdTasks) &&
-                Objects.equals(participatedTasks, user.participatedTasks);
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null || getClass() != other.getClass()){
+            return false;
+        }
+        User user = (User) other;
+        return id == user.id
+                && blocked == user.blocked
+                && Objects.equals(firstName, user.firstName)
+                && Objects.equals(lastName, user.lastName)
+                && Objects.equals(email, user.email)
+                && Objects.equals(photo, user.photo)
+                && Objects.equals(password, user.password)
+                && Objects.equals(phoneNumber, user.phoneNumber)
+                && Objects.equals(aboutUser, user.aboutUser)
+                && Objects.equals(dateOfBirth, user.dateOfBirth)
+                && trustLevel == user.trustLevel
+                && Objects.equals(apiKey, user.apiKey)
+                && Objects.equals(createdTasks, user.createdTasks)
+                && Objects.equals(participatedTasks, user.participatedTasks);
     }
 
     @Override

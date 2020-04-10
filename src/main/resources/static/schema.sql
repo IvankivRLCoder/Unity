@@ -71,11 +71,12 @@ VALUES (1, 'Disabled', 'Helping disabled people'),
        (2, 'Elderly', 'Helping elderly'),
        (3, 'Fundraising', 'Raising funds');
 
-INSERT INTO volunteer(id, first_name, last_name, email, password, phone, photo, date_of_birth, trust_level, is_blocked)
-VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', 'photo 1', '2001-01-20', 'NOVICE', false),
-       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', 'photo 2','2000-12-17', 'NOVICE', true),
-       (3,'Test', 'One', 'test1@gmail.com', 'Kaban228', '0990095275', 'photo 3','2000-12-17', 'NOVICE', false),
-       (4,'Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', 'photo 4','2000-12-17', 'NOVICE', false);
+--!TODO fix issue with API keys
+INSERT INTO volunteer(id, first_name, last_name, email, password, phone, photo, date_of_birth, trust_level, is_blocked, api_key)
+VALUES (1,'Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', 'photo 1', '2001-01-20', 'NOVICE', false, 'testKey1'),
+       (2,'Yura', 'Khanas', 'yura1@gmail.com', 'Kaban228', '0990095274', 'photo 2','2000-12-17', 'NOVICE', true, 'testKey2'),
+       (3,'Test', 'One', 'test1@gmail.com', 'Kaban228', '0990095275', 'photo 3','2000-12-17', 'NOVICE', false, 'testKey3'),
+       (4,'Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', 'photo 4','2000-12-17', 'NOVICE', false, 'testKey4');
 
 INSERT INTO task(id, task_name, description, creation_date, title, is_active, participants, status, priority, category_id, creator_id)
 VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTIVE', 'HIGH', 1, 1),
@@ -85,4 +86,4 @@ VALUES (1, 'Task 1', 'Task number 1', CURRENT_DATE(), 'Title 1', true, 10, 'ACTI
 INSERT INTO volunteer_task (volunteer_id, task_id, participation_date, comment, approved)
 VALUES (1, 2, CURRENT_DATE(), 'first user - first task', true ),
        (1, 3, '2020-07-27', 'first user - second task', false ),
-       (2, 1, '2000-03-03', 'second user - second task', true );
+       (2, 1, '2000-03-03', 'second user - second task', true);

@@ -51,7 +51,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
 
     @ExceptionHandler(UniqueConstraintViolation.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ApiError handleUnigueConstraintViolation(UniqueConstraintViolation exception) {
+    protected ApiError handleUniqueConstraintViolation(UniqueConstraintViolation exception) {
         return ApiError
                 .builder()
                 .status(HttpStatus.NOT_FOUND)
