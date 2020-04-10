@@ -6,6 +6,7 @@ import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.error.EntityNotFountException;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.service.TaskService;
@@ -14,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
     private Task getByTaskId(int id) {
         Task task = taskDao.getById(id);
         if (task == null) {
-            throw new EntityNotFoundException("Task is not found with id = " + id);
+            throw new EntityNotFountException("Task is not found with id = " + id);
         }
         return task;
     }
@@ -91,7 +91,7 @@ public class TaskServiceImpl implements TaskService {
     private User getByUserId(int id) {
         User user = userDao.getById(id);
         if (user == null) {
-            throw new EntityNotFoundException("User is not found with id = " + id);
+            throw new EntityNotFountException("User is not found with id = " + id);
         }
         return user;
     }

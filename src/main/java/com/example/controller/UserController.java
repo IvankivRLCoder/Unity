@@ -27,14 +27,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/{id}/tasks")
-    @ApiOperation(value = "All created tasks")
+    @GetMapping("/{id}/tasks/created")
+    @ApiOperation(value = "Get all created tasks")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Created tasks", response = TaskDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class)
     })
-    public List<CreatedTaskDto> getAllCreatedTasks(@PathVariable int id, @Valid ApiKeyDto apiKeyDto) {
-        return userService.getAllCreatedTasks(apiKeyDto);
+    public List<CreatedTaskDto> getAllCreatedTasks(@PathVariable int id) {
+        return userService.getAllCreatedTasks(id);
     }
 
     @DeleteMapping("/{id}")
@@ -48,16 +48,16 @@ public class UserController {
         userService.deleteUser(id, apiKeyDto);
     }
 
-    @PutMapping("/{id}")
-    @ApiOperation(value = "Update user by id")
+    @PutMapping("/update")
+    @ApiOperation(value = "Update user by API key")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User successfully updated", response = UpdateUserDto.class),
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class),
-            @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
+            @ApiResponse(code = 404, message = "Invalid API key", response = ApiError.class)
     })
-    public MainUserDto updateUser(@RequestBody UpdateUserDto userDto, @PathVariable int id) {
-        return userService.updateUser(userDto, id);
+    public MainUserDto updateUser(@RequestBody UpdateUserDto userDto) {
+        return userService.updateUser(userDto);
     }
 
     @GetMapping("/{id}")
@@ -79,12 +79,14 @@ public class UserController {
     }
 
 
-    @PostMapping("/tasks/done")
+    @GetMapping("/{id}/tasks/done")
     @ApiOperation(value = "View a list of done tasks by user id")
-    @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
-    public List<GetTaskDto> getDoneTasks(@RequestBody ApiKeyDto apiKeyDto) {
-        return userService.getDoneTasks(apiKeyDto);
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class),
+            @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
+    })
+    public List<GetTaskDto> getDoneTasks(@PathVariable int id) {
+        return userService.getDoneTasks(id);
     }
-
 
 }

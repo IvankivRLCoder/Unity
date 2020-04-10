@@ -56,13 +56,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getByPhoneNumber(String phoneNumber) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber", User.class)
-                .setParameter("phoneNumber", phoneNumber)
-                .getSingleResult();
-    }
-
-    @Override
     public User getByApiKey(String apiKey) {
         return entityManager.createQuery("SELECT u FROM User u WHERE u.apiKey = :apiKey", User.class)
                 .setParameter("apiKey", apiKey)

@@ -8,6 +8,6 @@ public interface UserTaskDao extends MainDao<UserTask> {
 
     void delete(UserTask userTask);
 
-    UserTask getByUsedAndTask(int userId, int taskId);
+    UserTask getByUserAndTask(int userId, int taskId);
 
 }

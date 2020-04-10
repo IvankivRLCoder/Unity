@@ -19,7 +19,7 @@ public interface UserService {
 
     void deleteUser(int id, ApiKeyDto apiKeyDto);
 
-    MainUserDto updateUser(UpdateUserDto userDto, int id);
+    MainUserDto updateUser(UpdateUserDto userDto);
 
     List<MainTaskUserDto> getAllTasksByUserId(int id);
 
@@ -27,14 +27,10 @@ public interface UserService {
 
     int getByApiKey(String apiKey);
 
-    String encode(String str);
-
-    String decode(String str);
-
     MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto);
 
-    List<CreatedTaskDto> getAllCreatedTasks(ApiKeyDto apiKeyDto);
+    List<CreatedTaskDto> getAllCreatedTasks(int id);
 
-    List<GetTaskDto> getDoneTasks(ApiKeyDto apiKeyDto);
+    List<GetTaskDto> getDoneTasks(int id);
 
 }

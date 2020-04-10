@@ -4,6 +4,7 @@ import com.example.dao.CategoryDao;
 import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.category.CategoryDto;
 import com.example.dto.category.MainCategoryDto;
+import com.example.error.EntityNotFountException;
 import com.example.model.Category;
 import com.example.service.CategoryService;
 import com.example.service.UserService;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     private Category getById(int id) {
         Category category = categoryDao.getById(id);
         if (category == null) {
-            throw new EntityNotFoundException("Category is not found with id = " + id);
+            throw new EntityNotFountException("Category is not found with id = " + id);
         }
         return category;
     }

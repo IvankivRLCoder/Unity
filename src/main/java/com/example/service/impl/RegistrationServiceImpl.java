@@ -3,15 +3,14 @@ package com.example.service.impl;
 import com.example.dao.UserDao;
 import com.example.dto.authorization.AuthDto;
 import com.example.error.BadCredentialsException;
+import com.example.error.EntityNotFountException;
 import com.example.model.User;
 import com.example.service.RegistrationService;
-import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 
 @Service
@@ -20,9 +19,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private final UserDao userDao;
 
-    private final UserService userService;
-
     private final ModelMapper modelMapper;
+
+    private final EncodingService encodingService;
 
     @Override
     public void register(AuthDto authDto) {
@@ -31,9 +30,9 @@ public class RegistrationServiceImpl implements RegistrationService {
             if (user != null) {
                 throw new BadCredentialsException("User already exists");
             }
-        } catch (EntityNotFoundException exception) {
+        } catch (EntityNotFountException ignored) {
         }
-        authDto.setPassword(userService.encode(authDto.getPassword()));
+        authDto.setPassword(encodingService.encode(authDto.getPassword()));
         userDao.save(modelMapper.map(authDto, User.class));
     }
 
@@ -41,7 +40,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         try {
             return userDao.getByEmail(email);
         } catch (NoResultException | EmptyResultDataAccessException ex) {
-            throw new EntityNotFoundException("User was not found with email: " + email);
+            throw new EntityNotFountException("User was not found with email: " + email);
         }
     }
 
