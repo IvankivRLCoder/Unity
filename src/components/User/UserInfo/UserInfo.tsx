@@ -1,21 +1,49 @@
 import React, {FormEvent} from 'react';
 import './UserInfo.scss';
 import axios from "axios";
+import Input from "../../../utils/UI/Input/Input";
+import { Create } from '@material-ui/icons';
+import Validation from "../../../utils/Validation/Validation";
+
 
 class UserInfo extends React.Component {
     state: { [id: string]: any; } = {
         formControls: {
             firstName: {
+                type: 'text',
+                placeholder: 'Name',
                 value: '',
-                error: ''
+                valid: false,
+                errorMessage: 'Enter valid name',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 1
+                }
             },
             lastName: {
+                type: 'text',
+                placeholder: 'Surname',
                 value: '',
-                error: ''
+                valid: false,
+                errorMessage: 'Enter valid surname',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 1
+                }
             },
             description: {
+                type: 'text',
+                placeholder: 'Surname',
                 value: '',
-                error: ''
+                valid: false,
+                errorMessage: 'Enter valid surname',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 1
+                }
             },
             photo: {
                 url: '',
@@ -24,7 +52,16 @@ class UserInfo extends React.Component {
             }
 
         },
-        editMode: false
+        editMode: false,
+        currentInfo: {
+            firstName: '',
+            lastName: '',
+            description: '',
+            photo: {
+                url: '',
+                file: ''
+            }
+        }
     };
 
     componentDidMount () {
@@ -35,23 +72,46 @@ class UserInfo extends React.Component {
             formControls.lastName.value = user.lastName;
             formControls.description.value = user.description;
             formControls.photo.url = user.photo;
+            const currentInfo = {...this.state.currentInfo};
+            currentInfo.firstName = user.firstName;
+            currentInfo.lastName = user.lastName;
+            currentInfo.description = user.description;
+            currentInfo.photo = user.photo;
             this.setState({formControls:formControls});
+            this.setState({currentInfo:currentInfo});
+
         });
     }
 
-    onChangeHandler = (event: FormEvent<HTMLElement>, controlName: string) => {
-        const formControls = {...this.state.formControls};
-        const control = formControls[controlName];
+    handleUserDataSaveButton(event: React.MouseEvent<HTMLButtonElement>) {
+        event.preventDefault();
 
-        control.value = (event.target as HTMLInputElement).value;
-        formControls[controlName] = control;
+        let isValid = true;
+        let formControls = {...this.state.formControls};
+
+        Object.keys(formControls).forEach((controlName) => {
+
+            let control = {...formControls[controlName]};
+
+            control.showValidate = true;
+            formControls[controlName] = control;
+
+            if (!control.valid && isValid) {
+                isValid = false;
+            }
+        });
 
         this.setState({
             formControls
         });
-    };
 
-    handleUserDataSaveButton () {
+        if (isValid) {
+            console.log({
+                name: formControls.name.value,
+                email: formControls.email.value,
+                password: formControls.password.value,
+            });
+        }
         axios.put('http://localhost:3000/mockups/user.json', {
             firstName: this.state.formControls.firstName.value,
             lastName: this.state.formControls.lastName.value,
@@ -59,12 +119,26 @@ class UserInfo extends React.Component {
             photo: this.state.formControls.photo.url,
         }).then(res => {
             this.setState({editMode: false});
+            this.setState({currentInfo: {firstName: {value: this.state.formControls.firstName.value}}});
+            this.setState({currentInfo: {lastName: {value: this.state.formControls.lastName.value}}});
+            this.setState({currentInfo: {description: {value: this.state.formControls.description.value}}});
+            this.setState({currentInfo: {photo: {url: this.state.formControls.photo.url, file: this.state.formControls.photo.file}}});
         }).catch(error => {
             if (error.response.status === 400) {
                 // TODO: some validations
             }
         });
     }
+
+    handleCancelButton = () => {
+        this.setState({editMode: false});
+        const formControls = {...this.state.formControls};
+        formControls.firstName.value = this.state.currentInfo.firstName;
+        formControls.lastName.value = this.state.currentInfo.lastName;
+        formControls.description.value = this.state.currentInfo.description;
+        formControls.photo.url = this.state.currentInfo.photo;
+        this.setState({formControls:formControls});
+    };
 
     onFileChangeHandler = (files: any) => {
         let reader = new FileReader();
@@ -84,11 +158,57 @@ class UserInfo extends React.Component {
         reader.readAsDataURL(file)
     };
 
+    validateControl = (value: string, validation: any) => {
+        if (!validation) {
+            return {isValid: true, errorMessage: ''};
+        }
+
+        let validator = new Validation();
+
+        let isValid = true;
+        let errorMessage = '';
+
+        if (validation.required && isValid) {
+            isValid = !validator.isEmpty(value);
+            if (!isValid) errorMessage = 'Field is required.';
+        }
+
+
+        return {isValid: isValid, errorMessage: errorMessage};
+    };
+
+    onChangeHandler = (event: FormEvent<HTMLInputElement>, controlName: string) => {
+        const formControls = {...this.state.formControls};
+        const control = {...formControls[controlName]};
+
+        control.value = (event.target as HTMLInputElement).value;
+        let validateControlInfo = this.validateControl(control.value, control.validation);
+
+        control.valid = validateControlInfo.isValid;
+        if (validateControlInfo.errorMessage !== '') {
+            control.errorMessage = validateControlInfo.errorMessage;
+        }
+
+        formControls[controlName] = control;
+
+        this.setState({
+            formControls
+        });
+    };
+
     render() {
         return (
             <div>
                 <div className={"user-info-block " + (this.state.editMode ? 'hide' : 'show')}>
-                    <img src={this.state.formControls.photo.url} className="user-info-img" alt="Avatar"/>
+                    <div className="avatar-upload">
+                        <div className="avatar-edit">
+                            <input type="file" id="imageUpload"
+                                   onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
+                        </div>
+                        <div className="avatar-preview">
+                            <img src={this.state.formControls.photo.url} className="avatar-preview" alt="Avatar"/>
+                        </div>
+                    </div>
                     <h3 className="user-name">{this.state.formControls.firstName.value} {this.state.formControls.lastName.value}</h3>
                     <p className="user-description">
                         {this.state.formControls.description.value}
@@ -102,7 +222,9 @@ class UserInfo extends React.Component {
                         <div className="avatar-edit">
                             <input type="file" id="imageUpload"
                                    onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
-                            <label htmlFor="imageUpload"></label>
+                            <label htmlFor="imageUpload">
+                                <Create/>
+                            </label>
                         </div>
                         <div className="avatar-preview">
                             <img src={this.state.formControls.photo.url} className="avatar-preview" alt="Avatar"/>
@@ -110,20 +232,36 @@ class UserInfo extends React.Component {
                     </div>
                     <div className={"row"} style={{paddingTop: "15px"}}>
                         <div className={"col-md-6"}>
-                            <input className={"form-control "} placeholder={"First name"} value={this.state.formControls.firstName.value} onChange={e => { this.onChangeHandler(e, 'firstName')}}/>
+                            <Input
+                                type={this.state.formControls.firstName.type}
+                                placeholder={this.state.formControls.firstName.placeholder}
+                                valid={this.state.formControls.firstName.valid}
+                                iconClassName={this.state.formControls.firstName.iconClassName}
+                                showValidate={this.state.formControls.firstName.showValidate}
+                                errorMessage={this.state.formControls.firstName.errorMessage}
+                                onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, "firstName")}
+                                value={this.state.formControls.firstName.value}/>
                         </div>
                         <div className={"col-md-6"}>
-                            <input className={"form-control"} placeholder={"Last name"} value={this.state.formControls.lastName.value} onChange={e => { this.onChangeHandler(e, 'lastName')}}/>
+                            <Input
+                                type={this.state.formControls.lastName.type}
+                                placeholder={this.state.formControls.lastName.placeholder}
+                                valid={this.state.formControls.lastName.valid}
+                                iconClassName={this.state.formControls.lastName.iconClassName}
+                                showValidate={this.state.formControls.lastName.showValidate}
+                                errorMessage={this.state.formControls.lastName.errorMessage}
+                                onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, "lastName")}
+                                value={this.state.formControls.lastName.value}/>
                         </div>
                     </div>
-                    <textarea className={"form-control user-description"} placeholder={"Enter your description"} value={this.state.formControls.description.value} onChange={e => { this.onChangeHandler(e, 'description')}}>
+                    <textarea className={"form-control user-description"} placeholder={"Enter your description"} value={this.state.formControls.description.value}>
                     </textarea>
                     <div className={'action-panel'} style={{paddingTop: "15px"}}>
                         <button className={"btn btn-primary"} style={{marginRight: "15px"}}
-                                onClick={e => this.setState({editMode: false})}>Cancel
+                                onClick={this.handleCancelButton}>Cancel
                         </button>
                         <button className={"btn btn-success"}
-                                onClick={e => this.handleUserDataSaveButton()}>Save
+                                onClick={e => this.handleUserDataSaveButton(e)}>Save
                         </button>
                     </div>
                 </div>
