@@ -2,6 +2,8 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
 import React, {Component, FormEvent} from "react";
 import avatar from '../Task/task.svg';
+import {Create, Image} from '@material-ui/icons';
+import './ManageTask.scss';
 
 type Props = {
     togglePopup: Function;
@@ -71,7 +73,41 @@ class ManageTask extends Component <Props> {
                 <Modal.Body>
                     <div className={"row"}>
                         <div className={"col-lg-4"}>
-                            <img src={this.state.formControls.mainImage.url} style={{"width": "70%"}} alt={""}/>
+                            <div className={"row"}>
+                                <div className={"col-lg-12"}>
+                                    <div className="avatar-edit">
+                                        <input type="file" id="imageUpload"/>
+                                        <label htmlFor="imageUpload">
+                                            <Image/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={"row"} style={{"paddingTop": "10px"}}>
+                                <div className={"col-lg-6"}>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
+                                </div>
+                                <div className={"col-lg-6"}>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
+                                </div>
+                            </div>
+                            <div className={"row"} style={{"paddingTop": "10px"}}>
+                                <div className={"col-lg-6"}>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
+                                </div>
+                                <div className={"col-lg-6"}>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
+                                </div>
+                            </div>
+                            <div className={"row"} style={{"paddingTop": "10px"}}>
+                                <div className={"col-lg-6"}>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
+                                </div>
+                                <div className={"col-lg-6"}>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
+                                </div>
+                            </div>
+{/*                            <img src={this.state.formControls.mainImage.url} style={{"width": "70%"}} alt={""}/>
                             <input style={{"paddingTop": "10px"}} type={"file"}
                                    onChange ={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
                             <div className={"row"} style={{"paddingTop": "10px"}}>
@@ -84,7 +120,7 @@ class ManageTask extends Component <Props> {
                                 <div className={"col-lg-4"}>
                                     <img src={avatar} style={{"width": "100%"}} alt={""}/>
                                 </div>
-                            </div>
+                            </div>*/}
                         </div>
                         <div className={"col-lg-8"}>
                             <div className="form-group">

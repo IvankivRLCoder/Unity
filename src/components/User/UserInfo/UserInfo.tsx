@@ -35,15 +35,12 @@ class UserInfo extends React.Component {
             },
             description: {
                 type: 'text',
-                placeholder: 'Surname',
+                placeholder: 'Description',
                 value: '',
                 valid: false,
-                errorMessage: 'Enter valid surname',
+                errorMessage: '',
                 showValidate: false,
-                validation: {
-                    required: true,
-                    minLength: 1
-                }
+                validation: false
             },
             photo: {
                 url: '',
@@ -173,11 +170,16 @@ class UserInfo extends React.Component {
             if (!isValid) errorMessage = 'Field is required.';
         }
 
+        if (validation.minLength && isValid) {
+            isValid = validator.checkMinLength(value, validation.minLength);
+            if (!isValid) errorMessage = 'You should put minimum ' + validation.minLength + ' chars.';
+        }
+
 
         return {isValid: isValid, errorMessage: errorMessage};
     };
 
-    onChangeHandler = (event: FormEvent<HTMLInputElement>, controlName: string) => {
+    onChangeHandler = (event: React.FormEvent<HTMLInputElement>, controlName: string) => {
         const formControls = {...this.state.formControls};
         const control = {...formControls[controlName]};
 
@@ -254,8 +256,15 @@ class UserInfo extends React.Component {
                                 value={this.state.formControls.lastName.value}/>
                         </div>
                     </div>
-                    <textarea className={"form-control user-description"} placeholder={"Enter your description"} value={this.state.formControls.description.value}>
-                    </textarea>
+                    <Input
+                        type={this.state.formControls.description.type}
+                        placeholder={this.state.formControls.description.placeholder}
+                        valid={this.state.formControls.description.valid}
+                        iconClassName={this.state.formControls.description.iconClassName}
+                        showValidate={this.state.formControls.description.showValidate}
+                        errorMessage={this.state.formControls.description.errorMessage}
+                        onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, "description")}
+                        value={this.state.formControls.description.value}/>
                     <div className={'action-panel'} style={{paddingTop: "15px"}}>
                         <button className={"btn btn-primary"} style={{marginRight: "15px"}}
                                 onClick={this.handleCancelButton}>Cancel
