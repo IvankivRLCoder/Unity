@@ -20,10 +20,7 @@ class ManageTask extends Component <Props> {
             description: {
                 value: ""
             },
-            mainImage: {
-                file: "",
-                url: avatar
-            }
+            images: []
         }
     };
 
@@ -51,18 +48,40 @@ class ManageTask extends Component <Props> {
         let file = files[0];
 
         reader.onloadend = () => {
-            const formControls = {...this.state.formControls};
-            const control = {...formControls.mainImage};
-            control.file = file;
-            control.url = reader.result;
-            formControls.mainImage = control;
-            this.setState({
-                formControls: formControls
-            });
+            let formControls = {...this.state.formControls};
+            let control = {
+                file: file,
+                url: reader.result
+            };
+            if (formControls.images.length < 6) {
+                formControls.images.push(control);
+                this.setState({
+                    formControls: formControls
+                });
+            }
         };
 
         reader.readAsDataURL(file)
     };
+
+    renderPhoto = (photo: any): any => {
+        return (<div className={"col-lg-2"}>
+            <img style={{width: "inherit"}} src={photo}/>
+        </div>)
+    };
+
+    renderPhotos = () => {
+        let photos = this.state.formControls.images;
+        console.log(photos, 1)
+
+        let HTML:any = [];
+        photos.forEach((photo:any) => {
+            HTML.push(this.renderPhoto(photo.url));
+        });
+      return (                    <div className={"row"}>
+          {HTML} </div>);
+    };
+
 
     render() {
 
@@ -72,62 +91,23 @@ class ManageTask extends Component <Props> {
                 </Modal.Header>
                 <Modal.Body>
                     <div className={"row"}>
-                        <div className={"col-lg-4"}>
-                            <div className={"row"}>
-                                <div className={"col-lg-12"}>
-                                    <div className="avatar-edit">
-                                        <input type="file" id="imageUpload"/>
-                                        <label htmlFor="imageUpload">
-                                            <Image/>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={"row"} style={{"paddingTop": "10px"}}>
-                                <div className={"col-lg-6"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                                <div className={"col-lg-6"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                            </div>
-                            <div className={"row"} style={{"paddingTop": "10px"}}>
-                                <div className={"col-lg-6"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                                <div className={"col-lg-6"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                            </div>
-                            <div className={"row"} style={{"paddingTop": "10px"}}>
-                                <div className={"col-lg-6"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                                <div className={"col-lg-6"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                            </div>
-{/*                            <img src={this.state.formControls.mainImage.url} style={{"width": "70%"}} alt={""}/>
-                            <input style={{"paddingTop": "10px"}} type={"file"}
-                                   onChange ={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
-                            <div className={"row"} style={{"paddingTop": "10px"}}>
-                                <div className={"col-lg-4"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                                <div className={"col-lg-4"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                                <div className={"col-lg-4"}>
-                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
-                                </div>
-                            </div>*/}
-                        </div>
-                        <div className={"col-lg-8"}>
+                        <div className={"col-lg-10"}>
                             <div className="form-group">
                                 <label>Task name</label>
                                 <input className="form-control" value={this.state.formControls.title.value}
                                        onChange={(event: FormEvent<HTMLInputElement>) => this.onChangeHandler(event, "title")}/>
                             </div>
+                        </div>
+                        <div className={"col-lg-2"}>
+                            <div className="avatar-edit">
+                                <input type="file" id="imageUpload"
+                                       onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
+                                <label htmlFor="imageUpload">
+                                    <Image/>
+                                </label>
+                            </div>
+                        </div>
+                        <div className={"col-lg-12"}>
                             <div className="form-group">
                                 <label>Task description</label>
                                 <textarea style={{"height": "150px"}} className="form-control"
@@ -136,6 +116,7 @@ class ManageTask extends Component <Props> {
                             </div>
                         </div>
                     </div>
+                    {this.renderPhotos()}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => this.props.togglePopup(false)}>
