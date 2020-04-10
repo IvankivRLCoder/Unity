@@ -71,18 +71,18 @@ class ManageTask extends Component <Props> {
                 <Modal.Body>
                     <div className={"row"}>
                         <div className={"col-lg-4"}>
-                            <img src={this.state.formControls.mainImage.url} style={{"width": "70%"}}/>
+                            <img src={this.state.formControls.mainImage.url} style={{"width": "70%"}} alt={""}/>
                             <input style={{"paddingTop": "10px"}} type={"file"}
                                    onChange ={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
                             <div className={"row"} style={{"paddingTop": "10px"}}>
                                 <div className={"col-lg-4"}>
-                                    <img src={avatar} style={{"width": "100%"}}/>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
                                 </div>
                                 <div className={"col-lg-4"}>
-                                    <img src={avatar} style={{"width": "100%"}}/>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
                                 </div>
                                 <div className={"col-lg-4"}>
-                                    <img src={avatar} style={{"width": "100%"}}/>
+                                    <img src={avatar} style={{"width": "100%"}} alt={""}/>
                                 </div>
                             </div>
                         </div>

@@ -13,7 +13,7 @@ class UserInfo extends React.Component {
     };
 
     componentDidMount () {
-        axios.get('http://localhost:3000/mockups/user.json').then(res => {
+        axios.get('/mockups/user.json').then(res => {
             const user = res.data;
             this.setState({
                 name: user.name,

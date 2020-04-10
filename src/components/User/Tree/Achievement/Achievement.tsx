@@ -2,11 +2,11 @@ import React from 'react';
 import './Achievement.scss';
 import achievementImage from './achievement.png';
 
-class Achievement extends React.Component {
-    props = {
-        id: 1,
-        name: ''
-    };
+interface IProps {
+    name: String
+}
+
+class Achievement extends React.Component<IProps> {
 
     render() {
         return (

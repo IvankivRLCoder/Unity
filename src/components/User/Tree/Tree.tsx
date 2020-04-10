@@ -12,7 +12,7 @@ class Tree extends React.Component{
     };
 
     componentDidMount () {
-        axios.get('http://localhost:3000/mockups/user.json').then(res => {
+        axios.get('/mockups/user.json').then(res => {
             const user = res.data;
             this.setState({
                 achievements: user.achievements,
@@ -23,12 +23,11 @@ class Tree extends React.Component{
 
     renderAchievements() {
         return this.state.achievements.map((achievement : any) => {
-            return <Achievement name={achievement.name} id={achievement.id}/>
+            return <Achievement name={achievement.name} key={achievement.id}/>
         });
     }
 
     render() {
-        console.log(this.state.achievements.length, this.state.totalAmount)
         return (
             <div className="tree-block">
                 <div className="tree-img">
