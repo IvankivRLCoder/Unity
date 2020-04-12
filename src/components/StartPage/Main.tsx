@@ -18,7 +18,7 @@ export class Main extends Component {
 
 
     componentDidMount () {
-        axios.get('http://localhost:3000/mockups/tasks.json').then(res => {
+        axios.get('/mockups/tasks.json').then(res => {
             const tasks = res.data;
             this.setState({tasksFromApi:tasks});
         });
@@ -26,9 +26,10 @@ export class Main extends Component {
 
     renderTasks = () => {
 
-        return this.state.tasksFromApi.map((task) => {
+        return this.state.tasksFromApi.map((task, index: number) => {
             return (
                 <Task
+                    key={index}
                     name={task.name}
                     owner={task.owner}
                     description={task.description}
