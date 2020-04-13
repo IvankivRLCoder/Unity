@@ -215,6 +215,7 @@ class Registration extends Component {
                     showValidate={control.showValidate}
                     errorMessage={control.errorMessage}
                     onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, controlName)}
+                    value={control.value}
                 />
             );
         });
