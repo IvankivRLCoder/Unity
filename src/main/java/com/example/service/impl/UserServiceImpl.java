@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserService {
         oldUser.setPhoto(fileName);
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
+        oldUser.setAboutUser(userDto.getAboutUser());
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
     }
 
