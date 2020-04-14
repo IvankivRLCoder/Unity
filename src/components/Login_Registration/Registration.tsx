@@ -3,6 +3,8 @@ import photo from './signup-image.jpg';
 import './LoginRegister.scss';
 import Input from "../../utils/UI/Input/Input";
 import Validation from "../../utils/Validation/Validation";
+import axios from 'axios';
+import {CONFIG} from '../../config';
 
 class Registration extends Component {
 
@@ -23,7 +25,7 @@ class Registration extends Component {
                 }
             },
             email: {
-                type: 'text',
+                type: 'email',
                 placeholder: 'Email',
                 value: '',
                 valid: false,
@@ -46,7 +48,12 @@ class Registration extends Component {
                 validation: {
                     required: true,
                     minLength: 8,
-                    maxLength: 30
+                    maxLength: 30,
+                    minCountLetters: 1,
+                    minCountUpperCase: 1,
+                    minCountLowerCase: 1,
+                    minCountDigits: 1,
+                    passwordSymbols: true,
                 }
             },
             repassword: {
@@ -69,7 +76,7 @@ class Registration extends Component {
         event.preventDefault();
 
         let isValid = true;
-        let formControls = {...this.state.formControls};
+        const formControls = {...this.state.formControls};
 
         Object.keys(formControls).forEach((controlName) => {
 
@@ -83,18 +90,34 @@ class Registration extends Component {
             }
         });
 
-        this.setState({
-            formControls
-        });
-
         if (isValid) {
-            console.log({
-                name: formControls.name.value,
+            axios.post(CONFIG.apiServer + "register/", {
+                firstName: formControls.name.value,
                 email: formControls.email.value,
                 password: formControls.password.value,
+            }).then((res) => {
+                if (res.status === 200) {
+                    window.location.href = "/login";
+                }
+            }).catch((error) => {
+                if (error.response.data.message === "User already exists") {
+                    let control = formControls.email;
+                    control.valid = false;
+                    control.showValidate = true;
+                    control.errorMessage = 'User with the same email already exists.';
+                    formControls.email = control;
+                    this.setState({
+                        formControls
+                    });
+                } else {
+                    alert("Unknown error");
+                }
+            });
+        } else {
+            this.setState({
+                formControls
             });
         }
-
     };
 
     validateControl = (value: string, validation: any) => {
@@ -128,6 +151,31 @@ class Registration extends Component {
         }
 
         if (validation.equalTo && isValid) {
+            isValid = (value === this.state.formControls[validation.equalTo].value);
+            if (!isValid) errorMessage = 'Passwords should be equal.';
+        }
+
+        if (validation.minCountLetters && isValid) {
+            isValid = validator.checkPasswordSymbols(value);
+            if (!isValid) errorMessage = 'You can use only latin letters, numbers and symbols(!,#,$,%,&,*,+,?,@,^)';
+        }
+
+        if (validation.minCountUpperCase && isValid) {
+            isValid = validator.checkMinCountUpperCase(value, validation.minCountUpperCase);
+            if (!isValid) errorMessage = 'You should put minimum ' + validation.minCountUpperCase + ' letter(s) in upper case.';
+        }
+
+        if (validation.minCountLowerCase && isValid) {
+            isValid = validator.checkMinCountLowerCase(value, validation.minCountLowerCase);
+            if (!isValid) errorMessage = 'You should put minimum ' + validation.minCountLowerCase + ' letter(s) in lower case.';
+        }
+
+        if (validation.minCountDigits && isValid) {
+            isValid = validator.checkMinCountDigits(value, validation.minCountDigits);
+            if (!isValid) errorMessage = 'You should put minimum ' + validation.minCountDigits + ' digit(s).';
+        }
+
+        if (validation.onlyLatin && isValid) {
             isValid = (value === this.state.formControls[validation.equalTo].value);
             if (!isValid) errorMessage = 'Passwords should be equal.';
         }
@@ -167,6 +215,7 @@ class Registration extends Component {
                     showValidate={control.showValidate}
                     errorMessage={control.errorMessage}
                     onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, controlName)}
+                    value={control.value}
                 />
             );
         });
@@ -183,7 +232,7 @@ class Registration extends Component {
                             <div className="text-center sign-form">
                                 <h2 className="form-title">Sign Up</h2>
                                 <form method="POST" className="register-form" id="login-form"
-                                      onSubmit={this.handleSubmit}>
+                                      onSubmit={this.handleSubmit} noValidate>
                                     {this.renderInputs()}
                                     <div className="form-group form-div form-button">
                                         <input type="submit" id="signin" className="form-submit" value="Register"/>
