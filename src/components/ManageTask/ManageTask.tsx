@@ -2,7 +2,6 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
 import React, {Component, FormEvent} from "react";
 import avatar from '../Task/task.svg';
-import {Create, Image} from '@material-ui/icons';
 import './ManageTask.scss';
 
 type Props = {
@@ -100,10 +99,10 @@ class ManageTask extends Component <Props> {
                         </div>
                         <div className={"col-lg-2"}>
                             <div className="avatar-edit">
-                                <input type="file" id="imageUpload"
+                                <input type="file" id="taskImagesUpload"
                                        onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
-                                <label htmlFor="imageUpload">
-                                    <Image/>
+                                <label htmlFor="taskImagesUpload">
+                                    <i className={"fas fa-images"}></i>
                                 </label>
                             </div>
                         </div>

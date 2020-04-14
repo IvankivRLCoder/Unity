@@ -28,8 +28,7 @@ export default (props: { [id: string]: any;}) => {
                        className={cls.join(' ')}
                        id={htmlFor}
                        placeholder={props.placeholder}
-                       onChange={props.onChange}
-                       value={props.value || ''}/>
+                       onChange={props.onChange}/>
 
             </div>
             <p className="sign-form-error-text">
