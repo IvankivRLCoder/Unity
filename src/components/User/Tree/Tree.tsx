@@ -41,7 +41,7 @@ class Tree extends React.Component<IProps, IState> {
 
     renderAchievements() {
         return this.state.achievements.map((achievement : any) => {
-            return <Achievement name={achievement.name} key={achievement.id}/>
+            return <Achievement name={achievement.name} id={achievement.id} key={achievement.id}/>
         });
     }
 

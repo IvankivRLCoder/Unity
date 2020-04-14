@@ -2,8 +2,9 @@ import React from 'react';
 import './Achievement.scss';
 import achievementImage from './achievement.png';
 
-interface IProps {
-    name: String
+export interface IProps {
+    name: string,
+    id: number
 }
 
 class Achievement extends React.Component<IProps> {

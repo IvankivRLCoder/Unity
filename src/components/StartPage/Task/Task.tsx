@@ -2,13 +2,14 @@ import React from 'react';
 import image from './task.svg';
 import './Task.scss';
 
+
 export default (props: {
     owner: any;
     description: any;
     partisipants: any;
     priority: any;
     name: React.ReactNode; }) =>(
-        <div className='main-task-block' onClick={() => window.location.href = "/task"}>
+        <div className='main-task-block'>
             <div className="priority" style={{background: props.priority}}/>
             <div className='container'>
                 <div className='row'>
@@ -17,7 +18,7 @@ export default (props: {
                             <figure><img src={image} alt="task-img"/></figure>
                         </div>
                     </div>
-                    <div className='col-md-8 task-main-data'>
+                    <div className='col-md-8   task-main-data'>
                         <div className='task-name'><h1>{props.name}</h1></div>
                         <div className="submain_data">
                             <div className='task-participants'><h4>Participants: <i>{props.partisipants} </i></h4></div>

@@ -15,27 +15,7 @@ class Validation {
 
     checkMinLength = (str: string, min: number) : boolean => {
         return str.length >= min;
-    };
-
-    checkPasswordSymbols = (str: string) => {
-        let regex = /^[\w!#$%&*+?@^]+$/;
-        return regex.test(str);
-    };
-
-    checkMinCountUpperCase = (str: string, minCount: number) => {
-        let regex = new RegExp('[A-Z]{' + minCount + ',}');
-        return regex.test(str);
-    };
-
-    checkMinCountLowerCase = (str: string, minCount: number) => {
-        let regex = new RegExp('[a-z]{' + minCount + ',}');
-        return regex.test(str);
-    };
-
-    checkMinCountDigits = (str: string, minCount: number) => {
-        let regex = new RegExp('\\d{' + minCount + ',}');
-        return regex.test(str);
-    };
+    }
 }
 
 export default Validation;

@@ -79,14 +79,12 @@ class ManageTask extends Component <Props> {
 
     renderPhoto = (photo: any): any => {
         return (<div className={"col-lg-2"}>
-            <img style={{width: "inherit"}} src={photo} alt={""}/>
+            <img style={{width: "inherit"}} src={photo}/>
         </div>)
     };
 
     renderPhotos = () => {
         let photos = this.state.formControls.images;
-        console.log(photos, 1)
-
         let HTML:any = [];
         photos.forEach((photo:any) => {
             HTML.push(this.renderPhoto(photo.url));
