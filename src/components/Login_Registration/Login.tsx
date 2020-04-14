@@ -94,6 +94,7 @@ class Login extends Component {
                     showValidate={control.showValidate}
                     errorMessage={control.errorMessage}
                     onChange={(e: FormEvent<HTMLInputElement>) => this.onChangeHandler(e, controlName)}
+                    value={control.value}
                 />
             );
         });
@@ -125,7 +126,7 @@ class Login extends Component {
                 password: formControls.password.value,
             }).then((res) => {
                 if (res.status === 200) {
-                    Auth.signIn(res.data.apiKey, res.data.firstName, res.data.id);
+                    Auth.signIn(res.data.apiKey, res.data.id, res.data.firstName);
                 }
             }).catch((error) => {
                 let control = formControls.email;

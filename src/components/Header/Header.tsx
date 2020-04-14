@@ -24,7 +24,7 @@ class Header extends Component {
                         </span>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link p-0" href="/user">
+                        <a className="nav-link p-0" href={"/user/" + Auth.loggedUserId}>
                             <i className="fas fa-user"/>
                         </a>
                     </li>
