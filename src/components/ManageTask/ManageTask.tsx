@@ -3,6 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import React, {Component, FormEvent} from "react";
 import avatar from '../Task/task.svg';
 import './ManageTask.scss';
+import axios from 'axios';
 
 type Props = {
     togglePopup: Function;
@@ -35,10 +36,22 @@ class ManageTask extends Component <Props> {
     };
 
     onSubmitHandler = () => {
-        console.log({
-           title: this.state.formControls.title.value,
-           description: this.state.formControls.description.value
-        });
+        let data = {
+            title: this.state.formControls.title.value,
+            description: this.state.formControls.description.value,
+            apiKey: "111",
+            creationDate: "2020-02-02",
+            name: this.state.formControls.title.value,
+            status: "ACTIVE",
+            priority: "CRITICAL",
+            category: {
+                id: 1,
+                description: "123",
+                name: "ddd"
+            }
+        }
+        axios.post("https://localhost:8080/tasks/", data);
+        console.log(data);
         this.props.togglePopup(false);
     };
 
@@ -71,8 +84,6 @@ class ManageTask extends Component <Props> {
 
     renderPhotos = () => {
         let photos = this.state.formControls.images;
-        console.log(photos, 1)
-
         let HTML:any = [];
         photos.forEach((photo:any) => {
             HTML.push(this.renderPhoto(photo.url));
