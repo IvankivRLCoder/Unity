@@ -4,6 +4,7 @@ import React, {Component, FormEvent} from "react";
 import avatar from '../Task/task.svg';
 import './ManageTask.scss';
 import axios from 'axios';
+import Auth from '../../utils/Auth/Auth';
 
 type Props = {
     togglePopup: Function;
@@ -39,7 +40,7 @@ class ManageTask extends Component <Props> {
         let data = {
             title: this.state.formControls.title.value,
             description: this.state.formControls.description.value,
-            apiKey: "111",
+            apiKey: Auth.loggedApiKey,
             creationDate: "2020-02-02",
             name: this.state.formControls.title.value,
             status: "ACTIVE",
