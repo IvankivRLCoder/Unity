@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
 import com.example.dto.apiKey.ApiKeyDto;
+import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
@@ -11,6 +12,7 @@ import com.example.model.Task;
 import com.example.model.User;
 import com.example.service.TaskService;
 import com.example.service.UserService;
+import com.example.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -45,8 +47,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<MainTaskDto> getAllTasks() {
-        return taskDao.getAll().stream().map(task -> modelMapper.map(task, MainTaskDto.class)).collect(Collectors.toList());
+    public PaginationDto<MainTaskDto> getAllTasks(int pageNumber) {
+        List<MainTaskDto> tasks = taskDao.getAll()
+                .stream()
+                .map(task -> modelMapper.map(task, MainTaskDto.class))
+                .collect(Collectors.toList());
+        return PaginationUtils.paginate(tasks,pageNumber);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.apiKey.ApiKeyDto;
+import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.error.ApiError;
@@ -72,9 +73,9 @@ public class TaskController {
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the tasks")
-    @ApiResponse(code = 200, message = "List of all tasks", response = MainTaskDto.class)
-    public List<MainTaskDto> getAllTasks() {
-        return taskService.getAllTasks();
+    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
+    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam int pageNumber) {
+        return taskService.getAllTasks(pageNumber);
     }
 
 }
