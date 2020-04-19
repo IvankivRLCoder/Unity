@@ -2,55 +2,81 @@
   {
     "name": "Task 1",
     "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 2",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 3",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 4",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 5",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 6",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 7",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 8",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   },
   {
     "name": "Task 9",
-    "owner": "Mykola Koshlan",
-    "partisipants": "3/10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
+  },
+  {
+    "name": "Task 10",
+    "owner": "Oleksii Havryshkiv",
+    "participants": 3,
+    "maxParticipants": 10,
+    "priority": "high",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniamquis\n                        nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute\n                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla\n                        pariatur.\n                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt\n                        mollit"
   }
 ]

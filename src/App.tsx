@@ -10,13 +10,25 @@ import './App.scss';
 import Auth from "./utils/Auth/Auth";
 
 function App() {
+    let curTime = Math.round(new Date().getTime()/1000);
+    let expireTime = 3600;
+    if (Auth.isLoggedIn && !Auth.remember) {
+        if (parseInt(localStorage.getItem('lastActivity') as string) < curTime - expireTime) {
+            Auth.logOut();
+        }
+        setTimeout(() => {
+            Auth.logOut();
+        }, 1000 * expireTime);
+    }
+    localStorage.setItem('lastActivity', curTime.toString());
+
     return (
         <BrowserRouter>
             <Layout>
                 <Switch>
                     <Route path="/user/:id" exact component={User}/>
                     <Route path="/" exact component={Main}/>
-                    <Route path="/task" exact component={Task}/>
+                    <Route path="/task/:id" exact component={Task}/>
                     <Route path="/login" render={() => (!Auth.isLoggedIn ? <Login/> : <Redirect to="/"/>)}/>
                     <Route path="/registration"
                            render={() => (!Auth.isLoggedIn ? <Registration/> : <Redirect to="/"/>)}/>

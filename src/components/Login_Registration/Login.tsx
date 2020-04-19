@@ -6,6 +6,7 @@ import Validation from "../../utils/Validation/Validation";
 import axios from "axios";
 import {CONFIG} from "../../config";
 import Auth from "../../utils/Auth/Auth";
+import {Link} from "react-router-dom";
 
 class Login extends Component {
 
@@ -36,7 +37,8 @@ class Login extends Component {
                     required: true,
                 }
             }
-        }
+        },
+        remember: false
     };
 
     validateControl = (value: string, validation: any) => {
@@ -126,7 +128,7 @@ class Login extends Component {
                 password: formControls.password.value,
             }).then((res) => {
                 if (res.status === 200) {
-                    Auth.signIn(res.data.apiKey, res.data.id, res.data.firstName);
+                    Auth.signIn(res.data.apiKey, res.data.id, res.data.firstName, this.state.remember);
                 }
             }).catch((error) => {
                 let control = formControls.email;
@@ -157,7 +159,8 @@ class Login extends Component {
                                       onSubmit={(event: FormEvent<HTMLFormElement>) => {this.handleSubmit(event)}}>
                                     {this.renderInputs()}
                                     <div className="form-check form-group text-left">
-                                        <input type="checkbox" className="form-check-input"/>
+                                        <input type="checkbox" className="form-check-input mt-2"
+                                               onChange={(event) => {this.setState({remember: event.target.checked})}}/>
                                         <label className="remember-label">Remember me</label>
                                     </div>
                                     <div className="form-group form-div form-button">
@@ -177,7 +180,7 @@ class Login extends Component {
                                     </ul>
                                 </div>
                                 <span className="login-label">Not a member?</span>
-                                <a href="/registration" className="signin-image-link">Sign Up</a>
+                                <Link to="/registration" className="signin-image-link">Sign Up</Link>
                             </div>
                         </div>
                         <div className="signin-image col-md-6 col-xs-12">
