@@ -50,27 +50,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(int pageNumber) {
-        List<MainTaskDto> tasks = TaskFilter.initialFilter(
-                taskDao.getAll()
-                        .stream()
-                        .map(task -> modelMapper.map(task, MainTaskDto.class))
-                        .collect(Collectors.toList()), "desc");
-        return PaginationUtils.paginate(tasks, pageNumber);
-    }
-
-    @Override
-    public PaginationDto<MainTaskDto> getAllTasksSorted(int pageNumber, String priority,
+    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String priority,
                                                         String category, String order) {
+        if(pageNumber == null){
+            pageNumber = 1;
+        }
         List<MainTaskDto> allTasks = taskDao.getAll()
                 .stream()
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
                 .collect(Collectors.toList());
-
-        if (priority == null && category == null && order == null) {
-            List<MainTaskDto> sortedTasks = TaskFilter.initialFilter(allTasks, "desc");
-            return PaginationUtils.paginate(sortedTasks, pageNumber);
-        }
 
         List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(allTasks, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);

@@ -14,9 +14,7 @@ public interface TaskService {
 
     MainTaskDto getTaskById(int id);
 
-    PaginationDto<MainTaskDto> getAllTasks(int pageNumber);
-
-    PaginationDto<MainTaskDto> getAllTasksSorted(int pageNumber, String priority, String category, String order);
+    PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String priority, String category, String order);
 
     void deleteTask(int id, ApiKeyDto apiKeyDto);
 

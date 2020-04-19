@@ -9,7 +9,7 @@ public class PaginationUtils {
 
     public final static int PAGE_SIZE = 20;
 
-    public static <T> PaginationDto<T> paginate(List<T> entities, int pageNumber) {
+    public static <T> PaginationDto<T> paginate(List<T> entities, Integer pageNumber) {
         if (pageNumber <= 0) {
             throw new PaginationException("Page or size can't be less or equals to 0");
         }
@@ -29,6 +29,7 @@ public class PaginationUtils {
             throw new PaginationException("There is no such quantity of entities");
         }
         entities = entities.subList(start, end);
+
         return PaginationDto.<T>builder()
                 .entities(entities)
                 .quantity(quantity)

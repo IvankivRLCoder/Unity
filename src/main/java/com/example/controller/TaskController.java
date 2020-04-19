@@ -73,18 +73,10 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the tasks")
     @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
-    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam int pageNumber) {
-        return taskService.getAllTasks(pageNumber);
-    }
-
-    @GetMapping("/filter")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "View list of all the tasks sorted by some criteria")
-    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
-    public PaginationDto<MainTaskDto> getAllTasksSorted(@RequestParam int pageNumber,
+    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam(required = false) Integer pageNumber,
                                                         @RequestParam(required = false) String priority,
                                                         @RequestParam(required = false) String category,
                                                         @RequestParam(required = false) String order) {
-        return taskService.getAllTasksSorted(pageNumber, priority, category, order);
+        return taskService.getAllTasks(pageNumber, priority, category, order);
     }
 }
