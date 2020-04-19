@@ -81,3 +81,20 @@
   }
 
 }
+
+.carousel-indicators li.active {
+    background-color: #000;
+}
+
+.carousel-indicators li {
+    box-shadow: inset 1px 1px 1px 1px black;      
+}
+
+
+.carousel-control-next-icon {
+    color:red;
+}
+
+span.carousel-control-prev-icon  {
+    color:red;
+}
