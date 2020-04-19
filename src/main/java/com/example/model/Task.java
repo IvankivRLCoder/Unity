@@ -21,17 +21,14 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "task_name")
-    private String name;
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "creation_date")
     private LocalDate creationDate;
-
-    @Column(name = "title")
-    private String title;
 
     @Column(name = "participants")
     private int possibleNumberOfParticipants;
@@ -70,7 +67,6 @@ public class Task {
         Task task = (Task) other;
         return possibleNumberOfParticipants == task.possibleNumberOfParticipants
                 && Objects.equals(id, task.id)
-                && Objects.equals(name, task.name)
                 && Objects.equals(description, task.description)
                 && Objects.equals(creationDate, task.creationDate)
                 && Objects.equals(title, task.title)

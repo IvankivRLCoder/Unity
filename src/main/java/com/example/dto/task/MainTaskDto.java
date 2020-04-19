@@ -16,10 +16,9 @@ import lombok.NoArgsConstructor;
 public class MainTaskDto {
 
     private int id;
-    private String name;
+    private String title;
     private String description;
     private String creationDate;
-    private String title;
     private int numberOfParticipants;
     private String status;
     private String priority;

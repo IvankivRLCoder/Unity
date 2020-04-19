@@ -15,11 +15,8 @@ import lombok.NoArgsConstructor;
 public class MainUserTaskDto {
 
     private GetUserDto user;
-
-    private String participationDate;
-
     private String comment;
-
+    private String participationDate;
     private boolean approved;
 
 }
