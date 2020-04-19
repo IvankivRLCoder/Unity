@@ -32,12 +32,6 @@ public class TaskDto {
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 
-    @NotNull(message = "{task.creation.null}")
-    @NotBlank(message = "{task.creation.blank}")
-    @LocalDateType
-    @ApiModelProperty(example = "2020-02-02", notes = "Date must be valid")
-    private String creationDate;
-
     @NotNull(message = "{task.title.null}")
     @NotBlank(message = "{task.title.blank}")
     @Size(min = 5, max = 100, message = "{task.title.size}")

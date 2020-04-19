@@ -15,21 +15,13 @@ import lombok.NoArgsConstructor;
 public class GetTaskDto {
 
     private int id;
-
     private String name;
-
     private String description;
-
     private String creationDate;
-
     private String title;
-
     private int possibleNumberOfParticipants;
-
     private String status;
-
     private String priority;
-
     private MainCategoryDto category;
 
 }

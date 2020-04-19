@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/Unity/tasks")
@@ -78,4 +77,14 @@ public class TaskController {
         return taskService.getAllTasks(pageNumber);
     }
 
+    @GetMapping("/filter")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "View list of all the tasks sorted by some criteria")
+    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
+    public PaginationDto<MainTaskDto> getAllTasksSorted(@RequestParam int pageNumber,
+                                                        @RequestParam(required = false) String priority,
+                                                        @RequestParam(required = false) String category,
+                                                        @RequestParam(required = false) String order) {
+        return taskService.getAllTasksSorted(pageNumber, priority, category, order);
+    }
 }

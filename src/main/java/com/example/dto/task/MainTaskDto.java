@@ -1,7 +1,8 @@
 package com.example.dto.task;
 
-import com.example.dto.category.MainCategoryDto;
+import com.example.dto.category.TaskCategoryDto;
 import com.example.dto.user.MainUserDto;
+import com.example.dto.user.UserCategoryDto;
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +24,8 @@ public class MainTaskDto {
     private int numberOfParticipants;
     private String status;
     private String priority;
-    private MainCategoryDto category;
-    private MainUserDto creator;
+    private TaskCategoryDto category;
+    private UserCategoryDto creator;
     private boolean active;
 
 }

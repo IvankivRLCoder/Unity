@@ -24,6 +24,7 @@ public class PaginationUtils {
         if (start < quantity && end > quantity) {
             end = quantity;
         }
+
         if (start > quantity || end > quantity) {
             throw new PaginationException("There is no such quantity of entities");
         }
