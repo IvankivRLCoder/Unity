@@ -1,5 +1,6 @@
 package com.example.dto.apiKey;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ApiModel(description = "Model that represents API key. Used for giving access only for authenticated users.")
 public class ApiKeyDto {
 
     @NotNull(message = "{user.api.key.null}")

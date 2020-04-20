@@ -3,18 +3,22 @@ package com.example.service.impl;
 import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
 import com.example.dto.apiKey.ApiKeyDto;
+import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.error.EntityNotFountException;
+import com.example.filter.TaskFilter;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.service.TaskService;
 import com.example.service.UserService;
+import com.example.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +40,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
         task.setActive(true);
+        task.setCreationDate(LocalDate.now());
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
 
@@ -45,8 +50,20 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<MainTaskDto> getAllTasks() {
-        return taskDao.getAll().stream().map(task -> modelMapper.map(task, MainTaskDto.class)).collect(Collectors.toList());
+    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String priority,
+                                                        String category, String order) {
+        if(pageNumber == null){
+            pageNumber = 1;
+        }
+        List<MainTaskDto> allTasks = taskDao.getAll()
+                .stream()
+                .map(task -> modelMapper.map(task, MainTaskDto.class))
+                .collect(Collectors.toList());
+
+        List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(allTasks, category, order);
+        List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
+
+        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), pageNumber);
     }
 
     @Override
@@ -64,7 +81,6 @@ public class TaskServiceImpl implements TaskService {
         task.setCategory(newTask.getCategory());
         task.setCreationDate(newTask.getCreationDate());
         task.setDescription(newTask.getDescription());
-        task.setName(newTask.getName());
         task.setPriority(newTask.getPriority());
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
         task.setStatus(newTask.getStatus());

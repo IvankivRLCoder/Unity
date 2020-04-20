@@ -145,6 +145,17 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
                 .build();
     }
 
+    @ExceptionHandler(PaginationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handlePagination(PaginationException exception){
+        return ApiError
+                .builder()
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
     @Override
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,

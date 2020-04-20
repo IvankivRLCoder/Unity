@@ -23,7 +23,9 @@ public class CategoryValidator implements ConstraintValidator<CategoryType, Main
         if (categoryDto != null) {
             List<Category> allCategory = categoryDao.getAll();
             Category searchCategory = mapper.map(categoryDto, Category.class);
-            return allCategory.stream().anyMatch(category -> isCategory(searchCategory, category));
+            return allCategory
+                    .stream()
+                    .anyMatch(category -> isCategory(searchCategory, category));
         }
         return true;
     }

@@ -1,5 +1,6 @@
 package com.example.dto.login;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ApiModel(description = "Model used for user`s login.")
 public class LoginDto {
 
     @NotNull
