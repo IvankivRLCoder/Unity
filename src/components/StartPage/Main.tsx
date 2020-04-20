@@ -1,44 +1,66 @@
-import React, {Component, Suspense,lazy} from 'react';
+import React, {Component} from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Sidebar from './Sidebar/Sidebar';
 import './Main.scss';
 import axios from 'axios';
-const Task = lazy(()=> import('./Task/Task'));
+import Task from './Task/Task';
+import ITask from './Task/ITask';
+import {CONFIG} from "../../config";
 
+interface IState {
+    tasksFromApi: ITask[],
+    page: number,
+    hasMoreTasks: boolean
+}
 
-export class Main extends Component {
+export class Main extends Component<any, IState> {
 
     state = {
-        tasksFromApi: [{
-            "name": "",
-            "owner": "",
-            "partisipants": "",
-            "description": ""
-        }]
-        };
+        tasksFromApi: [],
+        page: 1,
+        hasMoreTasks: true
+    };
 
+    componentDidMount() {
+        this.getNewTasks();
+    }
 
-    componentDidMount () {
-        axios.get('/mockups/tasks.json').then(res => {
-            const tasks = res.data;
-            this.setState({tasksFromApi:tasks});
+    getNewTasks = () => {
+        let tasks: ITask[] = [...this.state.tasksFromApi];
+
+        axios.get(CONFIG.apiServer + "tasks/?pageNumber=" + this.state.page).then(res => {
+            const newTasks = res.data.entities as ITask[];
+
+            newTasks.forEach((item: ITask) => {
+                let creatorData = item.creator;
+                item.creator = creatorData.firstName + " " + creatorData.lastName;
+                tasks.push(item);
+            });
+            this.setState({
+                tasksFromApi: tasks,
+                page: this.state.page + 1
+            });
+        }).catch(error => {
+            this.setState({hasMoreTasks: false});
         });
     }
 
     renderTasks = () => {
+        const tasks = [...this.state.tasksFromApi];
 
-        return this.state.tasksFromApi.map((task, index: number) => {
-            return (
+        return tasks.map((task: ITask, index: number) => (
                 <Task
+                    id={task.id}
                     key={index}
-                    name={task.name}
-                    owner={task.owner}
+                    title={task.title}
+                    creator={task.creator}
                     description={task.description}
-                    partisipants={task.partisipants}
-                    priority={"red"}
+                    approvedParticipants={task.approvedParticipants}
+                    numberOfParticipants={task.numberOfParticipants}
+                    priority={task.priority}
                 />
             )
-        });
-
+        );
     };
 
     render() {
@@ -50,9 +72,16 @@ export class Main extends Component {
                             <Sidebar/>
                         </div>
                         <div className="col-md-8 col-sm-12">
-                            <Suspense fallback={<div>Loading...</div>}>
+                            <InfiniteScroll
+                                dataLength={this.state.tasksFromApi.length}
+                                next={this.getNewTasks}
+                                hasMore={this.state.hasMoreTasks}
+                                loader={<p style={{textAlign: 'center'}}>Loading...</p>}
+                                endMessage={
+                                    <p style={{textAlign: 'center',color: 'gray'}}>No more tasks!</p>
+                                }>
                                 {this.renderTasks()}
-                            </Suspense>
+                            </InfiniteScroll>
                         </div>
                     </div>
                 </div>
