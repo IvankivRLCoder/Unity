@@ -10,7 +10,7 @@ function Task() {
                 <div className="row">
                     <div className="col-12 col-md-12 col-lg-5">
                         <div className="task-photos default-task-block">
-                        	<Carousel>
+                        	<Carousel nextIcon={(<i className="fas fa-chevron-right  task-carousel-arrow"></i>)} prevIcon={(<i className="fas fa-chevron-left  task-carousel-arrow"></i>)}>
                                 <Carousel.Item>
                                     <img className="d-block w-100" src={task} alt="First slide"/>
                                 </Carousel.Item>
