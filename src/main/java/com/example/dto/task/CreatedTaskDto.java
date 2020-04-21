@@ -11,14 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel(description = "Model that represents Task.")
+@ApiModel(description = "Model that represents Task. Accessible for GET requests.")
 public class CreatedTaskDto {
 
     private int id;
-    private String name;
+    private String title;
     private String description;
     private String creationDate;
-    private String title;
     private int numberOfParticipants;
     private String status;
     private String priority;

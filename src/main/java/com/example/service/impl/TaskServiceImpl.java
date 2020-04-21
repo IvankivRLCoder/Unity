@@ -8,6 +8,7 @@ import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.error.EntityNotFountException;
+import com.example.filter.TaskFilter;
 import com.example.model.Task;
 import com.example.model.User;
 import com.example.service.TaskService;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
         task.setActive(true);
+        task.setCreationDate(LocalDate.now());
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
 
@@ -47,12 +50,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(int offset, int limit) {
-        List<MainTaskDto> tasks = taskDao.getAll()
+    public PaginationDto<MainTaskDto> getAllTasks(int offset, int limit, String priority,
+                                                        String category, String order) {
+        List<MainTaskDto> allTasks = taskDao.getAll()
                 .stream()
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
                 .collect(Collectors.toList());
-        return PaginationUtils.paginate(tasks, offset, limit);
+
+        List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(allTasks, category, order);
+        List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
+
+        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), offset, limit);
+
     }
 
     @Override
@@ -70,7 +79,6 @@ public class TaskServiceImpl implements TaskService {
         task.setCategory(newTask.getCategory());
         task.setCreationDate(newTask.getCreationDate());
         task.setDescription(newTask.getDescription());
-        task.setName(newTask.getName());
         task.setPriority(newTask.getPriority());
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
         task.setStatus(newTask.getStatus());

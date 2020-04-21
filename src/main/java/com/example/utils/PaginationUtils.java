@@ -20,10 +20,12 @@ public class PaginationUtils {
         if (offset < quantity && end > quantity) {
             end = quantity;
         }
+
         if (offset > quantity || end > quantity) {
             throw new PaginationException("There is no such quantity of entities");
         }
         entities = entities.subList(offset, end);
+
         return PaginationDto.<T>builder()
                 .entities(entities)
                 .quantity(quantity)

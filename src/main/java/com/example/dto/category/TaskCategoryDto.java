@@ -7,11 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@ApiModel(description = "Model that represents Category. Used only for GET requests")
-public class MainCategoryDto {
+@ApiModel(description = "Model that represents category stored in a particular task. Used in GET requests.")
+public class TaskCategoryDto {
 
     private int id;
     private String name;
