@@ -53,7 +53,7 @@ public class Task {
     private boolean active;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private Set<UserTask> userTasks = new HashSet<>();
+    private Set<UserTask> userTasks = new HashSet<>();  
 
     @Override
     public boolean equals(Object other) {

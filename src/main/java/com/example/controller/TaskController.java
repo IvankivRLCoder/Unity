@@ -6,13 +6,16 @@ import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
+import com.example.service.impl.AmazonClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -21,8 +24,11 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Api(tags = "Task")
 public class TaskController {
+    private AmazonClient amazonClient = new AmazonClient();
 
-    private final TaskService taskService;
+
+    private TaskService taskService;
+
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
@@ -78,5 +84,13 @@ public class TaskController {
                                                         @RequestParam(required = false) String category,
                                                         @RequestParam(required = false) String order) {
         return taskService.getAllTasks(pageNumber, priority, category, order);
+    }
+
+    @PostMapping("/g")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "View list of all the tasks")
+    @ApiResponse(code = 200, message = "List of all tasks")
+    public String g(@RequestPart(value = "file") MultipartFile multipartFile) {
+        return this.amazonClient.uploadFile(multipartFile);
     }
 }

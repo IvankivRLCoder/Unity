@@ -11,22 +11,28 @@
 #      hibernate:
 #        dialect: org.hibernate.dialect.MySQL5Dialect
 
-spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2db
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: sa
-    schema: classpath:/static/schema.sql
-    initialization-mode: always
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+#spring:
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2db
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password: sa
+#    schema: classpath:/static/schema.sql
+#    initialization-mode: always
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: none
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.H2Dialect
+
+
+amazonProperties.endpointUrl: https://sts.eu-north-1.amazonaws.com
+amazonProperties.accessKey: AKIA2Q3SH7RKRJAKLQ2X
+amazonProperties.secretKey: 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
+amazonProperties.bucketName: unitylpnu
