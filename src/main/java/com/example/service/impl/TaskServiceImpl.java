@@ -50,11 +50,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String priority,
+    public PaginationDto<MainTaskDto> getAllTasks(int offset, int limit, String priority,
                                                         String category, String order) {
-        if(pageNumber == null){
-            pageNumber = 1;
-        }
         List<MainTaskDto> allTasks = taskDao.getAll()
                 .stream()
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
@@ -63,7 +60,8 @@ public class TaskServiceImpl implements TaskService {
         List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(allTasks, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
 
-        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), pageNumber);
+        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), offset, limit);
+
     }
 
     @Override
