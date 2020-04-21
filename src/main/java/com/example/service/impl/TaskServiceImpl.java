@@ -47,12 +47,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(int pageNumber) {
+    public PaginationDto<MainTaskDto> getAllTasks(int offset, int limit) {
         List<MainTaskDto> tasks = taskDao.getAll()
                 .stream()
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
                 .collect(Collectors.toList());
-        return PaginationUtils.paginate(tasks,pageNumber);
+        return PaginationUtils.paginate(tasks, offset, limit);
     }
 
     @Override

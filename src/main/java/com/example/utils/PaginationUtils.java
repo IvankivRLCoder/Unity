@@ -7,27 +7,23 @@ import java.util.List;
 
 public class PaginationUtils {
 
-    public final static int PAGE_SIZE = 20;
-
-    public static <T> PaginationDto<T> paginate(List<T> entities, int pageNumber) {
-        if (pageNumber <= 0) {
+    public static <T> PaginationDto<T> paginate(List<T> entities, int offset, int limit) {
+        if (offset < 0) {
             throw new PaginationException("Page or size can't be less or equals to 0");
         }
 
-        int start = (pageNumber - 1) * PAGE_SIZE;
-
-        int end = start + PAGE_SIZE;
+        int end = offset + limit;
 
         int quantity = entities.size();
-        int entityLeft = Math.max(quantity - (pageNumber * PAGE_SIZE), 0);
+        int entityLeft = Math.max(quantity - end, 0);
 
-        if (start < quantity && end > quantity) {
+        if (offset < quantity && end > quantity) {
             end = quantity;
         }
-        if (start > quantity || end > quantity) {
+        if (offset > quantity || end > quantity) {
             throw new PaginationException("There is no such quantity of entities");
         }
-        entities = entities.subList(start, end);
+        entities = entities.subList(offset, end);
         return PaginationDto.<T>builder()
                 .entities(entities)
                 .quantity(quantity)

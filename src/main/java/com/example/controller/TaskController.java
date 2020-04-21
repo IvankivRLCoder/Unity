@@ -74,8 +74,8 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the tasks")
     @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
-    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam int pageNumber) {
-        return taskService.getAllTasks(pageNumber);
+    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam int offset, @RequestParam int limit) {
+        return taskService.getAllTasks(offset, limit);
     }
 
 }
