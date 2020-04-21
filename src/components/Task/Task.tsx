@@ -1,6 +1,7 @@
 import React from 'react';
 import task from './task.svg';
 import './Task.scss';
+import Carousel from "react-bootstrap/Carousel";
 
 function Task() {
     return (
@@ -9,38 +10,26 @@ function Task() {
                 <div className="row">
                     <div className="col-12 col-md-12 col-lg-5">
                         <div className="task-photos default-task-block">
-                            <div className="main-task-photo">
-                                <img src={task} alt="Avatar"/>
-                            </div>
-                            <div className="other-task-images">
-                                <div className="row">
-                                    <div className="col">
-                                        <div className="task-image-wrapper">
-                                            <img src={task} alt="Avatar"/>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="task-image-wrapper">
-                                            <img src={task} alt="Avatar"/>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="task-image-wrapper">
-                                            <img src={task} alt="Avatar"/>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="task-image-wrapper">
-                                            <img src={task} alt="Avatar"/>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="task-image-wrapper">
-                                            <img src={task} alt="Avatar"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        	<Carousel nextIcon={(<i className="fas fa-chevron-right  task-carousel-arrow"></i>)} prevIcon={(<i className="fas fa-chevron-left  task-carousel-arrow"></i>)}>
+                                <Carousel.Item>
+                                    <img className="d-block w-100" src={task} alt="First slide"/>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <img className="d-block w-100" src={task} alt="Second slide"/>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <img className="d-block w-100" src={task} alt="Third slide"/>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <img className="d-block w-100" src={task} alt="Fourth slide"/>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <img className="d-block w-100" src={task} alt="Fifth slide"/>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <img className="d-block w-100" src={task} alt="Sixth slide"/>
+                                </Carousel.Item>
+                            </Carousel>
                         </div>
                     </div>
                     <div className="col-12 col-md-12 col-lg-7">
