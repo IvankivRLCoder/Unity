@@ -17,7 +17,6 @@ public class EncodingService {
         return str;
     }
 
-
     public String decode(String str) {
         BASE64Decoder decoder = new BASE64Decoder();
         try {

@@ -20,6 +20,7 @@ public class MainTaskDto {
     private String description;
     private String creationDate;
     private int numberOfParticipants;
+    private int approvedParticipants;
     private String status;
     private String priority;
     private TaskCategoryDto category;

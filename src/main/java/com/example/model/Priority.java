@@ -7,10 +7,12 @@ import java.util.Optional;
 
 @Getter
 public enum Priority {
-    CRITICAL("Critical"),
-    HIGH("High"),
-    MEDIUM("Medium"),
-    LOW("Low");
+
+    CRITICAL("critical"),
+    HIGH("high"),
+    MEDIUM("medium"),
+    LOW("low"),
+    NONE("none");
 
     private String taskPriority;
 
@@ -33,13 +35,9 @@ public enum Priority {
     public static Boolean isPriority(String name) {
         Optional<Priority> priority = Arrays
                 .stream(values())
-                .filter(x -> x.getPriority().equalsIgnoreCase(name))
+                .filter(x -> x.getTaskPriority().equalsIgnoreCase(name))
                 .findFirst();
         return priority.isPresent();
-    }
-
-    public String getPriority() {
-        return taskPriority;
     }
 
 }

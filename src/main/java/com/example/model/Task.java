@@ -55,6 +55,9 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private Set<UserTask> userTasks = new HashSet<>();
 
+    @Transient
+    private int approvedParticipants;
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

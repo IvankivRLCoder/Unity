@@ -28,12 +28,12 @@ CREATE TABLE IF NOT EXISTS task
 (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     description     VARCHAR (255)      NOT NULL,
-    creation_date   DATE               NOT NULL,
+    creation_date   DATE,
     title           VARCHAR (30)       NOT NULL,
     is_active       BOOLEAN            DEFAULT FALSE,
-    participants    INT                NOT NULL,
+    participants    INT,
     status          VARCHAR (30)       NOT NULL,
-    priority        VARCHAR (30)       NOT NULL,
+    priority        VARCHAR (30),
     category_id     INT                NOT NULL,
     creator_id      INT                NOT NULL,
 

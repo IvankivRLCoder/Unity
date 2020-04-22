@@ -4,6 +4,7 @@ import com.example.dao.UserDao;
 import com.example.dto.authorization.AuthDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
+import com.example.model.TrustLevel;
 import com.example.model.User;
 import com.example.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         } catch (EntityNotFountException ignored) {
         }
         authDto.setPassword(encodingService.encode(authDto.getPassword()));
-        userDao.save(modelMapper.map(authDto, User.class));
+        User registered = modelMapper.map(authDto, User.class);
+        registered.setTrustLevel(TrustLevel.NOVICE);
+        userDao.save(registered);
     }
 
     private User getByEmail(String email) {

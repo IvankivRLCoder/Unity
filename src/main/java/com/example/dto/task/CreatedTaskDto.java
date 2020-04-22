@@ -19,6 +19,7 @@ public class CreatedTaskDto {
     private String description;
     private String creationDate;
     private int numberOfParticipants;
+    private int approvedParticipants;
     private String status;
     private String priority;
     private MainCategoryDto category;
