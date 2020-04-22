@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 
+import static com.example.utils.EncodingUtils.encode;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationServiceImpl implements RegistrationService {
@@ -20,8 +22,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final UserDao userDao;
 
     private final ModelMapper modelMapper;
-
-    private final EncodingService encodingService;
 
     @Override
     public void register(AuthDto authDto) {
@@ -32,7 +32,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         } catch (EntityNotFountException ignored) {
         }
-        authDto.setPassword(encodingService.encode(authDto.getPassword()));
+        authDto.setPassword(encode(authDto.getPassword()));
         userDao.save(modelMapper.map(authDto, User.class));
     }
 
