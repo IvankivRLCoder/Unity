@@ -38,7 +38,6 @@ public class TaskServiceImpl implements TaskService {
         userId = userService.getByApiKey(taskDto.getApiKey());
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
-        task.setActive(false);
         task.setCreationDate(LocalDate.now());
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
@@ -49,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String priority,
+    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String criteria, String priority,
                                                   String category, String order) {
         if (pageNumber == null) {
             pageNumber = 1;
@@ -64,7 +63,6 @@ public class TaskServiceImpl implements TaskService {
             );
             if (task.getApprovedParticipants() == task.getPossibleNumberOfParticipants()) {
                 task.setStatus(Status.ACTIVE);
-                task.setActive(true);
             }
         });
 
@@ -72,7 +70,9 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
                 .collect(Collectors.toList());
-        List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(mappedTasks, category, order);
+
+        List<MainTaskDto> criteriaSorted = TaskFilter.filterByTitle(mappedTasks, criteria, order);
+        List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(criteriaSorted, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
 
         return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), pageNumber);
@@ -130,22 +130,6 @@ public class TaskServiceImpl implements TaskService {
             throw new EntityNotFountException("User is not found with id = " + id);
         }
         return user;
-    }
-
-    private Priority calculateTaskPriority(Task task) {
-        LocalDate taskCreationDate = task.getCreationDate();
-        int possibleParticipants = task.getPossibleNumberOfParticipants();
-        String taskStatus = task.getStatus().getTaskStatus();
-        boolean active = task.isActive();
-        int approvedParticipants = task.getApprovedParticipants();
-
-        if (taskStatus.equalsIgnoreCase("active")
-                || taskStatus.equalsIgnoreCase("done")
-                || active) {
-            return Priority.NONE;
-        }
-
-        return null;
     }
 
 }

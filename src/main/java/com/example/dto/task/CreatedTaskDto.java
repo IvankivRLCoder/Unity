@@ -20,9 +20,9 @@ public class CreatedTaskDto {
     private String creationDate;
     private int numberOfParticipants;
     private int approvedParticipants;
+    private String endDate;
     private String status;
     private String priority;
     private MainCategoryDto category;
-    private boolean active;
 
 }

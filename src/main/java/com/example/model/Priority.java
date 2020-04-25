@@ -8,16 +8,19 @@ import java.util.Optional;
 @Getter
 public enum Priority {
 
-    CRITICAL("critical"),
-    HIGH("high"),
-    MEDIUM("medium"),
-    LOW("low"),
-    NONE("none");
+    CRITICAL("critical", 5),
+    HIGH("high", 4),
+    MEDIUM("medium", 3),
+    LOW("low", 2),
+    NONE("none", 1);
 
     private String taskPriority;
 
-    Priority(String taskPriority){
+    private int priorityLvl;
+
+    Priority(String taskPriority, int priorityLvl){
         this.taskPriority = taskPriority;
+        this.priorityLvl = priorityLvl;
     }
 
     public static Priority getFromName(String name) {

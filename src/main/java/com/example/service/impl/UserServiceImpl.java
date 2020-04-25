@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         userTask.setTask(participatedTask);
         userTask.setParticipationDate(LocalDate.now());
 
-        if (!userTask.getTask().isActive()) {
+        if (userTask.getTask().getStatus().getTaskStatus().equalsIgnoreCase("done")) {
             throw new TaskIsNotActiveException("Task is not active.");
         }
 

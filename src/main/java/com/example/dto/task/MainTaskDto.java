@@ -21,10 +21,10 @@ public class MainTaskDto {
     private String creationDate;
     private int numberOfParticipants;
     private int approvedParticipants;
+    private String endDate;
     private String status;
     private String priority;
     private TaskCategoryDto category;
     private TaskUserDto creator;
-    private boolean active;
 
 }
