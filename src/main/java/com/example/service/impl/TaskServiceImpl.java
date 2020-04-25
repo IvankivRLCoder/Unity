@@ -9,6 +9,7 @@ import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
+import com.example.error.UserIsNotCreatorException;
 import com.example.filter.TaskFilter;
 import com.example.model.Status;
 import com.example.model.Task;
@@ -99,8 +100,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public MainTaskDto updateTask(TaskDto taskDto, int id) {
-        userService.getByApiKey(taskDto.getApiKey());
+        int userId = userService.getByApiKey(taskDto.getApiKey());
+
         Task task = getByTaskId(id);
+        if (task.getCreator().getId() != userId) {
+            throw new UserIsNotCreatorException("User is not creator of task: " + task.getId());
+        }
         Task newTask = modelMapper.map(taskDto, Task.class);
 
         task.setCategory(newTask.getCategory());

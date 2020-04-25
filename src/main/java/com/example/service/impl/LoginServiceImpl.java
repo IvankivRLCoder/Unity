@@ -67,6 +67,13 @@ public class LoginServiceImpl implements LoginService {
                 .build();
     }
 
+    @Override
+    public void checkUserByIdAndApiKey(int userId, ApiKeyDto apiKeyDto) {
+        if (userId != getByApiKey(apiKeyDto.getApiKey())) {
+            throw new BadCredentialsException("ApiKey is not valid for user with id:" + userId);
+        }
+    }
+
     private User getById(int id) {
         User user = userDao.getById(id);
         if (user == null) {
@@ -81,6 +88,16 @@ public class LoginServiceImpl implements LoginService {
         } catch (NoResultException | EmptyResultDataAccessException ex) {
             throw new EntityNotFountException("User wa not found with email: " + email);
         }
+    }
+
+    public int getByApiKey(String apiKey) {
+        User user;
+        try {
+            user = userDao.getByApiKey(encode(apiKey));
+        } catch (NoResultException | EmptyResultDataAccessException exception) {
+            throw new BadCredentialsException("API key is invalid");
+        }
+        return user.getId();
     }
 
 }

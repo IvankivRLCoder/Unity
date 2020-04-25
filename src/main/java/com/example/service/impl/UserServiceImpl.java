@@ -30,8 +30,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.example.utils.EncodingUtils.*;
 import static com.example.utils.EncodingUtils.decodeImage;
+import static com.example.utils.EncodingUtils.encode;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int id, ApiKeyDto apiKeyDto) {
         int apiKeyId = getByApiKey(apiKeyDto.getApiKey());
-        if(id!=apiKeyId){
+        if (id != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         User user = getById(id);
@@ -73,9 +73,12 @@ public class UserServiceImpl implements UserService {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
         String photo = userDto.getPhoto();
-        String fileName = UUID.randomUUID().toString();
-        File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
-        decodeImage(photo, photoFile.getAbsolutePath());
+        String fileName = userDto.getPhoto();
+        if (photo != null) {
+            fileName = UUID.randomUUID().toString();
+            File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
+            decodeImage(photo, photoFile.getAbsolutePath());
+        }
         oldUser.setPhoto(fileName);
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
@@ -94,7 +97,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
-        if(userId!=apiKeyId){
+        if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);

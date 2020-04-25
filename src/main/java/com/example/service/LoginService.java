@@ -9,4 +9,7 @@ public interface LoginService {
     MainLoginDto login(LoginDto loginDto);
 
     ApiKeyDto getApiKeyByUserId(int id);
+
+    void checkUserByIdAndApiKey(int userId, ApiKeyDto apiKeyDto);
+
 }
