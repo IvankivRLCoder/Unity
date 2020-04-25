@@ -10,7 +10,10 @@ import com.example.dto.task.TaskDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.filter.TaskFilter;
-import com.example.model.*;
+import com.example.model.Status;
+import com.example.model.Task;
+import com.example.model.User;
+import com.example.model.UserTask;
 import com.example.service.TaskService;
 import com.example.service.UserService;
 import com.example.utils.PaginationUtils;
@@ -37,7 +40,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
         int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
-        if(userId!=apiKeyId) {
+        if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         Task task = modelMapper.map(taskDto, Task.class);
@@ -75,9 +78,17 @@ public class TaskServiceImpl implements TaskService {
         List<MainTaskDto> criteriaSorted = TaskFilter.filterByCriteria(mappedTasks, criteria, order);
         List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(criteriaSorted, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
+        List<MainTaskDto> mainTaskDtos = TaskFilter.initialFilter(prioritySorted, order);
 
-        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), offset, limit);
-
+        if (limit != null && offset != null) {
+            return PaginationUtils.paginate(mainTaskDtos, offset, limit);
+        } else {
+            return PaginationDto.<MainTaskDto>builder()
+                    .entities(mainTaskDtos)
+                    .quantity(0)
+                    .entitiesLeft(0)
+                    .build();
+        }
     }
 
     @Override
