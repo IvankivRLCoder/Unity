@@ -48,11 +48,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String criteria, String priority,
+    public PaginationDto<MainTaskDto> getAllTasks(Integer offset, Integer limit, String criteria, String priority,
                                                   String category, String order) {
-        if (pageNumber == null) {
-            pageNumber = 1;
-        }
         List<Task> tasksFromDB = taskDao.getAll();
         tasksFromDB.forEach(task -> {
             task.setApprovedParticipants(
@@ -71,11 +68,12 @@ public class TaskServiceImpl implements TaskService {
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
                 .collect(Collectors.toList());
 
-        List<MainTaskDto> criteriaSorted = TaskFilter.filterByTitle(mappedTasks, criteria, order);
+        List<MainTaskDto> criteriaSorted = TaskFilter.filterByCriteria(mappedTasks, criteria, order);
         List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(criteriaSorted, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
 
-        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), pageNumber);
+        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), offset, limit);
+
     }
 
     @Override

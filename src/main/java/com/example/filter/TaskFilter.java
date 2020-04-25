@@ -39,7 +39,7 @@ public class TaskFilter {
                         .collect(Collectors.toList());
     }
 
-    public static List<MainTaskDto> filterByTitle(List<MainTaskDto> tasksToFilter, String criteria, String order){
+    public static List<MainTaskDto> filterByCriteria(List<MainTaskDto> tasksToFilter, String criteria, String order){
         return (criteria == null || criteria.trim().isEmpty()) ? initialFilter(tasksToFilter, order) :
                 tasksToFilter
                         .stream()
