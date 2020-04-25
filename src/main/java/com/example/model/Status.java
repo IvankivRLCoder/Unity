@@ -8,9 +8,9 @@ import java.util.Optional;
 @Getter
 public enum Status {
 
-    PENDING("Pending"),
-    ACTIVE("Active"),
-    DONE("Done");
+    PENDING("pending"),
+    ACTIVE("active"),
+    DONE("done");
 
     private String taskStatus;
 
@@ -33,13 +33,9 @@ public enum Status {
     public static Boolean isStatus(String name) {
         Optional<Status> status = Arrays
                 .stream(values())
-                .filter(x -> x.getStatus().equalsIgnoreCase(name))
+                .filter(x -> x.getTaskStatus().equalsIgnoreCase(name))
                 .findFirst();
         return status.isPresent();
-    }
-
-    public String getStatus() {
-        return taskStatus;
     }
 
 }

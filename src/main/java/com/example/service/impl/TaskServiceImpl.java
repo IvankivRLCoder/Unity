@@ -7,10 +7,10 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.filter.TaskFilter;
-import com.example.model.Task;
-import com.example.model.User;
+import com.example.model.*;
 import com.example.service.TaskService;
 import com.example.service.UserService;
 import com.example.utils.PaginationUtils;
@@ -36,10 +36,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
-        userId = userService.getByApiKey(taskDto.getApiKey());
+        int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
+        if(userId!=apiKeyId) {
+            throw new BadCredentialsException("Your apiKey is not tied to this id");
+        }
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
-        task.setActive(true);
         task.setCreationDate(LocalDate.now());
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
@@ -50,20 +52,32 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public PaginationDto<MainTaskDto> getAllTasks(Integer pageNumber, String priority,
-                                                        String category, String order) {
-        if(pageNumber == null){
-            pageNumber = 1;
-        }
-        List<MainTaskDto> allTasks = taskDao.getAll()
+    public PaginationDto<MainTaskDto> getAllTasks(Integer offset, Integer limit, String criteria, String priority,
+                                                  String category, String order) {
+        List<Task> tasksFromDB = taskDao.getAll();
+        tasksFromDB.forEach(task -> {
+            task.setApprovedParticipants(
+                    (int) task.getUserTasks()
+                            .stream()
+                            .filter(UserTask::isApproved)
+                            .count()
+            );
+            if (task.getApprovedParticipants() == task.getPossibleNumberOfParticipants()) {
+                task.setStatus(Status.ACTIVE);
+            }
+        });
+
+        List<MainTaskDto> mappedTasks = tasksFromDB
                 .stream()
                 .map(task -> modelMapper.map(task, MainTaskDto.class))
                 .collect(Collectors.toList());
 
-        List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(allTasks, category, order);
+        List<MainTaskDto> criteriaSorted = TaskFilter.filterByCriteria(mappedTasks, criteria, order);
+        List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(criteriaSorted, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
 
-        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), pageNumber);
+        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), offset, limit);
+
     }
 
     @Override
@@ -100,6 +114,14 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskDao.getById(id);
         if (task == null) {
             throw new EntityNotFountException("Task is not found with id = " + id);
+        }
+        long approvedParticipants = task.getUserTasks()
+                .stream()
+                .filter(UserTask::isApproved)
+                .count();
+        task.setApprovedParticipants((int) approvedParticipants);
+        if (approvedParticipants == task.getPossibleNumberOfParticipants()) {
+            task.setStatus(Status.ACTIVE);
         }
         return task;
     }

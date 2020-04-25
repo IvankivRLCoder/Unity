@@ -79,18 +79,13 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "View list of all the tasks")
     @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
-    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam(required = false) Integer pageNumber,
-                                                        @RequestParam(required = false) String priority,
-                                                        @RequestParam(required = false) String category,
-                                                        @RequestParam(required = false) String order) {
-        return taskService.getAllTasks(pageNumber, priority, category, order);
+    public PaginationDto<MainTaskDto> getAllTasks(@RequestParam(required = false) Integer offset,
+                                                  @RequestParam(required = false) Integer limit,
+                                                  @RequestParam(required = false) String criteria,
+                                                  @RequestParam(required = false) String priority,
+                                                  @RequestParam(required = false) String category,
+                                                  @RequestParam(required = false) String order) {
+        return taskService.getAllTasks(limit, offset, criteria, priority, category, order);
     }
 
-    @PostMapping("/g")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "View list of all the tasks")
-    @ApiResponse(code = 200, message = "List of all tasks")
-    public String g(@RequestPart(value = "file") MultipartFile multipartFile) {
-        return this.amazonClient.uploadFile(multipartFile);
-    }
 }

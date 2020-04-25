@@ -35,8 +35,18 @@ public class TaskFilter {
         return (category == null || category.trim().isEmpty()) ? initialFilter(tasksToFilter, order) :
                 tasksToFilter
                         .stream()
-                        .filter(task -> task.getCategory() != null
-                                && task.getCategory().getName().equalsIgnoreCase(category))
+                        .filter(task -> task.getCategory().getName().equalsIgnoreCase(category))
+                        .collect(Collectors.toList());
+    }
+
+    public static List<MainTaskDto> filterByCriteria(List<MainTaskDto> tasksToFilter, String criteria, String order){
+        return (criteria == null || criteria.trim().isEmpty()) ? initialFilter(tasksToFilter, order) :
+                tasksToFilter
+                        .stream()
+                        .filter(task ->
+                            task.getDescription().contains(criteria)
+                                    || task.getTitle().contains(criteria)
+                        )
                         .collect(Collectors.toList());
     }
 
