@@ -38,6 +38,12 @@ public class TaskDto {
     @ApiModelProperty(example = "7")
     private int possibleNumberOfParticipants;
 
+    @NotNull(message = "{task.endDate.null}")
+    @NotBlank(message = "{task.endDate.blank}")
+    @Pattern(regexp = "^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+    @ApiModelProperty(example = "2020-12-31")
+    private String endDate;
+
     @NotNull(message = "{task.status.null}")
     @NotBlank(message = "{task.status.blank}")
     @StatusType

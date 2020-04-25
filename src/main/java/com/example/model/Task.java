@@ -37,6 +37,9 @@ public class Task {
     @Column(name = "status")
     private Status status;
 
+    @Column(name = "end_date")
+    private LocalDate endDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "priority")
     private Priority priority;
@@ -49,11 +52,11 @@ public class Task {
     @JoinColumn(name = "creator_id")
     private User creator;
 
-    @Column(name = "is_active")
-    private boolean active;
-
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private Set<UserTask> userTasks = new HashSet<>();
+
+    @Transient
+    private int approvedParticipants;
 
     @Override
     public boolean equals(Object other) {

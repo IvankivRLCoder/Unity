@@ -4,6 +4,7 @@ import com.example.dao.UserDao;
 import com.example.dto.authorization.AuthDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
+import com.example.model.TrustLevel;
 import com.example.model.User;
 import com.example.service.RegistrationService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 
+import static com.example.utils.EncodingUtils.encode;
+
 @Service
 @RequiredArgsConstructor
 public class RegistrationServiceImpl implements RegistrationService {
@@ -20,8 +23,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final UserDao userDao;
 
     private final ModelMapper modelMapper;
-
-    private final EncodingService encodingService;
 
     @Override
     public void register(AuthDto authDto) {
@@ -32,8 +33,10 @@ public class RegistrationServiceImpl implements RegistrationService {
             }
         } catch (EntityNotFountException ignored) {
         }
-        authDto.setPassword(encodingService.encode(authDto.getPassword()));
-        userDao.save(modelMapper.map(authDto, User.class));
+        authDto.setPassword(encode(authDto.getPassword()));
+        User registered = modelMapper.map(authDto, User.class);
+        registered.setTrustLevel(TrustLevel.NOVICE);
+        userDao.save(registered);
     }
 
     private User getByEmail(String email) {

@@ -81,7 +81,7 @@ public class UserController {
     @GetMapping("/{id}/tasks/done")
     @ApiOperation(value = "View a list of done tasks by user id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class),
+            @ApiResponse(code = 200, message = "List of done tasks", response = MainUserDto.class),
             @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
     })
     public List<GetTaskDto> getDoneTasks(@PathVariable int id) {
