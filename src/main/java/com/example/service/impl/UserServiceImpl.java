@@ -30,6 +30,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.example.utils.EncodingUtils.*;
+import static com.example.utils.EncodingUtils.decodeImage;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -41,8 +44,6 @@ public class UserServiceImpl implements UserService {
     private final UserTaskDao userTaskDao;
 
     private final ModelMapper modelMapper;
-
-    private final EncodingService encodingService;
 
     @Override
     public MainUserDto getUserById(int id) {
@@ -59,7 +60,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int id, ApiKeyDto apiKeyDto) {
-        id = getByApiKey(apiKeyDto.getApiKey());
+        int apiKeyId = getByApiKey(apiKeyDto.getApiKey());
+        if(id!=apiKeyId){
+            throw new BadCredentialsException("Your apiKey is not tied to this id");
+        }
         User user = getById(id);
         userDao.delete(user);
     }
@@ -71,7 +75,7 @@ public class UserServiceImpl implements UserService {
         String photo = userDto.getPhoto();
         String fileName = UUID.randomUUID().toString();
         File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
-        encodingService.decodeImage(photo, photoFile.getAbsolutePath());
+        decodeImage(photo, photoFile.getAbsolutePath());
         oldUser.setPhoto(fileName);
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
@@ -89,7 +93,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
-        userId = getByApiKey(userTaskDto.getApiKey());
+        int apiKeyId = getByApiKey(userTaskDto.getApiKey());
+        if(userId!=apiKeyId){
+            throw new BadCredentialsException("Your apiKey is not tied to this id");
+        }
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);
         User participant = getById(userId);
         Task participatedTask = getTaskById(taskId);
@@ -128,14 +135,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MainUserTaskDto approveUserForTask(int userId, int taskId, boolean approved, ApiKeyDto apiKeyDto) {
-        int id = getByApiKey(apiKeyDto.getApiKey());
+        int creatorId = getByApiKey(apiKeyDto.getApiKey());
         Task task = getTaskById(taskId);
 
         if (task.getStatus() == Status.DONE) {
             throw new TaskDoneException("Task already done");
         }
 
-        if (task.getCreator().getId() != id) {
+        if (task.getCreator().getId() != creatorId) {
             throw new BadCredentialsException("This user can not approve");
         }
 
@@ -181,7 +188,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserTask getByUserIdAndTaskId(int userId, int taskId) {
-
         UserTask userTask;
         try {
             userTask = userTaskDao.getByUserAndTask(userId, taskId);
@@ -211,7 +217,7 @@ public class UserServiceImpl implements UserService {
     public int getByApiKey(String apiKey) {
         User user;
         try {
-            user = userDao.getByApiKey(encodingService.encode(apiKey));
+            user = userDao.getByApiKey(encode(apiKey));
         } catch (NoResultException | EmptyResultDataAccessException exception) {
             throw new BadCredentialsException("API key is invalid");
         }

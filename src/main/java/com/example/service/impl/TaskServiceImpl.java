@@ -7,6 +7,7 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.filter.TaskFilter;
 import com.example.model.*;
@@ -35,7 +36,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
-        userId = userService.getByApiKey(taskDto.getApiKey());
+        int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
+        if(userId!=apiKeyId) {
+            throw new BadCredentialsException("Your apiKey is not tied to this id");
+        }
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
         task.setCreationDate(LocalDate.now());
