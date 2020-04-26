@@ -7,6 +7,7 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.user.GetUserDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.error.UserIsNotCreatorException;
@@ -83,13 +84,13 @@ public class TaskServiceImpl implements TaskService {
 
         if (limit != null && offset != null) {
             return PaginationUtils.paginate(mainTaskDtos, offset, limit);
-        } else {
-            return PaginationDto.<MainTaskDto>builder()
-                    .entities(mainTaskDtos)
-                    .quantity(0)
-                    .entitiesLeft(0)
-                    .build();
         }
+        return PaginationDto.<MainTaskDto>builder()
+                .entities(mainTaskDtos)
+                .quantity(0)
+                .entitiesLeft(0)
+                .build();
+
     }
 
     @Override
@@ -124,6 +125,26 @@ public class TaskServiceImpl implements TaskService {
         return taskDao.getById(id).getUserTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDto<GetUserDto> getAllApprovedUsers(Integer offset, Integer limit, int taskId) {
+        Task task = getByTaskId(taskId);
+        List<GetUserDto> approvedUsers = task.getUserTasks()
+                .stream()
+                .filter(UserTask::isApproved)
+                .map(userTask -> modelMapper.map(userTask.getUser(), GetUserDto.class))
+                .collect(Collectors.toList());
+
+        if (limit != null && offset != null) {
+            return PaginationUtils.paginate(approvedUsers, offset, limit);
+        }
+        return PaginationDto.<GetUserDto>builder()
+                .entities(approvedUsers)
+                .quantity(0)
+                .entitiesLeft(0)
+                .build();
+
     }
 
     private Task getByTaskId(int id) {

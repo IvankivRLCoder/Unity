@@ -163,6 +163,7 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
         return ApiError
                 .builder()
                 .message(exception.getMessage())
+                .status(HttpStatus.BAD_REQUEST)
                 .timestamp(LocalDateTime.now())
                 .subErrors(new ArrayList<>())
                 .build();
