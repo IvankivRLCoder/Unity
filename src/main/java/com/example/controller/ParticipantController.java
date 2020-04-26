@@ -64,7 +64,7 @@ public class ParticipantController {
 
     @GetMapping("approved/task/{taskId}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "View list of all the approves users")
+    @ApiOperation(value = "View list of all the approved users")
     @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
     public PaginationDto<GetUserDto> getAllApprovedUsers(@RequestParam(required = false) Integer offset,
                                                          @RequestParam(required = false) Integer limit,
