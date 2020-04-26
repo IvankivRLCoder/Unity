@@ -1,7 +1,9 @@
 package com.example.controller;
 
 import com.example.dto.apiKey.ApiKeyDto;
+import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainUserTaskDto;
+import com.example.dto.user.GetUserDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
 import com.example.dto.usertask.UserTaskDto;
@@ -13,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -57,6 +60,16 @@ public class ParticipantController {
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
     public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable("taskId") int id) {
         return taskService.getAllUsersByTaskId(id);
+    }
+
+    @GetMapping("approved/task/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "View list of all the approves users")
+    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
+    public PaginationDto<GetUserDto> getAllApprovedUsers(@RequestParam(required = false) Integer offset,
+                                                         @RequestParam(required = false) Integer limit,
+                                                         @PathVariable int taskId) {
+        return taskService.getAllApprovedUsers(offset, limit, taskId);
     }
 
 }

@@ -4,7 +4,6 @@ import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.GetUserDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
 import io.swagger.annotations.Api;
@@ -81,16 +80,6 @@ public class TaskController {
                                                   @RequestParam(required = false) String category,
                                                   @RequestParam(required = false) String order) {
         return taskService.getAllTasks(offset, limit, criteria, priority, category, order);
-    }
-
-    @GetMapping("/{taskId}/users/approved")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "View list of all the approves users")
-    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
-    public PaginationDto<GetUserDto> getAllApprovedUsers(@RequestParam(required = false) Integer offset,
-                                                         @RequestParam(required = false) Integer limit,
-                                                         @PathVariable int taskId) {
-        return taskService.getAllApprovedUsers(offset, limit, taskId);
     }
 
 }
