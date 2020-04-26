@@ -9,7 +9,8 @@ import {CONFIG} from "../../config";
 
 interface IState {
     tasksFromApi: ITask[],
-    page: number,
+    offset: number,
+    limit: number,
     hasMoreTasks: boolean
 }
 
@@ -17,7 +18,8 @@ export class Main extends Component<any, IState> {
 
     state = {
         tasksFromApi: [],
-        page: 1,
+        offset: 0,
+        limit: 20,
         hasMoreTasks: true
     };
 
@@ -28,7 +30,7 @@ export class Main extends Component<any, IState> {
     getNewTasks = () => {
         let tasks: ITask[] = [...this.state.tasksFromApi];
 
-        axios.get(CONFIG.apiServer + "tasks/?pageNumber=" + this.state.page).then(res => {
+        axios.get(CONFIG.apiServer + "tasks/?offset=" + this.state.offset + "&limit=" + this.state.limit).then(res => {
             const newTasks = res.data.entities as ITask[];
 
             newTasks.forEach((item: ITask) => {
@@ -38,7 +40,7 @@ export class Main extends Component<any, IState> {
             });
             this.setState({
                 tasksFromApi: tasks,
-                page: this.state.page + 1
+                offset: tasks.length
             });
         }).catch(error => {
             this.setState({hasMoreTasks: false});

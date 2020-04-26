@@ -275,17 +275,13 @@ class UserInfo extends React.Component<any,any> {
             <div>
                 <div className={"user-info-block "}>
                     <div className="avatar-upload">
-                        <div className="avatar-edit">
-                            <input type="file" id="imageUpload"
-                                   onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
-                        </div>
                         <div className="avatar-preview">
-                            <img src={this.state.formControls.photo.url} className="avatar-preview" alt="Avatar"/>
+                            <img src={this.state.currentInfo.photo.url} className="avatar-preview" alt="Avatar"/>
                         </div>
                     </div>
-                    <h3 className="user-name">{this.state.formControls.firstName.value} {this.state.formControls.lastName.value}</h3>
+                    <h3 className="user-name">{this.state.currentInfo.firstName} {this.state.currentInfo.lastName}</h3>
                     <p className="user-description">
-                        {this.state.formControls.description.value}
+                        {this.state.currentInfo.description}
                     </p>
                     {userButton}
                 </div>
