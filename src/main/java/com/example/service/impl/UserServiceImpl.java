@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int id, ApiKeyDto apiKeyDto) {
         int apiKeyId = getByApiKey(apiKeyDto.getApiKey());
-        if(id!=apiKeyId){
+        if (id != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         User user = getById(id);
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
-        if(userId!=apiKeyId){
+        if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);

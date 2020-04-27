@@ -7,10 +7,15 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.user.GetUserDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
+import com.example.error.UserIsNotCreatorException;
 import com.example.filter.TaskFilter;
-import com.example.model.*;
+import com.example.model.Status;
+import com.example.model.Task;
+import com.example.model.User;
+import com.example.model.UserTask;
 import com.example.service.TaskService;
 import com.example.service.UserService;
 import com.example.utils.PaginationUtils;
@@ -42,7 +47,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
         int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
-        if(userId!=apiKeyId) {
+        if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         Task task = modelMapper.map(taskDto, Task.class);
@@ -85,8 +90,16 @@ public class TaskServiceImpl implements TaskService {
         List<MainTaskDto> criteriaSorted = TaskFilter.filterByCriteria(mappedTasks, criteria, order);
         List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(criteriaSorted, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
+        List<MainTaskDto> mainTaskDtos = TaskFilter.initialFilter(prioritySorted, order);
 
-        return PaginationUtils.paginate(TaskFilter.initialFilter(prioritySorted, order), offset, limit);
+        if (limit != null && offset != null) {
+            return PaginationUtils.paginate(mainTaskDtos, offset, limit);
+        }
+        return PaginationDto.<MainTaskDto>builder()
+                .entities(mainTaskDtos)
+                .quantity(0)
+                .entitiesLeft(0)
+                .build();
 
     }
 
@@ -98,8 +111,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public MainTaskDto updateTask(TaskDto taskDto, int id) {
-        userService.getByApiKey(taskDto.getApiKey());
+        int userId = userService.getByApiKey(taskDto.getApiKey());
+
         Task task = getByTaskId(id);
+        if (task.getCreator().getId() != userId) {
+            throw new UserIsNotCreatorException("User is not creator of task: " + task.getId());
+        }
         Task newTask = modelMapper.map(taskDto, Task.class);
         task.setCategory(newTask.getCategory());
         task.setCreationDate(newTask.getCreationDate());
@@ -118,6 +135,26 @@ public class TaskServiceImpl implements TaskService {
         return taskDao.getById(id).getUserTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PaginationDto<GetUserDto> getAllApprovedUsers(Integer offset, Integer limit, int taskId) {
+        Task task = getByTaskId(taskId);
+        List<GetUserDto> approvedUsers = task.getUserTasks()
+                .stream()
+                .filter(UserTask::isApproved)
+                .map(userTask -> modelMapper.map(userTask.getUser(), GetUserDto.class))
+                .collect(Collectors.toList());
+
+        if (limit != null && offset != null) {
+            return PaginationUtils.paginate(approvedUsers, offset, limit);
+        }
+        return PaginationDto.<GetUserDto>builder()
+                .entities(approvedUsers)
+                .quantity(0)
+                .entitiesLeft(0)
+                .build();
+
     }
 
     private Task getByTaskId(int id) {

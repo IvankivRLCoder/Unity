@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.login.LoginDto;
 import com.example.dto.login.MainLoginDto;
-import com.example.dto.user.MainUserDto;
 import com.example.error.ApiError;
 import com.example.service.LoginService;
 import io.swagger.annotations.Api;
@@ -44,4 +43,16 @@ public class LoginController {
     public ApiKeyDto getApiKeyByUserId(@PathVariable("userId") int userId) {
         return loginService.getApiKeyByUserId(userId);
     }
+
+    @PostMapping("check/apiKey/user/{userId}")
+    @ApiOperation(value = "Check if ApiKey exists")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "ApiKey found"),
+            @ApiResponse(code = 404, message = "Non-existing user id", response = ApiError.class)
+    })
+    public void checkUserByIdAndApiKey(@PathVariable("userId") int userId, @RequestBody ApiKeyDto apiKeyDto) {
+        loginService.checkUserByIdAndApiKey(userId, apiKeyDto);
+    }
+
 }

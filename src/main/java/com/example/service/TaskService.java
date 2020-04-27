@@ -5,6 +5,7 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.user.GetUserDto;
 
 import java.util.List;
 
@@ -23,4 +24,5 @@ public interface TaskService {
 
     List<MainUserTaskDto> getAllUsersByTaskId(int id);
 
+    PaginationDto<GetUserDto> getAllApprovedUsers(Integer offset, Integer limit, int taskId);
 }
