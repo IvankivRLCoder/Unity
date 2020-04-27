@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.dto.apiKey.ApiKeyDto;
+import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
@@ -13,7 +14,8 @@ public interface TaskService {
 
     MainTaskDto getTaskById(int id);
 
-    List<MainTaskDto> getAllTasks();
+    PaginationDto<MainTaskDto> getAllTasks(Integer offset, Integer limit, String criteria, String priority,
+                                           String category, String order);
 
     void deleteTask(int id, ApiKeyDto apiKeyDto);
 

@@ -7,9 +7,9 @@ import java.util.Optional;
 
 @Getter
 public enum TrustLevel {
-    RELIABLE("Reliable"),
-    DOUBTFUL("Doubtful"),
-    NOVICE("Novice");
+    RELIABLE("reliable"),
+    DOUBTFUL("doubtful"),
+    NOVICE("novice");
 
     private String levelOfTrust;
 
@@ -35,10 +35,6 @@ public enum TrustLevel {
                 .filter(x -> x.getLevelOfTrust().equalsIgnoreCase(name))
                 .findFirst();
         return trustLevel.isPresent();
-    }
-
-    public String getLevelOfTrust() {
-        return levelOfTrust;
     }
 
 }

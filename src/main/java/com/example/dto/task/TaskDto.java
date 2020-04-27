@@ -21,10 +21,11 @@ import javax.validation.constraints.*;
 @ApiModel(description = "Model that represents Task. Used for UPDATE and CREATE requests")
 public class TaskDto {
 
-    @NotNull(message = "{task.name.null}")
-    @Pattern(regexp = "^[a-z A-z]{7,25}$", message = "{description.regex}")
-    @ApiModelProperty(example = "Helping elderly", notes = "Minimum 7 characters, maximum 25, not blank")
-    private String name;
+    @NotNull(message = "{task.title.null}")
+    @NotBlank(message = "{task.title.blank}")
+    @Size(min = 5, max = 100, message = "{task.title.size}")
+    @ApiModelProperty(example = "Some task title", notes = "Not blank")
+    private String title;
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
@@ -32,22 +33,16 @@ public class TaskDto {
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 
-    @NotNull(message = "{task.creation.null}")
-    @NotBlank(message = "{task.creation.blank}")
-    @LocalDateType
-    @ApiModelProperty(example = "2020-02-02", notes = "Date must be valid")
-    private String creationDate;
-
-    @NotNull(message = "{task.title.null}")
-    @NotBlank(message = "{task.title.blank}")
-    @Size(min = 5, max = 100, message = "{task.title.size}")
-    @ApiModelProperty(example = "Some task title", notes = "Not blank")
-    private String title;
-
     @Min(value = 2, message = "{task.participants.minimum}")
     @Max(value = 100, message = "{task.participants.maximum}")
     @ApiModelProperty(example = "7")
     private int possibleNumberOfParticipants;
+
+    @NotNull(message = "{task.endDate.null}")
+    @NotBlank(message = "{task.endDate.blank}")
+    @Pattern(regexp = "^((19|2[0-9])[0-9]{2})-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$")
+    @ApiModelProperty(example = "2020-12-31")
+    private String endDate;
 
     @NotNull(message = "{task.status.null}")
     @NotBlank(message = "{task.status.blank}")
