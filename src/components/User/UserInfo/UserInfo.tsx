@@ -291,6 +291,7 @@ class UserInfo extends React.Component<any,any> {
     };
 
     render() {
+        console.log(this.state);
         if (!this.state.editMode) {
             return this.renderUserBlock();
         } else {

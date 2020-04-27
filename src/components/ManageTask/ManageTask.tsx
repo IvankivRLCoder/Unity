@@ -3,6 +3,10 @@ import Button from "react-bootstrap/esm/Button";
 import React, {Component, FormEvent} from "react";
 import { Image} from '@material-ui/icons';
 import './ManageTask.scss';
+import {CONFIG} from "../../config";
+import axios from "axios";
+import Auth from "../../utils/Auth/Auth";
+
 
 type Props = {
     togglePopup: Function;
@@ -35,10 +39,33 @@ class ManageTask extends Component <Props> {
     };
 
     onSubmitHandler = () => {
+        console.log(this.state)
         console.log({
            title: this.state.formControls.title.value,
            description: this.state.formControls.description.value
         });
+        let photos:any[] = [];
+        this.state.formControls.images.forEach((photo: { url: any; }) => {
+            photos.push(photo.url);
+        });
+        let data = {
+            apiKey: Auth.loggedApiKey,
+            title: this.state.formControls.title.value,
+            description: this.state.formControls.description.value,
+            photos: photos,
+            status: 'done',
+            priority: 'critical',
+            possibleNumberOfParticipants: 10,
+            endDate: '2019-04-03'
+        };
+        axios({
+            url: CONFIG.apiServer + 'tasks',
+            data: data,
+            method: 'post',
+            params: {
+                userId: Auth.loggedUserId
+            }
+        }).then().catch();
         this.props.togglePopup(false);
     };
 
@@ -98,9 +125,9 @@ class ManageTask extends Component <Props> {
                         </div>
                         <div className={"col-lg-2"}>
                             <div className="avatar-edit">
-                                <input type="file" id="imageUpload"
+                                <input type="file" id="taskImageUpload"
                                        onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
-                                <label htmlFor="imageUpload">
+                                <label htmlFor="taskImageUpload">
                                     <Image/>
                                 </label>
                             </div>
