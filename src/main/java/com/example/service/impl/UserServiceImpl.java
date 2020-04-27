@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import java.io.File;
@@ -31,7 +32,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.example.utils.EncodingUtils.*;
-import static com.example.utils.EncodingUtils.decodeImage;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private final UserTaskDao userTaskDao;
 
     private final ModelMapper modelMapper;
+
+    private final AmazonClient amazonClient;
 
     @Override
     public MainUserDto getUserById(int id) {
@@ -72,9 +74,7 @@ public class UserServiceImpl implements UserService {
     public MainUserDto updateUser(UpdateUserDto userDto) {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        String photo = userDto.getPhoto();
-        String fileName = UUID.randomUUID().toString();
-        oldUser.setPhoto(fileName);
+        oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
         oldUser.setAboutUser(userDto.getAboutUser());

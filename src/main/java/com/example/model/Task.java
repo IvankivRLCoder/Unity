@@ -53,7 +53,11 @@ public class Task {
     private User creator;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private Set<UserTask> userTasks = new HashSet<>();  
+    private Set<UserTask> userTasks = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(name = "photos")
+    private Set<String> photos = new HashSet<>();
 
     @Transient
     private int approvedParticipants;

@@ -24,8 +24,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Api(tags = "Task")
 public class TaskController {
-    private AmazonClient amazonClient = new AmazonClient();
-
 
     private TaskService taskService;
 

@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.service.AmazonService;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,36 +25,32 @@ public class AmazonClient {
 
     private AmazonS3 s3client;
 
-    private String bucketName = "unitylpnu";
+    private String bucketName = "testlpnu";
 
     private void initializeAmazon() {
-        String accessKey = "AKIA2Q3SH7RKRJAKLQ2X";
-        String secretKey = "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";
+        String accessKey = "AKIA2Q3SH7RK6JNO5EPY";
+        String secretKey = "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";
         AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
         this.s3client = new AmazonS3Client(credentials);
     }
 
-    public String uploadFile(MultipartFile multipartFile) {
+    public String uploadFile(String base64Declaration) {
         String fileUrl = "";
+        File file = new File("/home/kappa/Videos/dsa/Unity/src/main/resources/image.png");
+        String base64 = base64Declaration.split(",")[1];
+        byte[] data = Base64.decodeBase64(base64);
         try {
-            File file = convertMultiPartToFile(multipartFile);
+            OutputStream os = new FileOutputStream(file);
+            os.write(data);
             String fileName = generateFileName();
-            String endpointUrl = "https://sts.eu-north-1.amazonaws.com";
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+            String endpointUrl = "s3.eu-north-1.amazonaws.com";
+            fileUrl = "https://" + bucketName + "." + endpointUrl + "/" + fileName;
             uploadFileTos3bucket(fileName, file);
             file.delete();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return fileUrl;
-    }
-
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(file.getOriginalFilename());
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
     }
 
     private String generateFileName() {
