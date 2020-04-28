@@ -1,0 +1,33 @@
+@import './public/assets/_vars.scss';
+
+.task-participant-img-wrapper {
+  width: 100%;
+  padding-bottom: 100%;
+  height: 0;
+  border-radius: 100%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    transition: 0.3s;
+  }
+}
+.default-task-block.task-participant-block {
+  padding: 15px 30px;
+  border-radius: 10px;
+}
+
+.task-participant-link {
+  color: $default-text-color;
+
+  &:hover {
+    text-decoration: none;
+    color: lighten($default-text-color, 10%);
+
+    img {
+      width: 110%;
+      margin-top: -5%;
+      margin-left: -5%;
+    }
+  }
+}

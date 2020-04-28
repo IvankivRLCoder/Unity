@@ -1,26 +1,24 @@
 import React from 'react';
 import './Achievement.scss';
 import achievementImage from './achievement.png';
+import IAchievement from './IAchievement';
+import {Link} from "react-router-dom";
 
-interface IProps {
-    name: String
-}
-
-class Achievement extends React.Component<IProps> {
+class Achievement extends React.Component<IAchievement> {
 
     render() {
         return (
             <div className="achievement-wrapper">
-                <a href="/task">
+                <Link to={"/task/" + this.props.id}>
                     <div className="achievement">
                         <div className="achievement-img">
                             <img src={achievementImage} alt=""/>
                         </div>
                         <div className="achievement-description">
-                            <p>{this.props.name}</p>
+                            <p>{this.props.title}</p>
                         </div>
                     </div>
-                </a>
+                </Link>
             </div>
         );
     }
