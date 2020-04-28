@@ -12,10 +12,7 @@ import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UpdateUserDto;
 import com.example.dto.usertask.UserTaskDto;
 import com.example.error.*;
-import com.example.model.Status;
-import com.example.model.Task;
-import com.example.model.User;
-import com.example.model.UserTask;
+import com.example.model.*;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -30,11 +27,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.example.utils.EncodingUtils.*;
 import static com.example.utils.EncodingUtils.decodeImage;
+import static com.example.utils.EncodingUtils.encode;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("Duplicates")
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int id, ApiKeyDto apiKeyDto) {
         int apiKeyId = getByApiKey(apiKeyDto.getApiKey());
-        if(id!=apiKeyId){
+        if (id != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         User user = getById(id);
@@ -83,10 +82,17 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
     }
 
+    //TODO FIX PRIORITY CALCULATION
     @Override
     public List<MainTaskUserDto> getAllTasksByUserId(int id) {
         return userDao.getById(id).getParticipatedTasks()
                 .stream()
+                .peek(userTask -> {
+                    Task task = userTask.getTask();
+                    calculateTaskPriority(task);
+                    taskDao.update(task);
+                    userTaskDao.update(userTask);
+                })
                 .map(userTask -> modelMapper.map(userTask, MainTaskUserDto.class))
                 .collect(Collectors.toList());
     }
@@ -94,12 +100,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
-        if(userId!=apiKeyId){
+        if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);
         User participant = getById(userId);
+
         Task participatedTask = getTaskById(taskId);
+        calculateTaskPriority(participatedTask);
+        taskDao.update(participatedTask);
+
         userTask.setUser(participant);
         userTask.setTask(participatedTask);
         userTask.setParticipationDate(LocalDate.now());
@@ -222,6 +232,33 @@ public class UserServiceImpl implements UserService {
             throw new BadCredentialsException("API key is invalid");
         }
         return user.getId();
+    }
+
+    public void calculateTaskPriority(Task task) {
+        LocalDate creationDate = task.getCreationDate();
+        LocalDate endDate = task.getEndDate();
+
+        int possibleNumberOfParticipants = task.getPossibleNumberOfParticipants();
+        int approvedParticipants = task.getApprovedParticipants();
+
+        String status = task.getStatus().getTaskStatus();
+        if (status.equalsIgnoreCase("active") || status.equalsIgnoreCase("done")) {
+            task.setPriority(Priority.NONE);
+            return;
+        }
+
+        double participantsDiff = possibleNumberOfParticipants - approvedParticipants;
+        long datesDiff = DAYS.between(creationDate, endDate);
+
+        double coef = datesDiff / participantsDiff;
+        if (coef < 1) {
+            task.setPriority(Priority.CRITICAL);
+        } else if (coef >= 1 && coef <= 1.5) {
+            task.setPriority(Priority.HIGH);
+        } else if (coef > 1.5 && coef <= 2.5) {
+            task.setPriority(Priority.MEDIUM);
+        } else task.setPriority(Priority.LOW);
+
     }
 
 }
