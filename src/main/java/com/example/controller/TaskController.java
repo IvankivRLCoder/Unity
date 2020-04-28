@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @Api(tags = "Task")
 public class TaskController {
 
-    private TaskService taskService;
+    private final TaskService taskService;
 
 
     @PostMapping("/")
