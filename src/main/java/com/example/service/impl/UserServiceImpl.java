@@ -85,17 +85,10 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(userDao.update(oldUser), MainUserDto.class);
     }
 
-    //TODO FIX PRIORITY CALCULATION
     @Override
     public List<MainTaskUserDto> getAllTasksByUserId(int id) {
         return userDao.getById(id).getParticipatedTasks()
                 .stream()
-                .peek(userTask -> {
-                    Task task = userTask.getTask();
-                    calculateTaskPriority(task);
-                    taskDao.update(task);
-                    userTaskDao.update(userTask);
-                })
                 .map(userTask -> modelMapper.map(userTask, MainTaskUserDto.class))
                 .collect(Collectors.toList());
     }
@@ -237,7 +230,7 @@ public class UserServiceImpl implements UserService {
         return user.getId();
     }
 
-    public void calculateTaskPriority(Task task) {
+    private void calculateTaskPriority(Task task) {
         LocalDate creationDate = task.getCreationDate();
         LocalDate endDate = task.getEndDate();
 

@@ -12,10 +12,7 @@ import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.error.UserIsNotCreatorException;
 import com.example.filter.TaskFilter;
-import com.example.model.Status;
-import com.example.model.Task;
-import com.example.model.User;
-import com.example.model.UserTask;
+import com.example.model.*;
 import com.example.service.TaskService;
 import com.example.service.UserService;
 import com.example.utils.PaginationUtils;
@@ -111,6 +108,7 @@ public class TaskServiceImpl implements TaskService {
     public MainTaskDto updateTask(TaskDto taskDto, int id) {
         userService.getByApiKey(taskDto.getApiKey());
         Task task = getSingleTask(id);
+        calculateTaskPriority(task);
         int userId = userService.getByApiKey(taskDto.getApiKey());
 
         if (task.getCreator().getId() != userId) {
@@ -137,12 +135,11 @@ public class TaskServiceImpl implements TaskService {
                 .collect(Collectors.toList());
     }
 
-<<<<<<< HEAD
-    private Task getSingleTask(int id) {
-=======
     @Override
     public PaginationDto<GetUserDto> getAllApprovedUsers(Integer offset, Integer limit, int taskId) {
-        Task task = getByTaskId(taskId);
+        Task task = getSingleTask(taskId);
+        calculateTaskPriority(task);
+        taskDao.update(task);
         List<GetUserDto> approvedUsers = task.getUserTasks()
                 .stream()
                 .filter(UserTask::isApproved)
@@ -160,8 +157,7 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    private Task getByTaskId(int id) {
->>>>>>> 83982ed82458ec2f38e50dd20c53f833eca868ee
+    private Task getSingleTask(int id) {
         Task task = taskDao.getById(id);
         if (task == null) {
             throw new EntityNotFountException("Task is not found with id = " + id);
@@ -185,7 +181,7 @@ public class TaskServiceImpl implements TaskService {
         return user;
     }
 
-    public void calculateTaskPriority(Task task) {
+    private void calculateTaskPriority(Task task) {
         LocalDate creationDate = task.getCreationDate();
         LocalDate endDate = task.getEndDate();
 
