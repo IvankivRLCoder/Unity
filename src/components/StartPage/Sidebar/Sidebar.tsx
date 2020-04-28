@@ -23,7 +23,8 @@ export class Sidebar extends Component<any, IState> {
         filterParams: {
             priority: "",
             order: "",
-            category: ""
+            category: "",
+            criteria: ""
         }
     };
 
@@ -41,7 +42,6 @@ export class Sidebar extends Component<any, IState> {
                 categories.push(itemOption);
             });
             let filterParams = {...this.state.filterParams};
-            filterParams.category = newCategories[0].name.toString();
             this.setState({
                 categoriesFromApi: categories,
                 filterParams: filterParams
@@ -76,10 +76,16 @@ export class Sidebar extends Component<any, IState> {
                         this.props.setFilterParams(this.state.filterParams);
                     }}>
                         <div className="form-group">
+                            <label className="label-icon" htmlFor="email-0.8513741888192583">
+                                <i className="fas fa-search" aria-hidden="true"/>
+                            </label>
+                            <input className="searchParam form-control" type="text" onChange={event => this.handleChange(event)} value={this.state.filterParams.criteria} name="criteria" placeholder="Search"/>
+                        </div>
+                        <div className="form-group">
                             <label htmlFor="filterBlockCategoriesParam">Categories:</label>
                             <select className="form-control" name="category" value={this.state.filterParams.category}
                                     onChange={event => this.handleChange(event)}>
-                                <option value=" "> </option>
+                                <option value=" ">All</option>
                                 {this.renderCategories()}
                             </select>
                         </div>
@@ -95,7 +101,7 @@ export class Sidebar extends Component<any, IState> {
                             <label htmlFor="filterBlockPriorityParam">Priority:</label>
                             <select className="form-control" name="priority" value={this.state.filterParams.priority}
                                     onChange={event => this.handleChange(event)}>
-                                <option value=" "> </option>
+                                <option value=" ">All</option>
                                 <option value="low">Low</option>
                                 <option value="medium">Medium</option>
                                 <option value="high">High</option>

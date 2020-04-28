@@ -10,7 +10,8 @@ import IFilterParam from "./Task/IFilterParam";
 
 interface IState {
     tasksFromApi: ITask[],
-    page: number,
+    offset: number,
+    limit: number,
     hasMoreTasks: boolean
     filterParams: IFilterParam
 }
@@ -19,12 +20,14 @@ export class Main extends Component<any, IState> {
 
     state = {
         tasksFromApi: [],
-        page: 1,
+        offset: 0,
+        limit: 20,
         hasMoreTasks: true,
         filterParams: {
             priority: "",
             order: "",
-            category: ""
+            category: "",
+            criteria: ""
         }
     };
 
@@ -33,22 +36,9 @@ export class Main extends Component<any, IState> {
     }
 
     setFilterParams = (params: IFilterParam) => {
-        console.log(params);
-        this.setState({
-            page: 1,
-            filterParams: params,
-            tasksFromApi: []
-        });
-        console.log(this.state.page);
-        this.getNewTasks();
-
-    };
-
-    getNewTasks = () => {
-        let tasks: ITask[] = [...this.state.tasksFromApi];
-        console.log(this.state.filterParams);
-        let paramApiUrl = "&category="+this.state.filterParams.category+"&order="+this.state.filterParams.order+"&priority="+this.state.filterParams.priority;
-        axios.get(CONFIG.apiServer + "tasks/?pageNumber=" + this.state.page + paramApiUrl).then(res => {
+        let tasks: ITask[] = [];
+        let paramApiUrl = "&category=" + params.category + "&order=" + params.order + "&priority=" + params.priority + "&criteria=" + params.criteria;
+        axios.get(CONFIG.apiServer + "tasks/?offset=" + 0 + "&limit=" + this.state.limit + paramApiUrl).then(res => {
             const newTasks = res.data.entities as ITask[];
 
             newTasks.forEach((item: ITask) => {
@@ -58,7 +48,29 @@ export class Main extends Component<any, IState> {
             });
             this.setState({
                 tasksFromApi: tasks,
-                page: this.state.page + 1
+                offset: tasks.length,
+                filterParams: params
+            });
+        }).catch(error => {
+            this.setState({hasMoreTasks: false});
+        });
+    };
+
+    getNewTasks = () => {
+        let tasks: ITask[] = [...this.state.tasksFromApi];
+        let paramApiUrl = "&category=" + this.state.filterParams.category + "&order=" + this.state.filterParams.order + "&priority=" + this.state.filterParams.priority + "&criteria=" + this.state.filterParams.criteria;
+
+        axios.get(CONFIG.apiServer + "tasks/?offset=" + this.state.offset + "&limit=" + this.state.limit + paramApiUrl).then(res => {
+            const newTasks = res.data.entities as ITask[];
+
+            newTasks.forEach((item: ITask) => {
+                let creatorData = item.creator;
+                item.creator = creatorData.firstName + " " + creatorData.lastName;
+                tasks.push(item);
+            });
+            this.setState({
+                tasksFromApi: tasks,
+                offset: tasks.length
             });
         }).catch(error => {
             this.setState({hasMoreTasks: false});
@@ -81,8 +93,8 @@ export class Main extends Component<any, IState> {
                 />
             )
         );
-    };
 
+    };
 
 
     render() {
