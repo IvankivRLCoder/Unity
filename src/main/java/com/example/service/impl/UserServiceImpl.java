@@ -72,9 +72,12 @@ public class UserServiceImpl implements UserService {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
         String photo = userDto.getPhoto();
-        String fileName = UUID.randomUUID().toString();
-        File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
-        decodeImage(photo, photoFile.getAbsolutePath());
+        String fileName = userDto.getPhoto();
+        if (photo != null) {
+            fileName = UUID.randomUUID().toString();
+            File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
+            decodeImage(photo, photoFile.getAbsolutePath());
+        }
         oldUser.setPhoto(fileName);
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());

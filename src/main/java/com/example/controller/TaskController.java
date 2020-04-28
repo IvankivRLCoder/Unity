@@ -79,7 +79,7 @@ public class TaskController {
                                                   @RequestParam(required = false) String priority,
                                                   @RequestParam(required = false) String category,
                                                   @RequestParam(required = false) String order) {
-        return taskService.getAllTasks(limit, offset, criteria, priority, category, order);
+        return taskService.getAllTasks(offset, limit, criteria, priority, category, order);
     }
 
 }
