@@ -8,8 +8,18 @@ import Task from './components/Task/Task';
 import Layout from './hoc/Layout/Layout';
 import './App.scss';
 import Auth from "./utils/Auth/Auth";
+import axios from "axios";
+import {CONFIG} from "./config";
 
 function App() {
+    if (Auth.isLoggedIn) {
+        axios.post(CONFIG.apiServer + "check/apiKey/user/" + Auth.loggedUserId, {
+            apiKey: Auth.loggedApiKey
+        }).catch((error) => {
+            Auth.logOut();
+        });
+    }
+
     let curTime = Math.round(new Date().getTime()/1000);
     let expireTime = 3600;
     if (Auth.isLoggedIn && !Auth.remember) {

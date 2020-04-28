@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 export default (props: ITask) => (
     <Link to={"/task/" + props.id} className="task-link">
         <div className='main-task-block' onClick={() => window.location.href = "/task/" + props.id}>
-            <div className={"priority " + props.priority} />
+            <div className={"priority " + props.priority.toString().toLowerCase()} />
             <div className='container'>
                 <div className='row'>
                     <div className='col-md-4  '>
