@@ -1,23 +1,33 @@
+import cookies  from 'react-cookies'
+
 export default class Auth {
 
-    static isLoggedIn:boolean = (localStorage.getItem('apiKey') !== null && localStorage.getItem('userId') !== null);
-    static loggedUserId:any = localStorage.getItem('userId');
-    static loggedApiKey:any = localStorage.getItem('apiKey');
-    static remember:boolean = localStorage.getItem('remember') === 'true';
+    static isLoggedIn:boolean = (cookies.load('apiKey') && cookies.load('userId'));
+    static loggedUserId:any = cookies.load('userId');
+    static loggedApiKey:any = cookies.load('apiKey');
+    static remember:boolean = cookies.load('remember') === 'true';
 
     static signIn = (apiKey: string, userId: string, firstName: string, remember: string) => {
-        localStorage.setItem('apiKey', apiKey);
-        localStorage.setItem('userFirstName', firstName);
-        localStorage.setItem('userId', userId);
-        localStorage.setItem('remember', remember);
+        if (remember) {
+            cookies.save('apiKey', apiKey, {maxAge: 20 * 24 * 60 *60});
+            cookies.save('userFirstName', firstName, {maxAge: 20 * 24 * 60 *60});
+            cookies.save('userId', userId, {maxAge: 20 * 24 * 60 *60});
+            cookies.save('remember', remember, {maxAge: 20 * 24 * 60 *60});
+        } else {
+            cookies.save('apiKey', apiKey, {});
+            cookies.save('userFirstName', firstName, {});
+            cookies.save('userId', userId, {});
+            cookies.save('remember', remember, {});
+        }
+
         window.location.href = "/user/" + userId;
     };
 
     static logOut = () => {
-        localStorage.removeItem('apiKey');
-        localStorage.removeItem('userFirstName');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('remember');
+        cookies.remove('apiKey');
+        cookies.remove('userFirstName');
+        cookies.remove('userId');
+        cookies.remove('remember');
         window.location.href = "/login";
     }
 }
