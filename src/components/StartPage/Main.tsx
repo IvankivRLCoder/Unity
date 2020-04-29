@@ -52,7 +52,10 @@ export class Main extends Component<any, IState> {
                 filterParams: params
             });
         }).catch(error => {
-            this.setState({hasMoreTasks: false});
+            this.setState({
+                hasMoreTasks: false,
+                tasksFromApi: []
+            });
         });
     };
 
@@ -73,9 +76,11 @@ export class Main extends Component<any, IState> {
                 offset: tasks.length
             });
         }).catch(error => {
-            this.setState({hasMoreTasks: false});
+            this.setState({
+                hasMoreTasks: false
+            });
         });
-    }
+    };
 
     renderTasks = () => {
         const tasks = [...this.state.tasksFromApi];
