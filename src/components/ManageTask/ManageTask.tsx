@@ -6,6 +6,11 @@ import './ManageTask.scss';
 import {CONFIG} from "../../config";
 import axios from "axios";
 import Auth from "../../utils/Auth/Auth";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import NumericInput from 'react-numeric-input';
+
+
 
 
 type Props = {
@@ -22,6 +27,9 @@ class ManageTask extends Component <Props> {
             },
             description: {
                 value: ""
+            },
+            endDate: {
+                value: new Date()
             },
             images: []
         }
@@ -106,7 +114,17 @@ class ManageTask extends Component <Props> {
       return (                    <div className={"row"}>
           {HTML} </div>);
     };
+    handleChange(date:Date) {
+        console.log(date)
+        const formControls = {...this.state.formControls};
+        const control = {...formControls['endDate']};
+        control.value = date;
+        formControls['endDate'] = control;
 
+        this.setState({
+            formControls
+        });
+    }
 
     render() {
 
@@ -130,6 +148,33 @@ class ManageTask extends Component <Props> {
                                 <label htmlFor="taskImageUpload">
                                     <Image/>
                                 </label>
+                            </div>
+                        </div>
+                        <div className={"col-lg-4"}>
+                            <div className="form-group">
+                                <label>Priority</label>
+                                <select className="form-control" name="priority">
+                                    <option value=" ">All</option>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                    <option value="critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className={"col-lg-4"}>
+                            <div className="form-group">
+                                <label style={{display: 'block'}}>End date</label>
+                                <DatePicker className="form-control" selected={this.state.formControls.endDate.value} onChange={(date:Date) => this.handleChange(date) }
+                                            dateFormat="MMMM d, yyyy"
+                                />
+                            </div>
+                        </div>
+                        <div className={"col-lg-4"}>
+                            <div className="form-group">
+                                <label>Participants</label>
+                                <NumericInput className="form-control"
+                                />
                             </div>
                         </div>
                         <div className={"col-lg-12"}>

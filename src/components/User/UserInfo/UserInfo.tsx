@@ -104,9 +104,10 @@ class UserInfo extends React.Component<any,any> {
                     firstName: res.data.firstName,
                     lastName: res.data.lastName,
                     description: res.data.aboutUser,
-                    photo: res.data.photo ? res.data.photo : '/img/avatar.png',
+                    photo: {
+                        url: res.data.photo
+                    }
                 };
-
                 this.setState({
                     currentInfo: currentInfo,
                     editMode: false
@@ -270,6 +271,7 @@ class UserInfo extends React.Component<any,any> {
             <div className={'action-panel'}>
             <button type={"button"} className={"btn btn-danger"} onClick={e => this.setState({editMode: true})}>Edit</button>
         </div>) : '';
+        console.log(this.state.currentInfo.photo.ur);
 
         return (
             <div>
