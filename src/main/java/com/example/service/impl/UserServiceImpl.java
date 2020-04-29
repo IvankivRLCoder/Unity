@@ -23,14 +23,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.example.utils.EncodingUtils.decodeImage;
 import static com.example.utils.EncodingUtils.encode;
 
 @Service
@@ -72,14 +69,7 @@ public class UserServiceImpl implements UserService {
     public MainUserDto updateUser(UpdateUserDto userDto) {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        String photo = userDto.getPhoto();
-        String fileName = userDto.getPhoto();
-        if (photo != null) {
-            fileName = UUID.randomUUID().toString();
-            File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
-            decodeImage(photo, photoFile.getAbsolutePath());
-        }
-        oldUser.setPhoto(fileName);
+        oldUser.setPhoto(userDto.getPhoto());
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
         oldUser.setAboutUser(userDto.getAboutUser());
@@ -95,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
+    public MainUserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
         if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
@@ -133,7 +123,7 @@ public class UserServiceImpl implements UserService {
             throw new OverflowingTaskException("Task is full of participants.");
         }
 
-        return modelMapper.map(userTaskDao.save(userTask), MainTaskUserDto.class);
+        return modelMapper.map(userTaskDao.save(userTask), MainUserTaskDto.class);
     }
 
     @Override

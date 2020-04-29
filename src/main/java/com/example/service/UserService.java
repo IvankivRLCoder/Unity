@@ -23,7 +23,7 @@ public interface UserService {
 
     List<MainTaskUserDto> getAllTasksByUserId(int id);
 
-    MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
+    MainUserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto);
 
     int getByApiKey(String apiKey);
 
