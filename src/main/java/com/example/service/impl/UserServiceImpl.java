@@ -24,11 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.example.utils.EncodingUtils.*;
@@ -90,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
+    public MainUserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
         if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
@@ -128,7 +126,7 @@ public class UserServiceImpl implements UserService {
             throw new OverflowingTaskException("Task is full of participants.");
         }
 
-        return modelMapper.map(userTaskDao.save(userTask), MainTaskUserDto.class);
+        return modelMapper.map(userTaskDao.save(userTask), MainUserTaskDto.class);
     }
 
     @Override

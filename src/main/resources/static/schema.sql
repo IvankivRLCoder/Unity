@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS volunteer_task
     volunteer_id        INT NOT NULL,
     task_id             INT NOT NULL,
     participation_date  DATE NOT NULL,
-    comment             VARCHAR (50) NOT NULL,
+    comment             VARCHAR (50),
     approved            BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (volunteer_id, task_id),
 
