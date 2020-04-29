@@ -6,13 +6,16 @@ import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
+import com.example.service.impl.AmazonClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -23,6 +26,7 @@ import javax.validation.Valid;
 public class TaskController {
 
     private final TaskService taskService;
+
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)

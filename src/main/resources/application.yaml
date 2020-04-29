@@ -30,3 +30,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+
+
+amazonProperties.endpointUrl: https://sts.eu-north-1.amazonaws.com
+amazonProperties.accessKey: AKIA2Q3SH7RKRJAKLQ2X
+amazonProperties.secretKey: 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
+amazonProperties.bucketName: unitylpnu

@@ -24,7 +24,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +42,8 @@ public class TaskServiceImpl implements TaskService {
 
     private final ModelMapper modelMapper;
 
+    private final AmazonClient amazonClient;
+
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
         int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
@@ -46,6 +51,11 @@ public class TaskServiceImpl implements TaskService {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         Task task = modelMapper.map(taskDto, Task.class);
+        Set<String> photos = new HashSet<>();
+        taskDto.getPhotos().forEach(photo -> {
+            photos.add(amazonClient.uploadFile(photo));
+        });
+        task.setPhotos(photos);
         task.setCreator(getByUserId(userId));
         task.setCreationDate(LocalDate.now());
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
@@ -108,7 +118,6 @@ public class TaskServiceImpl implements TaskService {
             throw new UserIsNotCreatorException("User is not creator of task: " + task.getId());
         }
         Task newTask = modelMapper.map(taskDto, Task.class);
-
         task.setCategory(newTask.getCategory());
         task.setCreationDate(newTask.getCreationDate());
         task.setDescription(newTask.getDescription());
@@ -116,6 +125,7 @@ public class TaskServiceImpl implements TaskService {
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
         task.setStatus(newTask.getStatus());
         task.setTitle(newTask.getTitle());
+        task.setPhotos(newTask.getPhotos());
 
         return modelMapper.map(taskDao.update(task), MainTaskDto.class);
     }

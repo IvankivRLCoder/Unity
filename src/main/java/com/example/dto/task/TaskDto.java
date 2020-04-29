@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -62,5 +64,7 @@ public class TaskDto {
     @NotNull(message = "{user.api.key.null}")
     @NotBlank(message = "{user.api.key.blank}")
     private String apiKey;
+
+    private List<String> photos = new ArrayList<>();
 
 }
