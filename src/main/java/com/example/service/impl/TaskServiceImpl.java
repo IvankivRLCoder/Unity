@@ -53,6 +53,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = modelMapper.map(taskDto, Task.class);
         Set<String> photos = new HashSet<>();
         taskDto.getPhotos().forEach(photo -> {
+            System.out.println(photo);
             photos.add(amazonClient.uploadFile(photo));
         });
         task.setPhotos(photos);

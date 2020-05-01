@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS category
     description         VARCHAR (128) NOT NULL
 );
 
+
 ALTER TABLE category
     ADD UNIQUE (category_name, description);
 
