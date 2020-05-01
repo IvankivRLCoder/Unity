@@ -21,7 +21,7 @@ export class Main extends Component<any, IState> {
     state = {
         tasksFromApi: [],
         offset: 0,
-        limit: 20,
+        limit: 5,
         hasMoreTasks: true,
         filterParams: {
             priority: "",
@@ -36,28 +36,20 @@ export class Main extends Component<any, IState> {
     }
 
     setFilterParams = (params: IFilterParam) => {
-        let tasks: ITask[] = [];
-        let paramApiUrl = "&category=" + params.category + "&order=" + params.order + "&priority=" + params.priority + "&criteria=" + params.criteria;
-        axios.get(CONFIG.apiServer + "tasks/?offset=" + 0 + "&limit=" + this.state.limit + paramApiUrl).then(res => {
-            const newTasks = res.data.entities as ITask[];
-
-            newTasks.forEach((item: ITask) => {
-                let creatorData = item.creator;
-                item.creator = creatorData.firstName + " " + creatorData.lastName;
-                tasks.push(item);
+            this.state =({
+                tasksFromApi: [],
+                offset: 0,
+                limit: 5,
+                hasMoreTasks: true,
+                filterParams: {
+                    priority: params.priority.toString(),
+                    order: params.order.toString(),
+                    category: params.category.toString(),
+                    criteria: params.criteria.toString()
+                }
             });
-            this.setState({
-                tasksFromApi: tasks,
-                offset: tasks.length,
-                filterParams: params
-            });
-        }).catch(error => {
-            this.setState({
-                hasMoreTasks: false,
-                tasksFromApi: []
-            });
-        });
-    };
+            this.getNewTasks();
+        };
 
     getNewTasks = () => {
         let tasks: ITask[] = [...this.state.tasksFromApi];
