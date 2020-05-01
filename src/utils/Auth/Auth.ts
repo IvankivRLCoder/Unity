@@ -23,10 +23,10 @@ export default class Auth {
     };
 
     static logOut = () => {
-        cookies.remove('apiKey');
-        cookies.remove('userFirstName');
-        cookies.remove('userId');
-        cookies.remove('remember');
+        cookies.remove('apiKey', {path:'/'});
+        cookies.remove('userFirstName', {path:'/'});
+        cookies.remove('userId', {path:'/'});
+        cookies.remove('remember', {path:'/'});
         window.location.href = "/login";
     }
 }
