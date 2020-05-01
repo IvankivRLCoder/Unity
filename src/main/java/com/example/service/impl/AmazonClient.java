@@ -6,16 +6,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.example.service.AmazonService;
 import org.apache.commons.codec.binary.Base64;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.UUID;
@@ -37,7 +32,10 @@ public class AmazonClient {
     public String uploadFile(String base64Declaration) {
         String fileUrl = "";
         File file = new File("/home/kappa/Videos/dsa/Unity/src/main/resources/image.png");
-        String base64 = base64Declaration.split(",")[1];
+        String base64 = base64Declaration;
+        if (base64Declaration.contains(",")) {
+            base64 = base64Declaration.split(",")[1];
+        }
         byte[] data = Base64.decodeBase64(base64);
         try {
             OutputStream os = new FileOutputStream(file);

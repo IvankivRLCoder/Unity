@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,5 +28,5 @@ public class MainTaskDto {
     private String priority;
     private TaskCategoryDto category;
     private TaskUserDto creator;
-
+    private Set<String> photos;
 }
