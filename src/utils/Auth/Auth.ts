@@ -1,7 +1,6 @@
 import cookies  from 'react-cookies'
 
 export default class Auth {
-
     static isLoggedIn:boolean = (cookies.load('apiKey') && cookies.load('userId'));
     static loggedUserId:any = cookies.load('userId');
     static loggedApiKey:any = cookies.load('apiKey');

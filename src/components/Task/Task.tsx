@@ -7,11 +7,15 @@ import {CONFIG} from "../../config";
 import ITask from "../StartPage/Task/ITask";
 import Participant from "./Participant/Participant";
 import IParticipant from "./Participant/IParticipant";
+import Auth from "../../utils/Auth/Auth";
+import ParticipateModal from "./ParticipateModal/ParticipateModal";
 
 interface IState {
     task: ITask | null,
     participants: IParticipant[],
     isTask: boolean,
+    isShownModalParticipate: boolean,
+    canUserParticipate: boolean
 }
 
 class Task extends Component<any, IState> {
@@ -27,27 +31,82 @@ class Task extends Component<any, IState> {
             description: '',
             approvedParticipants: 0,
             numberOfParticipants: 0,
-            priority: ''
+            priority: '',
+            category: {
+                name: '',
+            }
         },
         isTask: true,
-        participants: []
+        participants: [],
+        isShownModalParticipate: false,
+        canUserParticipate: false
     }
 
     componentDidMount = () => {
         axios(CONFIG.apiServer + 'tasks/' + this.props.match.params.id).then(res => {
             this.setState({task: res.data});
+            if (Auth.isLoggedIn) {
+                // eslint-disable-next-line
+                if (Auth.loggedUserId != res.data.creator.id) {
+                    axios(CONFIG.apiServer + 'participants/user/' + Auth.loggedUserId + '/task/' + this.props.match.params.id).then(res1 => {
+                        if (!res1.data.participant) {
+                            this.setState({canUserParticipate: true});
+                        }
+                    });
+                }
+            }
             axios(CONFIG.apiServer + 'participants/' + this.props.match.params.id + "/users").then(res1 => {
                 this.setState({participants: res1.data});
             });
+
         }).catch(error => {
             this.setState({isTask: false});
         });
     }
 
+    isCreator = () => {
+        // eslint-disable-next-line
+        return Auth.isLoggedIn && Auth.loggedUserId == this.state.task.creator.id;
+    }
+
+    changeApproveStatus = (approved: boolean) => {
+        const task = {...this.state.task};
+        task.approvedParticipants += approved ? 1 : -1;
+        this.setState({task: task});
+    }
+
     renderParticipants = () => {
         return this.state.participants.map((participant: IParticipant, index: number) => (
-            <Participant participant={participant}/>
+            <Participant key={index}
+                         participant={participant}
+                         isCreator={this.isCreator()}
+                         onChangeApproveStatus={this.changeApproveStatus}
+                         taskId={this.state.task.id}/>
         ));
+    }
+
+    onSuccessParticipate = (participant: IParticipant) => {
+        const participants:IParticipant[] = [...this.state.participants];
+        participants.push(participant);
+        this.setState({
+            participants: participants,
+            canUserParticipate: false
+        });
+    }
+
+    renderButtonParticipate = () => {
+         if (this.state.canUserParticipate) {
+             return (<button className="btn participate-btn"
+                             onClick={() => {
+                                 this.setState({isShownModalParticipate: true})
+                             }}>Participate</button>);
+         } else {
+             return (<button className="btn participate-btn"
+                             disabled={true}
+                             onClick={() => {
+                                 this.setState({isShownModalParticipate: true})
+                             }}>Participate</button>);
+         }
     }
 
     render () {
@@ -88,10 +147,14 @@ class Task extends Component<any, IState> {
                                         {this.state.task.approvedParticipants}/{this.state.task.numberOfParticipants} participants
                                     </h3>
                                     <h3 className="task-organizer">
-                                        Organized by: <a href={"/user/" + this.state.task.creator.id}>{this.state.task.creator.firstName + " " + this.state.task.creator.lastName}</a>
+                                        Organized by: <a href={"/user/" + this.state.task.creator.id}>{this.state.task.creator.firstName + " " + (this.state.task.creator.lastName ? this.state.task.creator.lastName : '')}</a>
+                                    </h3>
+                                    <h3>
+                                        Category: {this.state.task.category.name}
                                     </h3>
                                     <p className="task-description">{this.state.task.description}</p>
-                                    <button className="btn participate-btn">Participate</button>
+                                    {this.renderButtonParticipate()}
+                                    <ParticipateModal onSuccessParticipate={this.onSuccessParticipate} taskId={this.state.task.id} onHide={() => {this.setState({isShownModalParticipate: false})}} isShown={this.state.isShownModalParticipate}/>
                                 </div>
                                 <div className="task-participants">
                                     {this.renderParticipants()}
