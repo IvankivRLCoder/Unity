@@ -46,18 +46,6 @@ public class TaskDto {
     @ApiModelProperty(example = "2020-12-31")
     private String endDate;
 
-    @NotNull(message = "{task.status.null}")
-    @NotBlank(message = "{task.status.blank}")
-    @StatusType
-    @ApiModelProperty(example = "ACTIVE")
-    private String status;
-
-    @NotNull(message = "{task.priority.null}")
-    @NotBlank(message = "{task.priority.blank}")
-    @PriorityType
-    @ApiModelProperty(example = "CRITICAL")
-    private String priority;
-
     @CategoryType
     private MainCategoryDto category;
 

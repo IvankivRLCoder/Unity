@@ -12,27 +12,28 @@ import com.example.dto.user.MainUserDto;
 import com.example.dto.user.UpdateUserDto;
 import com.example.dto.usertask.UserTaskDto;
 import com.example.error.*;
-import com.example.model.Status;
-import com.example.model.Task;
-import com.example.model.User;
-import com.example.model.UserTask;
+import com.example.model.*;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.example.utils.EncodingUtils.*;
+import static com.example.utils.EncodingUtils.decodeImage;
+import static com.example.utils.EncodingUtils.encode;
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("Duplicates")
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -42,8 +43,6 @@ public class UserServiceImpl implements UserService {
     private final UserTaskDao userTaskDao;
 
     private final ModelMapper modelMapper;
-
-    private final AmazonClient amazonClient;
 
     @Override
     public MainUserDto getUserById(int id) {
@@ -72,7 +71,14 @@ public class UserServiceImpl implements UserService {
     public MainUserDto updateUser(UpdateUserDto userDto) {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
+        String photo = userDto.getPhoto();
+        String fileName = userDto.getPhoto();
+        if (photo != null) {
+            fileName = UUID.randomUUID().toString();
+            File photoFile = new File("Unity/src/main/resources/static/image/" + fileName + ".jpg");
+            decodeImage(photo, photoFile.getAbsolutePath());
+        }
+        oldUser.setPhoto(fileName);
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
         oldUser.setAboutUser(userDto.getAboutUser());
@@ -88,14 +94,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainUserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
+    public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
         if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         UserTask userTask = modelMapper.map(userTaskDto, UserTask.class);
         User participant = getById(userId);
+
         Task participatedTask = getTaskById(taskId);
+        calculateTaskPriority(participatedTask);
+        taskDao.update(participatedTask);
+
         userTask.setUser(participant);
         userTask.setTask(participatedTask);
         userTask.setParticipationDate(LocalDate.now());
@@ -126,7 +136,7 @@ public class UserServiceImpl implements UserService {
             throw new OverflowingTaskException("Task is full of participants.");
         }
 
-        return modelMapper.map(userTaskDao.save(userTask), MainUserTaskDto.class);
+        return modelMapper.map(userTaskDao.save(userTask), MainTaskUserDto.class);
     }
 
     @Override
@@ -218,6 +228,33 @@ public class UserServiceImpl implements UserService {
             throw new BadCredentialsException("API key is invalid");
         }
         return user.getId();
+    }
+
+    private void calculateTaskPriority(Task task) {
+        LocalDate creationDate = task.getCreationDate();
+        LocalDate endDate = task.getEndDate();
+
+        int possibleNumberOfParticipants = task.getPossibleNumberOfParticipants();
+        int approvedParticipants = task.getApprovedParticipants();
+
+        String status = task.getStatus().getTaskStatus();
+        if (status.equalsIgnoreCase("active") || status.equalsIgnoreCase("done")) {
+            task.setPriority(Priority.NONE);
+            return;
+        }
+
+        double participantsDiff = possibleNumberOfParticipants - approvedParticipants;
+        long datesDiff = DAYS.between(creationDate, endDate);
+
+        double coef = datesDiff / participantsDiff;
+        if (coef < 1) {
+            task.setPriority(Priority.CRITICAL);
+        } else if (coef >= 1 && coef <= 1.5) {
+            task.setPriority(Priority.HIGH);
+        } else if (coef > 1.5 && coef <= 2.5) {
+            task.setPriority(Priority.MEDIUM);
+        } else task.setPriority(Priority.LOW);
+
     }
 
 }
