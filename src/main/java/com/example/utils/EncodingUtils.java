@@ -26,15 +26,4 @@ public class EncodingUtils {
         return str;
     }
 
-    public static void decodeImage(String base64Image, String pathFile) {
-        try (FileOutputStream imageOutFile = new FileOutputStream(pathFile)) {
-            byte[] imageByteArray = Base64.getDecoder().decode(base64Image);
-            imageOutFile.write(imageByteArray);
-        } catch (FileNotFoundException e) {
-            System.err.println("Image not found" + e);
-        } catch (IOException ioe) {
-            System.err.println("Exception while reading the Image " + ioe);
-        }
-    }
-
 }

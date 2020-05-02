@@ -16,26 +16,33 @@ Backend: Java, Spring Framework(Spring Boot, Spring MVC), REST, Java Utility Lib
 
 ## How to launch?
 
-Install Intellij Idea. Go to JetBrains site for that.
+Install Docker
+- Ubuntu: https://docs.docker.com/engine/install/ubuntu/
+- Windows: https://docs.docker.com/docker-for-windows/
+- MacOS: https://docs.docker.com/docker-for-mac/install/
 
-Install JDK 8: https://www.oracle.com/java/technologies/javase-jdk8-downloads.html
+Install Maven
+- Ubuntu: https://linuxize.com/post/how-to-install-apache-maven-on-ubuntu-18-04/
+- Windows: https://howtodoinjava.com/maven/how-to-install-maven-on-windows/
+- MacOS: https://www.baeldung.com/install-maven-on-windows-linux-mac
 
-Install Lombok plugin: on the control panel choose File -> Settings -> Plugins. Then choose Lombok Plugin.
+Install git: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git and then
+- Run "git config core.fileMode false"
+- Set correct user name and user email for git config
+- git config --local user.name "name"
+- git config --local user.email "email"
 
-To launch the program run the main method in UnityApplication class.
+Clone repository from branch __"frontend"__: `git clone https://github.com/IvankivRLCoder/Unity.git -b backend`
 
-Program starts on localhost, port: 8080. Swagger API support added. Link to switch to Swagger: localhost:8080/swagger-ui.html.
+Change dir to your project: `cd your_project_dir_name`
+
+Build *.jar you can use the Maven command line: `mvn package`
+
+Build the image you can use the Docker command line: `docker build -t springio/gs-spring-boot-docker .`
+
+Run container you can use the Docker command line: `docker run springio/gs-spring-boot-docker`
+
+Swagger API support added. Link to switch to Swagger: localhost:8080/swagger-ui.html.
 
 Application uses in-memory database H2. It is accessible with the next link: localhost:8080/h2db.
 
-To build *.jar you can use the Maven command line:
-
-`mvn package`
-
-To build the image you can use the Docker command line:
-
-`docker build -t springio/gs-spring-boot-docker .`
-
-To run container you can use the Docker command line:
-
-`docker run springio/gs-spring-boot-docker`
