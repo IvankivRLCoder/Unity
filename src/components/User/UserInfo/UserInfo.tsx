@@ -2,7 +2,6 @@ import React, {FormEvent} from 'react';
 import './UserInfo.scss';
 import axios from "axios";
 import Input from "../../../utils/UI/Input/Input";
-import { Create } from '@material-ui/icons';
 import Validation from "../../../utils/Validation/Validation";
 import {CONFIG} from "../../../config";
 import Auth from "../../../utils/Auth/Auth";
@@ -213,7 +212,7 @@ class UserInfo extends React.Component<any,any> {
                         <input type="file" id="imageUpload"
                                onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
                         <label htmlFor="imageUpload">
-                            <Create/>
+                            //Todo: Image icon
                         </label>
                     </div>
                     <div className="avatar-preview">

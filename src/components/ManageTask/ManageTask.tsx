@@ -1,7 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
 import React, {Component} from "react";
-import { Image} from '@material-ui/icons';
 import './ManageTask.scss';
 import {CONFIG} from "../../config";
 import axios from "axios";
@@ -183,7 +182,7 @@ class ManageTask extends Component <Props> {
                                 <input type="file" id="taskImageUpload"
                                        onChange={(event: any) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
                                 <label htmlFor="taskImageUpload">
-                                    <Image/>
+                                    <i style={{marginTop: "10px"}} className={"fas fa-camera"}/>
                                 </label>
                             </div>
                         </div>
