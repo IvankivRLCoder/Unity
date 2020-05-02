@@ -22,6 +22,7 @@ export default (props: ITask) => (
                                 <h4>Participants: <i>{props.approvedParticipants} / {props.numberOfParticipants} </i>
                                 </h4></div>
                             <div className='task-owner'><h4>Owner: {props.creator}</h4></div>
+                            <div className='task-owner'><h4>Category: {props.category}</h4></div>
                         </div>
                     </div>
                     <div className='col-md-12 task-description'> {props.description}

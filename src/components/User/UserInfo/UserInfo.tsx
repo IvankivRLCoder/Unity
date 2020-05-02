@@ -211,7 +211,7 @@ class UserInfo extends React.Component<any,any> {
                         <input type="file" id="imageUpload"
                                onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
                         <label htmlFor="imageUpload">
-                            //Todo: Image icon
+                            <i className="fas fa-pen"/>
                         </label>
                     </div>
                     <div className="avatar-preview">
