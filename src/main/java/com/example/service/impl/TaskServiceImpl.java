@@ -48,6 +48,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = modelMapper.map(taskDto, Task.class);
         task.setCreator(getByUserId(userId));
         task.setCreationDate(LocalDate.now());
+        task.setStatus(Status.PENDING);
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
 
