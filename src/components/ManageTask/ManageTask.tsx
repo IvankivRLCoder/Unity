@@ -1,6 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
-import React, {Component, FormEvent} from "react";
+import React, {Component} from "react";
 import { Image} from '@material-ui/icons';
 import './ManageTask.scss';
 import {CONFIG} from "../../config";
@@ -28,17 +28,38 @@ class ManageTask extends Component <Props> {
             description: {
                 value: ""
             },
+            category: {
+              value: ""
+            },
             endDate: {
                 value: new Date()
             },
+            possibleNumberOfParticipants: {
+                value: ''
+            },
             images: []
-        }
+        },
+        categories: []
     };
 
-    onChangeHandler = (event: FormEvent<HTMLElement>, controlName: string) => {
+    parseDate(date: any) {
+        let year = date.getFullYear();
+        let month = parseInt(date.getMonth()+1);
+        let day = date.getDate();
+        return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+    }
+
+    componentDidMount(): void {
+        const formControls = {...this.state.formControls};
+        axios(CONFIG.apiServer + 'categories/').then(data => {
+            this.setState({categories: data.data})
+        });
+    }
+
+    onChangeHandler = (event: any, controlName: string) => {
         const formControls = {...this.state.formControls};
         const control = {...formControls[controlName]};
-        control.value = (event.target as HTMLInputElement).value;
+        control.value = (event.target as any).value;
         formControls[controlName] = control;
 
         this.setState({
@@ -47,11 +68,6 @@ class ManageTask extends Component <Props> {
     };
 
     onSubmitHandler = () => {
-        console.log(this.state)
-        console.log({
-           title: this.state.formControls.title.value,
-           description: this.state.formControls.description.value
-        });
         let photos:any[] = [];
         this.state.formControls.images.forEach((photo: { url: any; }) => {
             photos.push(photo.url);
@@ -62,16 +78,20 @@ class ManageTask extends Component <Props> {
             description: this.state.formControls.description.value,
             photos: photos,
             status: 'done',
-            priority: 'critical',
-            possibleNumberOfParticipants: 10,
-            endDate: '2019-04-03'
+            priority: 'CRITICAL',
+            possibleNumberOfParticipants: this.state.formControls.possibleNumberOfParticipants.value,
+            endDate: this.parseDate(this.state.formControls.endDate.value)
         };
+        let categoryId:any = parseInt(this.state.formControls.category.value, 10);
+        if (isNaN(categoryId))
+            categoryId = null;
         axios({
-            url: CONFIG.apiServer + 'tasks',
+            url: CONFIG.apiServer + 'tasks/',
             data: data,
             method: 'post',
             params: {
-                userId: Auth.loggedUserId
+                userId: Auth.loggedUserId,
+                categoryId: categoryId
             }
         }).then().catch();
         this.props.togglePopup(false);
@@ -98,9 +118,9 @@ class ManageTask extends Component <Props> {
         reader.readAsDataURL(file)
     };
 
-    renderPhoto = (photo: any): any => {
-        return (<div className={"col-lg-2"}>
-            <img style={{width: "inherit"}} src={photo} alt={""}/>
+    renderPhoto = (photo: any, index:number): any => {
+        return (<div key={index} className={"col-lg-2"}>
+            <img key={index} style={{width: "inherit"}} src={photo} alt={""}/>
         </div>)
     };
 
@@ -108,26 +128,43 @@ class ManageTask extends Component <Props> {
         let photos = this.state.formControls.images;
 
         let HTML:any = [];
-        photos.forEach((photo:any) => {
-            HTML.push(this.renderPhoto(photo.url));
+        photos.forEach((photo:any, index:number) => {
+            HTML.push(this.renderPhoto(photo.url, index));
         });
       return (                    <div className={"row"}>
           {HTML} </div>);
     };
-    handleChange(date:Date) {
-        console.log(date)
+    handleDateChange(date:any) {
         const formControls = {...this.state.formControls};
         const control = {...formControls['endDate']};
         control.value = date;
         formControls['endDate'] = control;
+        this.setState({
+            formControls
+        });
+    }
+
+    handleNumericChange(int: any) {
+        const formControls = {...this.state.formControls};
+        const control = {...formControls['possibleNumberOfParticipants']};
+        control.value = int;
+        formControls['possibleNumberOfParticipants'] = control;
 
         this.setState({
             formControls
         });
     }
 
-    render() {
+    renderOptionsForSelect() {
+        let options:any = [];
+        let categories = this.state.categories;
+        categories.forEach((category:any, index: number) => {
+            options.push((<option value={category.id} key={index}>{category.name}</option> ));
+        });
+        return options;
+    }
 
+    render() {
         return (<Modal size="lg" show={this.props.isPopupShown} onHide={() => this.props.togglePopup(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add new task</Modal.Title>
@@ -138,13 +175,13 @@ class ManageTask extends Component <Props> {
                             <div className="form-group">
                                 <label>Task name</label>
                                 <input className="form-control" value={this.state.formControls.title.value}
-                                       onChange={(event: FormEvent<HTMLInputElement>) => this.onChangeHandler(event, "title")}/>
+                                       onChange={(event: any) => this.onChangeHandler(event, "title")}/>
                             </div>
                         </div>
                         <div className={"col-lg-2"}>
                             <div className="avatar-edit">
                                 <input type="file" id="taskImageUpload"
-                                       onChange={(event: FormEvent<HTMLInputElement>) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
+                                       onChange={(event: any) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
                                 <label htmlFor="taskImageUpload">
                                     <Image/>
                                 </label>
@@ -152,28 +189,24 @@ class ManageTask extends Component <Props> {
                         </div>
                         <div className={"col-lg-4"}>
                             <div className="form-group">
-                                <label>Priority</label>
-                                <select className="form-control" name="priority">
-                                    <option value=" ">All</option>
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                    <option value="critical">Critical</option>
+                                <label>Category</label>
+                                <select className="form-control" name="priority" onChange={(event: any) => this.onChangeHandler(event, "category")}>
+                                    <option/>
+                                    {this.renderOptionsForSelect()}
                                 </select>
                             </div>
                         </div>
                         <div className={"col-lg-4"}>
                             <div className="form-group">
                                 <label style={{display: 'block'}}>End date</label>
-                                <DatePicker className="form-control" selected={this.state.formControls.endDate.value} onChange={(date:Date) => this.handleChange(date) }
-                                            dateFormat="MMMM d, yyyy"
+                                <DatePicker className="form-control" selected={this.state.formControls.endDate.value} onChange={(date: any) => this.handleDateChange(date)}                                         dateFormat="yyyy-MM-dd"
                                 />
                             </div>
                         </div>
                         <div className={"col-lg-4"}>
                             <div className="form-group">
                                 <label>Participants</label>
-                                <NumericInput className="form-control"
+                                <NumericInput className="form-control" onChange={(numeric: any) => this.handleNumericChange(numeric)}
                                 />
                             </div>
                         </div>
@@ -182,7 +215,7 @@ class ManageTask extends Component <Props> {
                                 <label>Task description</label>
                                 <textarea style={{"height": "150px"}} className="form-control"
                                           value={this.state.formControls.description.value}
-                                          onChange={(event: FormEvent<HTMLTextAreaElement>) => this.onChangeHandler(event, "description")}  />
+                                          onChange={(event: any) => this.onChangeHandler(event, "description")}  />
                             </div>
                         </div>
                     </div>
