@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.dao.CategoryDao;
 import com.example.dao.TaskDao;
 import com.example.dao.UserDao;
 import com.example.dto.apiKey.ApiKeyDto;
@@ -30,6 +31,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.toIntExact;
+
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -38,6 +41,8 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserDao userDao;
 
+    private final CategoryDao categoryDao;
+
     private final UserService userService;
 
     private final ModelMapper modelMapper;
@@ -45,7 +50,7 @@ public class TaskServiceImpl implements TaskService {
     private final AmazonClient amazonClient;
 
     @Override
-    public MainTaskDto createTask(TaskDto taskDto, int userId) {
+    public MainTaskDto createTask(TaskDto taskDto, int userId, Long categoryId) {
         int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
         if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
@@ -53,13 +58,17 @@ public class TaskServiceImpl implements TaskService {
         Task task = modelMapper.map(taskDto, Task.class);
         Set<String> photos = new HashSet<>();
         taskDto.getPhotos().forEach(photo -> {
-            System.out.println(photo);
             photos.add(amazonClient.uploadFile(photo));
         });
+        if (categoryId == null)
+            task.setCategory(null);
+        else
+            task.setCategory(categoryDao.getById(toIntExact(categoryId)));
         task.setPhotos(photos);
         task.setCreator(getByUserId(userId));
         task.setCreationDate(LocalDate.now());
-        return modelMapper.map(taskDao.save(task), MainTaskDto.class);
+        taskDao.save(task);
+        return null;
     }
 
     @Override

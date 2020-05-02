@@ -55,11 +55,8 @@ public class TaskDto {
     @NotNull(message = "{task.priority.null}")
     @NotBlank(message = "{task.priority.blank}")
     @PriorityType
-    @ApiModelProperty(example = "CRITICAL")
+        @ApiModelProperty(example = "CRITICAL")
     private String priority;
-
-    @CategoryType
-    private MainCategoryDto category;
 
     @NotNull(message = "{user.api.key.null}")
     @NotBlank(message = "{user.api.key.blank}")
