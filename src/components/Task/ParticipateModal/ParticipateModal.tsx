@@ -36,7 +36,6 @@ class ParticipateModal extends Component<IProps, IState> {
             this.props.onSuccessParticipate(res.data);
             this.close();
         }).catch(error => {
-            console.log(error.response.data);
             if (error.response.status === 401) {
                 Auth.logOut();
             } else if (error.response.data.message && error.response.data.message === 'User is already participant.') {

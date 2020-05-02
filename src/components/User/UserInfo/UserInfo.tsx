@@ -270,7 +270,6 @@ class UserInfo extends React.Component<any,any> {
             <div className={'action-panel'}>
             <button type={"button"} className={"btn btn-danger"} onClick={e => this.setState({editMode: true})}>Edit</button>
         </div>) : '';
-        console.log(this.state.currentInfo.photo.ur);
 
         return (
             <div>
@@ -292,7 +291,6 @@ class UserInfo extends React.Component<any,any> {
     };
 
     render() {
-        console.log(this.state);
         if (!this.state.editMode) {
             return this.renderUserBlock();
         } else {
