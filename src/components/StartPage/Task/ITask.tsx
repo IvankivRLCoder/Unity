@@ -5,5 +5,6 @@ export default interface ITask {
     description: String,
     approvedParticipants: number,
     numberOfParticipants: number,
-    priority: any
+    priority: any,
+    category: any
 }
