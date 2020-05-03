@@ -31,7 +31,7 @@ public class AmazonClient {
 
     public String uploadFile(String base64Declaration) {
         String fileUrl = "";
-        File file = new File("/home/kappa/Videos/dsa/Unity/src/main/resources/image.png");
+        File file = new File("image.png");
         String base64 = base64Declaration;
         if (base64Declaration.contains(",")) {
             base64 = base64Declaration.split(",")[1];
