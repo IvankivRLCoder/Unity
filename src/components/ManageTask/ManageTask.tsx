@@ -22,23 +22,56 @@ class ManageTask extends Component <Props> {
     state: { [id: string]: any; } = {
         formControls: {
             title: {
-                value: ""
+                value: "",
+                valid: false,
+                errorMessage: 'Enter valid name',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 60
+                }
             },
             description: {
-                value: ""
+                value: "",
+                valid: false,
+                errorMessage: 'Enter valid description',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 60
+                }
             },
             category: {
-              value: ""
+                value: ""
             },
             endDate: {
-                value: new Date()
+                value: new Date(),
+                valid: false,
+                errorMessage: 'Enter valid end date',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 60
+                }
             },
             possibleNumberOfParticipants: {
-                value: ''
+                value: '',
+                valid: false,
+                errorMessage: 'Enter valid number of participants',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 3,
+                    maxLength: 60
+                }
             },
             images: []
         },
-        categories: []
+        categories: [],
+        errorMessage: ''
     };
 
     parseDate(date: any) {
@@ -65,6 +98,10 @@ class ManageTask extends Component <Props> {
         });
     };
 
+    validateFields = () => {
+        
+    };
+
     onSubmitHandler = () => {
         let photos:any[] = [];
         this.state.formControls.images.forEach((photo: { url: any; }) => {
@@ -75,8 +112,6 @@ class ManageTask extends Component <Props> {
             title: this.state.formControls.title.value,
             description: this.state.formControls.description.value,
             photos: photos,
-            status: 'done',
-            priority: 'CRITICAL',
             possibleNumberOfParticipants: this.state.formControls.possibleNumberOfParticipants.value,
             endDate: this.parseDate(this.state.formControls.endDate.value)
         };
@@ -91,8 +126,9 @@ class ManageTask extends Component <Props> {
                 userId: Auth.loggedUserId,
                 categoryId: categoryId
             }
-        }).then().catch();
-        this.props.togglePopup(false);
+        }).then(() => {
+            this.clearModal();
+        }).catch();
     };
 
     onFileChangeHandler = (files: any) => {
@@ -162,25 +198,50 @@ class ManageTask extends Component <Props> {
         return options;
     }
 
+    clearModal() {
+        let formControls = {
+            title: {
+                value: ""
+            },
+            description: {
+                value: ""
+            },
+            category: {
+                value: ""
+            },
+            endDate: {
+                value: new Date()
+            },
+            possibleNumberOfParticipants: {
+                value: ''
+            },
+            images: []
+        };
+        this.props.togglePopup(false);
+        this.setState({formControls: formControls});
+    }
+
     render() {
         return (<Modal size="lg" show={this.props.isPopupShown} onHide={() => this.props.togglePopup(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Add new task</Modal.Title>
+                    <p>{this.state.errorMessage}</p>
                 </Modal.Header>
                 <Modal.Body>
                     <div className={"row"}>
                         <div className={"col-lg-10"}>
                             <div className="form-group">
                                 <label>Task name</label>
-                                <input className="form-control" value={this.state.formControls.title.value}
+                                <input className={"form-control " + (this.state.formControls.title.showValidate ? 'validation' : '')} value={this.state.formControls.title.value}
                                        onChange={(event: any) => this.onChangeHandler(event, "title")}/>
+                                <p style={{display: (this.state.formControls.title.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.title.errorMessage}</p>
                             </div>
                         </div>
                         <div className={"col-lg-2"}>
                             <div className="avatar-edit">
-                                <input type="file" id="taskImageUpload"
+                                <input type="file" id="taskImageUpload" disabled={this.state.formControls.images.length === 6}
                                        onChange={(event: any) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
-                                <label htmlFor="taskImageUpload">
+                                <label htmlFor="taskImageUpload" style={{opacity: (this.state.formControls.images.length === 6 ? "0.2" : "1")}}>
                                     <i style={{marginTop: "10px"}} className={"fas fa-camera"}/>
                                 </label>
                             </div>
@@ -197,30 +258,37 @@ class ManageTask extends Component <Props> {
                         <div className={"col-lg-4"}>
                             <div className="form-group">
                                 <label style={{display: 'block'}}>End date</label>
-                                <DatePicker className="form-control" selected={this.state.formControls.endDate.value} onChange={(date: any) => this.handleDateChange(date)}                                         dateFormat="yyyy-MM-dd"
+                                <DatePicker className={"form-control " + (this.state.formControls.endDate.showValidate ? 'validation' : '')} selected={this.state.formControls.endDate.value} onChange={(date: any) => this.handleDateChange(date)}
+                                            dateFormat="yyyy-MM-dd"
                                 />
+                                <p style={{display: (this.state.formControls.endDate.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.endDate.errorMessage}</p>
+
                             </div>
                         </div>
                         <div className={"col-lg-4"}>
                             <div className="form-group">
                                 <label>Participants</label>
-                                <NumericInput className="form-control" onChange={(numeric: any) => this.handleNumericChange(numeric)}
+                                <NumericInput className={"form-control " + (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'validation' : '')} onChange={(numeric: any) => this.handleNumericChange(numeric)}
                                 />
+                                <p style={{display: (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.possibleNumberOfParticipants.errorMessage}</p>
+
                             </div>
                         </div>
                         <div className={"col-lg-12"}>
                             <div className="form-group">
                                 <label>Task description</label>
-                                <textarea style={{"height": "150px"}} className="form-control"
+                                <textarea style={{"height": "150px"}} className={"form-control " + (this.state.formControls.description.showValidate ? 'validation' : '')}
                                           value={this.state.formControls.description.value}
                                           onChange={(event: any) => this.onChangeHandler(event, "description")}  />
+                                <p style={{display: (this.state.formControls.description.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.description.errorMessage}</p>
+
                             </div>
                         </div>
                     </div>
                     {this.renderPhotos()}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={() => this.props.togglePopup(false)}>
+                    <Button variant="danger" onClick={() => this.clearModal()}>
                         Close
                     </Button>
                     <Button variant="success" onClick={() => this.onSubmitHandler()}>
