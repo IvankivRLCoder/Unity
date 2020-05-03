@@ -79,9 +79,9 @@ VALUES ('Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', 
        ('Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', 'photo 4','2000-12-17', 'NOVICE', false, 'testKey4');
 
 INSERT INTO task(description, creation_date, title, participants, status, end_date, priority, category_id, creator_id)
-VALUES ('Task number 1', CURRENT_DATE(), 'Title 1', 10, 'PENDING', '2020-07-17', 'HIGH', 1, 1),
+VALUES ('Task number 1', CURRENT_DATE(), 'Title 1', 10, 'ACTIVE', '2020-07-17', 'HIGH', 1, 1),
        ('Task number 2', '2020-03-27', 'Title 2', 20, 'ACTIVE', '2020-05-15', 'LOW', 3, 2),
-       ('Task number 3', CURRENT_DATE(), 'Title 3', 2, 'ACTIVE', '2020-10-10', 'CRITICAL', 2, 2),
+       ('Task number 3', CURRENT_DATE(), 'Title 3', 2, 'ACTIVE', '2020-10-10', 'LOW', 2, 2),
        ('Task number 4', '1999-09-09', 'Title 4', 2, 'ACTIVE', '2020-12-12', 'HIGH', 3, 3);
 
 INSERT INTO volunteer_task (volunteer_id, task_id, participation_date, comment, approved)
