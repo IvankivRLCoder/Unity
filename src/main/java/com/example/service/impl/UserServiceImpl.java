@@ -17,6 +17,7 @@ import com.example.model.Task;
 import com.example.model.User;
 import com.example.model.UserTask;
 import com.example.service.UserService;
+import com.example.utils.CalculatingUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.example.utils.CalculatingUtils.calculateTaskPriority;
 import static com.example.utils.EncodingUtils.*;
 
 @Service
@@ -169,6 +171,7 @@ public class UserServiceImpl implements UserService {
         User user = getById(id);
         return user.getCreatedTasks()
                 .stream()
+                .peek(CalculatingUtils::calculateTaskPriority)
                 .map(task -> modelMapper.map(task, CreatedTaskDto.class))
                 .collect(Collectors.toList());
     }
@@ -207,6 +210,7 @@ public class UserServiceImpl implements UserService {
         if (task == null) {
             throw new EntityNotFountException("Task is not found with id = " + id);
         }
+        calculateTaskPriority(task);
         return task;
     }
 
