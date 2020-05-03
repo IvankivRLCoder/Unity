@@ -13,10 +13,7 @@ import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.error.UserIsNotCreatorException;
 import com.example.filter.TaskFilter;
-import com.example.model.Status;
-import com.example.model.Task;
-import com.example.model.User;
-import com.example.model.UserTask;
+import com.example.model.*;
 import com.example.service.TaskService;
 import com.example.service.UserService;
 import com.example.utils.PaginationUtils;
@@ -25,11 +22,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.example.utils.CalculatingUtils.calculateTaskPriority;
 
 import static java.lang.Math.toIntExact;
 
@@ -67,13 +65,17 @@ public class TaskServiceImpl implements TaskService {
         task.setPhotos(photos);
         task.setCreator(getByUserId(userId));
         task.setCreationDate(LocalDate.now());
+        task.setStatus(Status.PENDING);
+        calculateTaskPriority(task);
         taskDao.save(task);
         return null;
     }
 
     @Override
     public MainTaskDto getTaskById(int id) {
-        return modelMapper.map(getByTaskId(id), MainTaskDto.class);
+        Task task = getByTaskId(id);
+        calculateTaskPriority(task);
+        return modelMapper.map(task, MainTaskDto.class);
     }
 
     @Override
@@ -87,8 +89,10 @@ public class TaskServiceImpl implements TaskService {
                             .filter(UserTask::isApproved)
                             .count()
             );
+            calculateTaskPriority(task);
             if (task.getApprovedParticipants() == task.getPossibleNumberOfParticipants()) {
                 task.setStatus(Status.ACTIVE);
+                task.setPriority(Priority.NONE);
             }
         });
 
@@ -131,11 +135,10 @@ public class TaskServiceImpl implements TaskService {
         task.setCategory(newTask.getCategory());
         task.setCreationDate(newTask.getCreationDate());
         task.setDescription(newTask.getDescription());
-        task.setPriority(newTask.getPriority());
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
-        task.setStatus(newTask.getStatus());
         task.setTitle(newTask.getTitle());
         task.setPhotos(newTask.getPhotos());
+        calculateTaskPriority(task);
 
         return modelMapper.map(taskDao.update(task), MainTaskDto.class);
     }
@@ -190,6 +193,7 @@ public class TaskServiceImpl implements TaskService {
         task.setApprovedParticipants((int) approvedParticipants);
         if (approvedParticipants == task.getPossibleNumberOfParticipants()) {
             task.setStatus(Status.ACTIVE);
+            task.setPriority(Priority.NONE);
         }
         return task;
     }
