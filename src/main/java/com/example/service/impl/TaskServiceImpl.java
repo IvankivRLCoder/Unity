@@ -7,12 +7,15 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
-import com.example.dto.user.GetUserDto;
+import com.example.dto.user.ParticipantDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
 import com.example.error.UserIsNotCreatorException;
 import com.example.filter.TaskFilter;
-import com.example.model.*;
+import com.example.model.Status;
+import com.example.model.Task;
+import com.example.model.User;
+import com.example.model.UserTask;
 import com.example.service.TaskService;
 import com.example.service.UserService;
 import com.example.utils.PaginationUtils;
@@ -21,14 +24,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings("Duplicates")
 public class TaskServiceImpl implements TaskService {
 
     private final TaskDao taskDao;
@@ -39,6 +42,8 @@ public class TaskServiceImpl implements TaskService {
 
     private final ModelMapper modelMapper;
 
+    private final AmazonClient amazonClient;
+
     @Override
     public MainTaskDto createTask(TaskDto taskDto, int userId) {
         int apiKeyId = userService.getByApiKey(taskDto.getApiKey());
@@ -46,19 +51,20 @@ public class TaskServiceImpl implements TaskService {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
         }
         Task task = modelMapper.map(taskDto, Task.class);
+        Set<String> photos = new HashSet<>();
+        taskDto.getPhotos().forEach(photo -> {
+            System.out.println(photo);
+            photos.add(amazonClient.uploadFile(photo));
+        });
+        task.setPhotos(photos);
         task.setCreator(getByUserId(userId));
         task.setCreationDate(LocalDate.now());
-        task.setStatus(Status.PENDING);
-        calculateTaskPriority(task);
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
 
     @Override
     public MainTaskDto getTaskById(int id) {
-        Task task = getSingleTask(id);
-        calculateTaskPriority(task);
-        taskDao.update(task);
-        return modelMapper.map(task, MainTaskDto.class);
+        return modelMapper.map(getByTaskId(id), MainTaskDto.class);
     }
 
     @Override
@@ -72,11 +78,9 @@ public class TaskServiceImpl implements TaskService {
                             .filter(UserTask::isApproved)
                             .count()
             );
-            calculateTaskPriority(task);
             if (task.getApprovedParticipants() == task.getPossibleNumberOfParticipants()) {
                 task.setStatus(Status.ACTIVE);
             }
-            taskDao.update(task);
         });
 
         List<MainTaskDto> mappedTasks = tasksFromDB
@@ -103,21 +107,18 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void deleteTask(int id, ApiKeyDto apiKeyDto) {
         userService.getByApiKey(apiKeyDto.getApiKey());
-        taskDao.delete(getSingleTask(id));
+        taskDao.delete(getByTaskId(id));
     }
 
     @Override
     public MainTaskDto updateTask(TaskDto taskDto, int id) {
-        userService.getByApiKey(taskDto.getApiKey());
-        Task task = getSingleTask(id);
-        calculateTaskPriority(task);
         int userId = userService.getByApiKey(taskDto.getApiKey());
 
+        Task task = getByTaskId(id);
         if (task.getCreator().getId() != userId) {
             throw new UserIsNotCreatorException("User is not creator of task: " + task.getId());
         }
         Task newTask = modelMapper.map(taskDto, Task.class);
-
         task.setCategory(newTask.getCategory());
         task.setCreationDate(newTask.getCreationDate());
         task.setDescription(newTask.getDescription());
@@ -125,33 +126,31 @@ public class TaskServiceImpl implements TaskService {
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
         task.setStatus(newTask.getStatus());
         task.setTitle(newTask.getTitle());
+        task.setPhotos(newTask.getPhotos());
 
         return modelMapper.map(taskDao.update(task), MainTaskDto.class);
     }
 
     @Override
     public List<MainUserTaskDto> getAllUsersByTaskId(int id) {
-        return taskDao.getById(id).getUserTasks()
-                .stream()
+        return taskDao.getById(id).getUserTasks().stream()
                 .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public PaginationDto<GetUserDto> getAllApprovedUsers(Integer offset, Integer limit, int taskId) {
-        Task task = getSingleTask(taskId);
-        calculateTaskPriority(task);
-        taskDao.update(task);
-        List<GetUserDto> approvedUsers = task.getUserTasks()
+    public PaginationDto<MainUserTaskDto> getAllApprovedUsers(Integer offset, Integer limit, int taskId) {
+        Task task = getByTaskId(taskId);
+        List<MainUserTaskDto> approvedUsers = task.getUserTasks()
                 .stream()
                 .filter(UserTask::isApproved)
-                .map(userTask -> modelMapper.map(userTask.getUser(), GetUserDto.class))
+                .map(userTask -> modelMapper.map(userTask, MainUserTaskDto.class))
                 .collect(Collectors.toList());
 
         if (limit != null && offset != null) {
             return PaginationUtils.paginate(approvedUsers, offset, limit);
         }
-        return PaginationDto.<GetUserDto>builder()
+        return PaginationDto.<MainUserTaskDto>builder()
                 .entities(approvedUsers)
                 .quantity(0)
                 .entitiesLeft(0)
@@ -159,7 +158,18 @@ public class TaskServiceImpl implements TaskService {
 
     }
 
-    private Task getSingleTask(int id) {
+    @Override
+    public ParticipantDto isParticipant(int userId, int taskId) {
+        Task task = getByTaskId(taskId);
+        boolean isParticipant = task.getUserTasks()
+                .stream()
+                .anyMatch(userTask -> userTask.getUser().getId() == userId);
+        return ParticipantDto.builder()
+                .isParticipant(isParticipant)
+                .build();
+    }
+
+    private Task getByTaskId(int id) {
         Task task = taskDao.getById(id);
         if (task == null) {
             throw new EntityNotFountException("Task is not found with id = " + id);
@@ -181,33 +191,6 @@ public class TaskServiceImpl implements TaskService {
             throw new EntityNotFountException("User is not found with id = " + id);
         }
         return user;
-    }
-
-    private void calculateTaskPriority(Task task) {
-        LocalDate creationDate = task.getCreationDate();
-        LocalDate endDate = task.getEndDate();
-
-        int possibleNumberOfParticipants = task.getPossibleNumberOfParticipants();
-        int approvedParticipants = task.getApprovedParticipants();
-
-        String status = task.getStatus().getTaskStatus();
-        if (status.equalsIgnoreCase("active") || status.equalsIgnoreCase("done")) {
-            task.setPriority(Priority.NONE);
-            return;
-        }
-
-        double participantsDiff = possibleNumberOfParticipants - approvedParticipants;
-        long datesDiff = DAYS.between(creationDate, endDate);
-
-        double coef = datesDiff / participantsDiff;
-        if (coef < 1) {
-            task.setPriority(Priority.CRITICAL);
-        } else if (coef >= 1 && coef <= 1.5) {
-            task.setPriority(Priority.HIGH);
-        } else if (coef > 1.5 && coef <= 2.5) {
-            task.setPriority(Priority.MEDIUM);
-        } else task.setPriority(Priority.LOW);
-
     }
 
 }
