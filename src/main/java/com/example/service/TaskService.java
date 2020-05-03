@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    MainTaskDto createTask(TaskDto taskDto, int userId);
+    MainTaskDto createTask(TaskDto taskDto, int userId, Long categoryId);
 
     MainTaskDto getTaskById(int id);
 
