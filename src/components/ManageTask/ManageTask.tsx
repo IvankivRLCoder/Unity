@@ -8,6 +8,7 @@ import Auth from "../../utils/Auth/Auth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import NumericInput from 'react-numeric-input';
+import Validation from "../../utils/Validation/Validation";
 
 
 
@@ -28,8 +29,8 @@ class ManageTask extends Component <Props> {
                 showValidate: false,
                 validation: {
                     required: true,
-                    minLength: 3,
-                    maxLength: 60
+                    minLength: 5,
+                    maxLength: 100
                 }
             },
             description: {
@@ -39,8 +40,8 @@ class ManageTask extends Component <Props> {
                 showValidate: false,
                 validation: {
                     required: true,
-                    minLength: 3,
-                    maxLength: 60
+                    minLength: 10,
+                    maxLength: 150
                 }
             },
             category: {
@@ -52,9 +53,7 @@ class ManageTask extends Component <Props> {
                 errorMessage: 'Enter valid end date',
                 showValidate: false,
                 validation: {
-                    required: true,
-                    minLength: 3,
-                    maxLength: 60
+                    minDate: new Date()
                 }
             },
             possibleNumberOfParticipants: {
@@ -63,9 +62,8 @@ class ManageTask extends Component <Props> {
                 errorMessage: 'Enter valid number of participants',
                 showValidate: false,
                 validation: {
-                    required: true,
-                    minLength: 3,
-                    maxLength: 60
+                    minNumber: 2,
+                    maxNumber: 100
                 }
             },
             images: []
@@ -90,7 +88,15 @@ class ManageTask extends Component <Props> {
     onChangeHandler = (event: any, controlName: string) => {
         const formControls = {...this.state.formControls};
         const control = {...formControls[controlName]};
-        control.value = (event.target as any).value;
+
+        control.value = (event.target as HTMLInputElement).value;
+        let validateControlInfo = this.validateControl(control.value, control.validation);
+        control.valid = validateControlInfo.isValid;
+        control.showValidate = !control.valid;
+        if (validateControlInfo.errorMessage !== '') {
+            control.errorMessage = validateControlInfo.errorMessage;
+        }
+
         formControls[controlName] = control;
 
         this.setState({
@@ -98,11 +104,77 @@ class ManageTask extends Component <Props> {
         });
     };
 
-    validateFields = () => {
-        
+    validateControl = (value: any, validation: any) => {
+        if (!validation) {
+            return {isValid: true, errorMessage: ''};
+        }
+
+        let validator = new Validation();
+
+        let isValid = true;
+        let errorMessage = '';
+
+        if (validation.required && isValid) {
+            isValid = !validator.isEmpty(value);
+            if (!isValid) errorMessage = 'Field is required.';
+        }
+
+        if (validation.minLength && isValid) {
+            isValid = validator.checkMinLength(value, validation.minLength);
+            if (!isValid) errorMessage = 'You should put minimum ' + validation.minLength + ' chars.';
+        }
+
+        if (validation.maxLength && isValid) {
+            isValid = validator.checkMaxLength(value, validation.maxLength);
+            if (!isValid) errorMessage = 'You can put maximum ' + validation.maxLength + ' chars.';
+        }
+
+        if (validation.minDate && isValid) {
+            isValid = validator.checkMinDate(value, validation.minDate) || false;
+            if (!isValid) errorMessage = "You can put minimum date: " + validation.minDate + '.';
+        }
+
+        if (validation.minNumber && isValid) {
+            isValid = validator.checkMinNumber(value, validation.minNumber);
+            if (!isValid) errorMessage = 'You can put minimum ' + validation.minNumber + '.';
+        }
+
+        if (validation.maxNumber && isValid) {
+            isValid = validator.checkMaxNumber(value, validation.maxNumber);
+            if (!isValid) errorMessage = 'You can put maximum ' + validation.maxNumber + '.';
+        }
+
+        return {isValid: isValid, errorMessage: errorMessage};
     };
 
     onSubmitHandler = () => {
+        let isValid = true;
+        const formControls = {...this.state.formControls};
+
+        Object.keys(formControls).forEach((controlName) => {
+            if (controlName === "images" || controlName === "category") {
+                return;
+            }
+            const control = {...formControls[controlName]};
+            let validateControlInfo = this.validateControl(control.value, control.validation);
+
+            control.valid = validateControlInfo.isValid;
+            control.showValidate = !control.valid;
+            if (validateControlInfo.errorMessage !== '') {
+                control.errorMessage = validateControlInfo.errorMessage;
+            }
+
+            formControls[controlName] = control;
+
+            if (!control.valid && isValid) {
+                isValid = false;
+            }
+        });
+        if (!isValid) {
+            this.setState({
+                formControls: formControls
+            });
+        }
         let photos:any[] = [];
         this.state.formControls.images.forEach((photo: { url: any; }) => {
             photos.push(photo.url);
@@ -118,17 +190,20 @@ class ManageTask extends Component <Props> {
         let categoryId:any = parseInt(this.state.formControls.category.value, 10);
         if (isNaN(categoryId))
             categoryId = null;
-        axios({
-            url: CONFIG.apiServer + 'tasks/',
-            data: data,
-            method: 'post',
-            params: {
-                userId: Auth.loggedUserId,
-                categoryId: categoryId
-            }
-        }).then(() => {
-            this.clearModal();
-        }).catch();
+        if (isValid) {
+            axios({
+                url: CONFIG.apiServer + 'tasks/',
+                data: data,
+                method: 'post',
+                params: {
+                    userId: Auth.loggedUserId,
+                    categoryId: categoryId
+                }
+            }).then(() => {
+                this.clearModal();
+                this.props.togglePopup(false);
+            }).catch();
+        }
     };
 
     onFileChangeHandler = (files: any) => {
@@ -160,7 +235,6 @@ class ManageTask extends Component <Props> {
 
     renderPhotos = () => {
         let photos = this.state.formControls.images;
-
         let HTML:any = [];
         photos.forEach((photo:any, index:number) => {
             HTML.push(this.renderPhoto(photo.url, index));
@@ -168,21 +242,39 @@ class ManageTask extends Component <Props> {
       return (                    <div className={"row"}>
           {HTML} </div>);
     };
-    handleDateChange(date:any) {
+
+    handleDateChange(date:any, controlName: string) {
         const formControls = {...this.state.formControls};
-        const control = {...formControls['endDate']};
+        const control = {...formControls[controlName]};
         control.value = date;
-        formControls['endDate'] = control;
+        let validateControlInfo = this.validateControl(control.value, control.validation);
+        control.valid = validateControlInfo.isValid;
+        control.showValidate = !control.valid;
+        if (validateControlInfo.errorMessage !== '') {
+            control.errorMessage = validateControlInfo.errorMessage;
+        }
+
+        formControls[controlName] = control;
+
         this.setState({
             formControls
         });
     }
 
-    handleNumericChange(int: any) {
+    handleNumericChange(int: any, controlName:string) {
         const formControls = {...this.state.formControls};
-        const control = {...formControls['possibleNumberOfParticipants']};
+        const control = {...formControls[controlName]};
+
         control.value = int;
-        formControls['possibleNumberOfParticipants'] = control;
+        let validateControlInfo = this.validateControl(control.value, control.validation);
+
+        control.valid = validateControlInfo.isValid;
+        control.showValidate = !control.valid;
+        if (validateControlInfo.errorMessage !== '') {
+            control.errorMessage = validateControlInfo.errorMessage;
+        }
+
+        formControls[controlName] = control;
 
         this.setState({
             formControls
@@ -201,19 +293,48 @@ class ManageTask extends Component <Props> {
     clearModal() {
         let formControls = {
             title: {
-                value: ""
+                value: "",
+                valid: false,
+                errorMessage: 'Enter valid name',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 5,
+                    maxLength: 100
+                }
             },
             description: {
-                value: ""
+                value: "",
+                valid: false,
+                errorMessage: 'Enter valid description',
+                showValidate: false,
+                validation: {
+                    required: true,
+                    minLength: 10,
+                    maxLength: 150
+                }
             },
             category: {
                 value: ""
             },
             endDate: {
-                value: new Date()
+                value: new Date(),
+                valid: false,
+                errorMessage: 'Enter valid end date',
+                showValidate: false,
+                validation: {
+                    minDate: new Date()
+                }
             },
             possibleNumberOfParticipants: {
-                value: ''
+                value: '',
+                valid: false,
+                errorMessage: 'Enter valid number of participants',
+                showValidate: false,
+                validation: {
+                    minNumber: 2,
+                    maxNumber: 100
+                }
             },
             images: []
         };
@@ -258,7 +379,7 @@ class ManageTask extends Component <Props> {
                         <div className={"col-lg-4"}>
                             <div className="form-group">
                                 <label style={{display: 'block'}}>End date</label>
-                                <DatePicker className={"form-control " + (this.state.formControls.endDate.showValidate ? 'validation' : '')} selected={this.state.formControls.endDate.value} onChange={(date: any) => this.handleDateChange(date)}
+                                <DatePicker className={"form-control " + (this.state.formControls.endDate.showValidate ? 'validation' : '')} selected={this.state.formControls.endDate.value} onChange={(date: any) => this.handleDateChange(date, 'endDate')}
                                             dateFormat="yyyy-MM-dd"
                                 />
                                 <p style={{display: (this.state.formControls.endDate.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.endDate.errorMessage}</p>
@@ -268,7 +389,7 @@ class ManageTask extends Component <Props> {
                         <div className={"col-lg-4"}>
                             <div className="form-group">
                                 <label>Participants</label>
-                                <NumericInput className={"form-control " + (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'validation' : '')} onChange={(numeric: any) => this.handleNumericChange(numeric)}
+                                <NumericInput className={"form-control " + (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'validation' : '')} onChange={(numeric: any) => this.handleNumericChange(numeric, 'possibleNumberOfParticipants')}
                                 />
                                 <p style={{display: (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.possibleNumberOfParticipants.errorMessage}</p>
 
