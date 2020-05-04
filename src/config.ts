@@ -1,4 +1,3 @@
 export const CONFIG = {
-    apiServer: 'http://localhost:8080/Unity/'
+    apiServer: 'https://unity-application.herokuapp.com/Unity/'
 };
-

@@ -9,8 +9,10 @@ import Participant from "./Participant/Participant";
 import IParticipant from "./Participant/IParticipant";
 import Auth from "../../utils/Auth/Auth";
 import ParticipateModal from "./ParticipateModal/ParticipateModal";
+import EditTask from "../EditTask/EditTask";
 
 interface IState {
+    openedModal: boolean,
     task: ITask | null,
     participants: IParticipant[],
     isTask: boolean,
@@ -20,6 +22,7 @@ interface IState {
 
 class Task extends Component<any, IState> {
     state = {
+        openedModal: false,
         task: {
             id: 0,
             title: '',
@@ -32,6 +35,7 @@ class Task extends Component<any, IState> {
             approvedParticipants: 0,
             numberOfParticipants: 0,
             priority: '',
+            endDate: '',
             category: {
                 name: '',
             }
@@ -40,7 +44,10 @@ class Task extends Component<any, IState> {
         participants: [],
         isShownModalParticipate: false,
         canUserParticipate: false
-    }
+    };
+    togglePopup = (openedModal: boolean) => {
+        this.setState({openedModal: openedModal})
+    };
 
     componentDidMount = () => {
         axios(CONFIG.apiServer + 'tasks/' + this.props.match.params.id).then(res => {
@@ -62,18 +69,18 @@ class Task extends Component<any, IState> {
         }).catch(error => {
             this.setState({isTask: false});
         });
-    }
+    };
 
     isCreator = () => {
         // eslint-disable-next-line
         return Auth.isLoggedIn && Auth.loggedUserId == this.state.task.creator.id;
-    }
+    };
 
     changeApproveStatus = (approved: boolean) => {
         const task = {...this.state.task};
         task.approvedParticipants += approved ? 1 : -1;
         this.setState({task: task});
-    }
+    };
 
     renderParticipants = () => {
         return this.state.participants.map((participant: IParticipant, index: number) => (
@@ -83,33 +90,32 @@ class Task extends Component<any, IState> {
                          onChangeApproveStatus={this.changeApproveStatus}
                          taskId={this.state.task.id}/>
         ));
-    }
+    };
 
     onSuccessParticipate = (participant: IParticipant) => {
-        const participants:IParticipant[] = [...this.state.participants];
+        const participants: IParticipant[] = [...this.state.participants];
         participants.push(participant);
         this.setState({
             participants: participants,
             canUserParticipate: false
         });
-    }
+    };
 
     renderButtonParticipate = () => {
-         if (this.state.canUserParticipate) {
-             return (<button className="btn participate-btn"
-                             onClick={() => {
-                                 this.setState({isShownModalParticipate: true})
-                             }}>Participate</button>);
-         } else {
-             return (<button className="btn participate-btn"
-                             disabled={true}
-                             onClick={() => {
-                                 this.setState({isShownModalParticipate: true})
-                             }}>Participate</button>);
-         }
-    }
+        if (this.state.canUserParticipate) {
+            return (<button className="btn participate-btn"
+                            onClick={() => {
+                                this.setState({isShownModalParticipate: true})
+                            }}>Participate</button>);
+        } else {
+            return (<button className="btn participate-btn"
+                            onClick={() => {
+                                this.setState({isShownModalParticipate: true, openedModal: true})
+                            }}>Edit task</button>);
+        }
+    };
 
-    render () {
+    render() {
         if (this.state.task.id !== 0) {
             return (
                 <div className="task-page">
@@ -147,21 +153,28 @@ class Task extends Component<any, IState> {
                                         {this.state.task.approvedParticipants}/{this.state.task.numberOfParticipants} participants
                                     </h3>
                                     <h3 className="task-organizer">
-                                        Organized by: <a href={"/user/" + this.state.task.creator.id}>{this.state.task.creator.firstName + " " + (this.state.task.creator.lastName ? this.state.task.creator.lastName : '')}</a>
+                                        Organized by: <a
+                                        href={"/user/" + this.state.task.creator.id}>{this.state.task.creator.firstName + " " + (this.state.task.creator.lastName ? this.state.task.creator.lastName : '')}</a>
                                     </h3>
                                     <h3>
                                         Category: {this.state.task.category.name}
                                     </h3>
                                     <p className="task-description">{this.state.task.description}</p>
                                     {this.renderButtonParticipate()}
-                                    <ParticipateModal onSuccessParticipate={this.onSuccessParticipate} taskId={this.state.task.id} onHide={() => {this.setState({isShownModalParticipate: false})}} isShown={this.state.isShownModalParticipate}/>
+                                    <ParticipateModal onSuccessParticipate={this.onSuccessParticipate}
+                                                      taskId={this.state.task.id} onHide={() => {
+                                        this.setState({isShownModalParticipate: false})
+                                    }} isShown={this.state.isShownModalParticipate}/>
                                 </div>
+
+
                                 <div className="task-participants">
                                     {this.renderParticipants()}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <EditTask task={this.state.task} togglePopup={this.togglePopup} isPopupShown={this.state.openedModal}/>
                 </div>
             );
         } else if (this.state.isTask) {
