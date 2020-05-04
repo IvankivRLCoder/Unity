@@ -1,3 +1,5 @@
+import {number} from "prop-types";
+
 class Validation {
     checkEmail = (email: string) : boolean => {
         // eslint-disable-next-line
@@ -35,6 +37,24 @@ class Validation {
     checkMinCountDigits = (str: string, minCount: number) => {
         let regex = new RegExp('\\d{' + minCount + ',}');
         return regex.test(str);
+    };
+
+    checkMinDate = (date: Date, min: Date) => {
+        if (date.getFullYear() <= min.getFullYear() && date.getMonth() <= min.getMonth() && date.getDay() < min.getDay())
+            return false;
+        return true;
+    };
+
+    checkMinNumber = (number: number, min: number) => {
+        if (number < min)
+            return false;
+        return true;
+    };
+
+    checkMaxNumber = (number: number, max: number) => {
+        if (number > max)
+            return false;
+        return true;
     };
 }
 
