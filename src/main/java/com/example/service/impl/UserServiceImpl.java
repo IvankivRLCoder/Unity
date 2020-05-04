@@ -74,7 +74,8 @@ public class UserServiceImpl implements UserService {
     public MainUserDto updateUser(UpdateUserDto userDto) {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
+        if (userDto.getPhoto() != null)
+            oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
         oldUser.setAboutUser(userDto.getAboutUser());
