@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS task
     creation_date DATE,
     title         VARCHAR(30)  NOT NULL,
     participants  INT,
-    status        VARCHAR(30),
+    status        VARCHAR(30)  NOT NULL ,
     end_date      DATE         NOT NULL,
     priority      VARCHAR(30),
     category_id   INT          NOT NULL,
@@ -83,11 +83,11 @@ VALUES ('Nazar', 'Koval', 'marmeladka228@gmail.com', 'Kebab1488', '0679359820', 
        ('Test', 'Two', 'test2@gmail.com', 'Kaban228', '0990095271', 'photo 4', '2000-12-17', 'NOVICE', false,
         'testKey4');
 
-INSERT INTO task(description, creation_date, title, participants, end_date, category_id, creator_id)
-VALUES ('First description', '2020-05-05', 'FirstTitle', 10, '2020-07-17', 1, 1),
-       ('Second description', '2020-03-27', 'SecondTitle', 7, '2020-05-15', 3, 2),
-       ('Third description', '2019-09-07', 'ThirdTitle', 2, '2020-10-10', 2, 2),
-       ('Fourth description', '2018-09-09', 'FourthTitle', 2, '2020-12-12', 3, 3);
+INSERT INTO task(description, creation_date, title, participants, status, end_date, category_id, creator_id)
+VALUES ('First description', '2020-05-05', 'FirstTitle', 10,'PENDING','2020-07-17', 1, 1),
+       ('Second description', '2020-03-27', 'SecondTitle', 7,'PENDING','2020-05-15', 3, 2),
+       ('Third description', '2019-09-07', 'ThirdTitle', 2,'PENDING','2020-10-10', 2, 2),
+       ('Fourth description', '2018-09-09', 'FourthTitle', 2,'PENDING','2020-12-12', 3, 3);
 
 INSERT INTO volunteer_task (volunteer_id, task_id, participation_date, comment, approved)
 VALUES (1, 2, '2020-03-30', 'first user - first task', true),
