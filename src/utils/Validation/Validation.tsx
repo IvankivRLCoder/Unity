@@ -1,5 +1,3 @@
-import {number} from "prop-types";
-
 class Validation {
     checkEmail = (email: string) : boolean => {
         // eslint-disable-next-line
