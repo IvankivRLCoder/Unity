@@ -104,7 +104,7 @@ class UserInfo extends React.Component<any,any> {
                     lastName: res.data.lastName,
                     description: res.data.aboutUser,
                     photo: {
-                        url: res.data.photo
+                        url: res.data.photo ? res.data.photo : '/img/avatar.png'
                     }
                 };
                 this.setState({
