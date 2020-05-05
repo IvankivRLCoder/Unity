@@ -81,6 +81,8 @@ class ManageTask extends Component <Props> {
 
     componentDidMount(): void {
         axios(CONFIG.apiServer + 'categories/').then(data => {
+            const formControls = {...this.state.formControls};
+            formControls.category.value = data.data[0].id;
             this.setState({categories: data.data})
         });
     }

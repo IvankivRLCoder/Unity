@@ -111,7 +111,7 @@ class Task extends Component<any, IState> {
                             }}>Participate</button>);
 
         }
-        if (this.isCreator()==true) {
+        if (this.isCreator()) {
             return (<button className="btn participate-btn"
                     onClick={() => {
                         this.setState({openedModal: true})

@@ -289,7 +289,7 @@ class ManageTask extends Component <Props> {
         let options:any = [];
         let categories = this.state.categories;
         categories.forEach((category:any, index: number) => {
-            if(this.props.task.category.id == category.id)
+            if(this.props.task.category.id === category.id)
             options.push((<option selected value={category.id} key={index}>{category.name}</option> ));
             else{
                 options.push((<option  value={category.id} key={index}>{category.name}</option> ));

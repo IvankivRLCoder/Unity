@@ -26,7 +26,7 @@ export default (props: ITask) => {
                         <p className="card-text"><span className="text-muted">Created on {props.creationDate}</span> | <span className="text-muted">Organized by {props.creator}</span></p>
                         <h4>Category: {props.category}</h4>
                         <h4>Participants: {props.approvedParticipants} / {props.numberOfParticipants}</h4>
-                        <p className="card-text task-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus aliquid animi, consequuntur debitis deserunt ea eum ex excepturi explicabo incidunt ipsum, nobis nulla numquam quos ratione totam, vitae voluptatibus.</p>
+                        <p className="card-text task-description">{props.description}</p>
                     </div>
                 </div>
             </div>
