@@ -110,7 +110,7 @@ class Task extends Component<any, IState> {
         } else {
             return (<button className="btn participate-btn"
                             onClick={() => {
-                                this.setState({isShownModalParticipate: true, openedModal: true})
+                                this.setState({openedModal: true})
                             }}>Edit task</button>);
         }
     };
