@@ -37,30 +37,6 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
                 .build();
     }
 
-    @ExceptionHandler(UserIsNotCreatorException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handleUserIsNotCreator(UserIsNotCreatorException exception) {
-        return ApiError
-                .builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .message(exception.getMessage())
-                .timestamp(LocalDateTime.now())
-                .subErrors(new ArrayList<>())
-                .build();
-    }
-
-    @ExceptionHandler(PaginationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ApiError handlePagination(PaginationException exception) {
-        return ApiError
-                .builder()
-                .message(exception.getMessage())
-                .status(HttpStatus.BAD_REQUEST)
-                .timestamp(LocalDateTime.now())
-                .subErrors(new ArrayList<>())
-                .build();
-    }
-
     @ExceptionHandler(TaskDoneException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ApiError handleTaskDone(TaskDoneException exception) {
@@ -157,12 +133,36 @@ public class ApiExceptionHandlerControllerAdvice extends ResponseEntityException
                 .build();
     }
 
+    @ExceptionHandler(UserIsNotCreatorException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handleUserIsNotCreator(UserIsNotCreatorException exception) {
+        return ApiError
+                .builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .message(exception.getMessage())
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ApiError handleDataIntegrityViolation() {
         return ApiError
                 .builder()
                 .message("Database error! Possible causes: primary key is NULL or UNIQUE constraint violation")
+                .status(HttpStatus.BAD_REQUEST)
+                .timestamp(LocalDateTime.now())
+                .subErrors(new ArrayList<>())
+                .build();
+    }
+
+    @ExceptionHandler(PaginationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    protected ApiError handlePagination(PaginationException exception) {
+        return ApiError
+                .builder()
+                .message(exception.getMessage())
                 .status(HttpStatus.BAD_REQUEST)
                 .timestamp(LocalDateTime.now())
                 .subErrors(new ArrayList<>())

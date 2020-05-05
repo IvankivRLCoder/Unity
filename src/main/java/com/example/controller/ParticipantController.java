@@ -1,7 +1,9 @@
 package com.example.controller;
 
 import com.example.dto.apiKey.ApiKeyDto;
+import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainUserTaskDto;
+import com.example.dto.user.ParticipantDto;
 import com.example.dto.user.MainTaskUserDto;
 import com.example.dto.user.MainUserDto;
 import com.example.dto.usertask.UserTaskDto;
@@ -13,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,11 +34,11 @@ public class ParticipantController {
     @PostMapping("/{participantId}/tasks/{taskId}")
     @ApiOperation(value = "Take part in task")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of all users", response = UserTaskDto.class),
+            @ApiResponse(code = 200, message = "List of all users", response = MainUserTaskDto.class),
             @ApiResponse(code = 400, message = "Bad request", response = ApiError.class),
             @ApiResponse(code = 404, message = "Non-existing user id or task id", response = ApiError.class)
     })
-    public MainTaskUserDto takePartInTask(@PathVariable int participantId, @PathVariable int taskId, @Valid @RequestBody UserTaskDto userTaskDto) {
+    public MainUserTaskDto takePartInTask(@PathVariable int participantId, @PathVariable int taskId, @Valid @RequestBody UserTaskDto userTaskDto) {
         return userService.takePartInTask(participantId, taskId, userTaskDto);
     }
 
@@ -57,6 +60,24 @@ public class ParticipantController {
     @ApiResponse(code = 200, message = "List of all users", response = MainUserDto.class)
     public List<MainUserTaskDto> getAllUsersByTaskId(@PathVariable("taskId") int id) {
         return taskService.getAllUsersByTaskId(id);
+    }
+
+    @GetMapping("approved/task/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "View list of all the approved users")
+    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
+    public PaginationDto<MainUserTaskDto> getAllApprovedUsers(@RequestParam(required = false) Integer offset,
+                                                              @RequestParam(required = false) Integer limit,
+                                                              @PathVariable int taskId) {
+        return taskService.getAllApprovedUsers(offset, limit, taskId);
+    }
+
+    @GetMapping("user/{userId}/task/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Check if user is participant")
+    @ApiResponse(code = 200, message = "List of all tasks", response = PaginationDto.class)
+    public ParticipantDto isParticipant(@PathVariable int userId, @PathVariable int taskId){
+        return taskService.isParticipant(userId, taskId);
     }
 
 }

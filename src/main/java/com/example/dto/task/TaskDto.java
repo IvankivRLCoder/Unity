@@ -1,10 +1,5 @@
 package com.example.dto.task;
 
-import com.example.dto.category.MainCategoryDto;
-import com.example.validation.CategoryType;
-import com.example.validation.LocalDateType;
-import com.example.validation.PriorityType;
-import com.example.validation.StatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -13,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,7 +26,6 @@ public class TaskDto {
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
-    @Pattern(regexp = "^[a-z A-z]{10,150}$", message = "{description.regex}")
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 
@@ -44,23 +40,11 @@ public class TaskDto {
     @ApiModelProperty(example = "2020-12-31")
     private String endDate;
 
-    @NotNull(message = "{task.status.null}")
-    @NotBlank(message = "{task.status.blank}")
-    @StatusType
-    @ApiModelProperty(example = "ACTIVE")
-    private String status;
-
-    @NotNull(message = "{task.priority.null}")
-    @NotBlank(message = "{task.priority.blank}")
-    @PriorityType
-    @ApiModelProperty(example = "CRITICAL")
-    private String priority;
-
-    @CategoryType
-    private MainCategoryDto category;
 
     @NotNull(message = "{user.api.key.null}")
     @NotBlank(message = "{user.api.key.blank}")
     private String apiKey;
+
+    private List<String> photos = new ArrayList<>();
 
 }

@@ -65,14 +65,6 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
-    private User getById(int id) {
-        User user = userDao.getById(id);
-        if (user == null) {
-            throw new EntityNotFountException("User is not found with id = " + id);
-        }
-        return user;
-    }
-
     private User getByEmail(String email) {
         try {
             return userDao.getByEmail(email);

@@ -15,7 +15,7 @@ import java.util.Set;
 @ToString(exclude = {"participatedTasks", "createdTasks"})
 @Entity
 @Table(name = "volunteer")
-public class User {
+public class  User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

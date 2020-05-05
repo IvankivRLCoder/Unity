@@ -17,10 +17,12 @@ import com.example.model.Task;
 import com.example.model.User;
 import com.example.model.UserTask;
 import com.example.service.UserService;
+import com.example.utils.CalculatingUtils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
@@ -28,7 +30,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.utils.EncodingUtils.encode;
+import static com.example.utils.CalculatingUtils.calculateTaskPriority;
+import static com.example.utils.EncodingUtils.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +44,8 @@ public class UserServiceImpl implements UserService {
     private final UserTaskDao userTaskDao;
 
     private final ModelMapper modelMapper;
+
+    private final AmazonClient amazonClient;
 
     @Override
     public MainUserDto getUserById(int id) {
@@ -69,7 +74,8 @@ public class UserServiceImpl implements UserService {
     public MainUserDto updateUser(UpdateUserDto userDto) {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        oldUser.setPhoto(userDto.getPhoto());
+        if (userDto.getPhoto() != null)
+            oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
         oldUser.setAboutUser(userDto.getAboutUser());
@@ -85,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MainTaskUserDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
+    public MainUserTaskDto takePartInTask(int userId, int taskId, UserTaskDto userTaskDto) {
         int apiKeyId = getByApiKey(userTaskDto.getApiKey());
         if (userId != apiKeyId) {
             throw new BadCredentialsException("Your apiKey is not tied to this id");
@@ -123,7 +129,7 @@ public class UserServiceImpl implements UserService {
             throw new OverflowingTaskException("Task is full of participants.");
         }
 
-        return modelMapper.map(userTaskDao.save(userTask), MainTaskUserDto.class);
+        return modelMapper.map(userTaskDao.save(userTask), MainUserTaskDto.class);
     }
 
     @Override
@@ -166,6 +172,7 @@ public class UserServiceImpl implements UserService {
         User user = getById(id);
         return user.getCreatedTasks()
                 .stream()
+                .peek(CalculatingUtils::calculateTaskPriority)
                 .map(task -> modelMapper.map(task, CreatedTaskDto.class))
                 .collect(Collectors.toList());
     }
@@ -204,6 +211,7 @@ public class UserServiceImpl implements UserService {
         if (task == null) {
             throw new EntityNotFountException("Task is not found with id = " + id);
         }
+        calculateTaskPriority(task);
         return task;
     }
 

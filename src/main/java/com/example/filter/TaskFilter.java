@@ -57,16 +57,16 @@ public class TaskFilter {
         List<MainTaskDto> lowTasks = filterByDate(filterByPriority(tasksToFilter, "Low", order), order);
 
         List<MainTaskDto> initialList;
-        if (order == null || order.trim().isEmpty()) {
-            initialList = new ArrayList<>(criticalTasks);
-            initialList.addAll(highTasks);
-            initialList.addAll(mediumTasks);
-            initialList.addAll(lowTasks);
-        } else {
+        if (order != null && order.equalsIgnoreCase("Asc")) {
             initialList = new ArrayList<>(lowTasks);
             initialList.addAll(mediumTasks);
             initialList.addAll(highTasks);
             initialList.addAll(criticalTasks);
+        } else {
+            initialList = new ArrayList<>(criticalTasks);
+            initialList.addAll(highTasks);
+            initialList.addAll(mediumTasks);
+            initialList.addAll(lowTasks);
         }
         return initialList;
     }
