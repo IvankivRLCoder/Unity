@@ -187,7 +187,7 @@ class ManageTask extends Component <Props> {
             title: this.state.formControls.title.value,
             description: this.state.formControls.description.value,
             photos: photos,
-            category: categoryId,
+            category: this.state.formControls.category.value,
             possibleNumberOfParticipants: this.state.formControls.possibleNumberOfParticipants.value,
             endDate: this.parseDate(this.state.formControls.endDate.value)
         };
