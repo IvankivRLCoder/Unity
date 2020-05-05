@@ -1,7 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/esm/Button";
 import React, {Component} from "react";
-import './ManageTask.scss';
+import '../ManageTask/ManageTask.scss';
 import {CONFIG} from "../../config";
 import axios from "axios";
 import Auth from "../../utils/Auth/Auth";
@@ -9,11 +9,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import NumericInput from 'react-numeric-input';
 import Validation from "../../utils/Validation/Validation";
+import ITask from "../StartPage/Task/ITask";
 
 
 
 
 type Props = {
+    task: ITask;
     togglePopup: Function;
     isPopupShown: any;
 }
@@ -23,7 +25,7 @@ class ManageTask extends Component <Props> {
     state: { [id: string]: any; } = {
         formControls: {
             title: {
-                value: "",
+                value: this.props.task.title,
                 valid: false,
                 errorMessage: 'Enter valid name',
                 showValidate: false,
@@ -34,7 +36,7 @@ class ManageTask extends Component <Props> {
                 }
             },
             description: {
-                value: "",
+                value: this.props.task.description,
                 valid: false,
                 errorMessage: 'Enter valid description',
                 showValidate: false,
@@ -45,10 +47,10 @@ class ManageTask extends Component <Props> {
                 }
             },
             category: {
-                value: ""
+                value: this.props.task.category
             },
             endDate: {
-                value: new Date(),
+                value: new Date(this.props.task.endDate),
                 valid: false,
                 errorMessage: 'Enter valid end date',
                 showValidate: false,
@@ -57,7 +59,7 @@ class ManageTask extends Component <Props> {
                 }
             },
             possibleNumberOfParticipants: {
-                value: '',
+                value: this.props.task.numberOfParticipants,
                 valid: false,
                 errorMessage: 'Enter valid number of participants',
                 showValidate: false,
@@ -81,8 +83,6 @@ class ManageTask extends Component <Props> {
 
     componentDidMount(): void {
         axios(CONFIG.apiServer + 'categories/').then(data => {
-            const formControls = {...this.state.formControls};
-            formControls.category.value = data.data[0].id;
             this.setState({categories: data.data})
         });
     }
@@ -181,22 +181,24 @@ class ManageTask extends Component <Props> {
         this.state.formControls.images.forEach((photo: { url: any; }) => {
             photos.push(photo.url);
         });
+        let categoryId:any = parseInt(this.state.formControls.category.value, 10);
         let data = {
             apiKey: Auth.loggedApiKey,
             title: this.state.formControls.title.value,
             description: this.state.formControls.description.value,
             photos: photos,
+            category: this.state.formControls.category.value,
             possibleNumberOfParticipants: this.state.formControls.possibleNumberOfParticipants.value,
             endDate: this.parseDate(this.state.formControls.endDate.value)
         };
-        let categoryId:any = parseInt(this.state.formControls.category.value, 10);
         if (isNaN(categoryId))
             categoryId = null;
         if (isValid) {
+            console.log(data);
             axios({
-                url: CONFIG.apiServer + 'tasks/',
+                url: CONFIG.apiServer + 'tasks/'+this.props.task.id.toString(),
                 data: data,
-                method: 'post',
+                method: 'put',
                 params: {
                     userId: Auth.loggedUserId,
                     categoryId: categoryId
@@ -241,8 +243,8 @@ class ManageTask extends Component <Props> {
         photos.forEach((photo:any, index:number) => {
             HTML.push(this.renderPhoto(photo.url, index));
         });
-      return (                    <div className={"row"}>
-          {HTML} </div>);
+        return (                    <div className={"row"}>
+            {HTML} </div>);
     };
 
     handleDateChange(date:any, controlName: string) {
@@ -287,7 +289,11 @@ class ManageTask extends Component <Props> {
         let options:any = [];
         let categories = this.state.categories;
         categories.forEach((category:any, index: number) => {
-            options.push((<option value={category.id} key={index}>{category.name}</option> ));
+            if(this.props.task.category.id === category.id)
+            options.push((<option selected value={category.id} key={index}>{category.name}</option> ));
+            else{
+                options.push((<option  value={category.id} key={index}>{category.name}</option> ));
+            }
         });
         return options;
     }
@@ -344,10 +350,12 @@ class ManageTask extends Component <Props> {
         this.setState({formControls: formControls});
     }
 
+
+
     render() {
         return (<Modal size="lg" show={this.props.isPopupShown} onHide={() => this.props.togglePopup(false)}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add new task</Modal.Title>
+                    <Modal.Title>Edit task</Modal.Title>
                     <p>{this.state.errorMessage}</p>
                 </Modal.Header>
                 <Modal.Body>
@@ -363,7 +371,8 @@ class ManageTask extends Component <Props> {
                         <div className={"col-lg-2"}>
                             <div className="avatar-edit">
                                 <input type="file" id="taskImageUpload" disabled={this.state.formControls.images.length === 6}
-                                       onChange={(event: any) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}/>
+                                       onChange={(event: any) => this.onFileChangeHandler((event.target as HTMLInputElement).files)}
+                                       />
                                 <label htmlFor="taskImageUpload" style={{opacity: (this.state.formControls.images.length === 6 ? "0.2" : "1")}}>
                                     <i style={{marginTop: "10px"}} className={"fas fa-camera"}/>
                                 </label>
@@ -373,6 +382,7 @@ class ManageTask extends Component <Props> {
                             <div className="form-group">
                                 <label>Category</label>
                                 <select className="form-control" name="priority" onChange={(event: any) => this.onChangeHandler(event, "category")}>
+                                    <option/>
                                     {this.renderOptionsForSelect()}
                                 </select>
                             </div>
@@ -391,7 +401,7 @@ class ManageTask extends Component <Props> {
                             <div className="form-group">
                                 <label>Participants</label>
                                 <NumericInput className={"form-control " + (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'validation' : '')} onChange={(numeric: any) => this.handleNumericChange(numeric, 'possibleNumberOfParticipants')}
-                                />
+                                              placeholder={this.props.task.numberOfParticipants.toString()}/>
                                 <p style={{display: (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.possibleNumberOfParticipants.errorMessage}</p>
 
                             </div>
@@ -401,7 +411,7 @@ class ManageTask extends Component <Props> {
                                 <label>Task description</label>
                                 <textarea style={{"height": "150px"}} className={"form-control " + (this.state.formControls.description.showValidate ? 'validation' : '')}
                                           value={this.state.formControls.description.value}
-                                          onChange={(event: any) => this.onChangeHandler(event, "description")}  />
+                                          onChange={(event: any) => this.onChangeHandler(event, "description")}/>
                                 <p style={{display: (this.state.formControls.description.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.description.errorMessage}</p>
 
                             </div>
@@ -414,7 +424,7 @@ class ManageTask extends Component <Props> {
                         Close
                     </Button>
                     <Button variant="success" onClick={() => this.onSubmitHandler()}>
-                        Create
+                        Edit
                     </Button>
                 </Modal.Footer>
             </Modal>
