@@ -28,13 +28,15 @@ class Task extends Component<any, IState> {
                 id: 0,
                 lastName: ''
             },
+            photos: [],
             description: '',
             approvedParticipants: 0,
             numberOfParticipants: 0,
             priority: '',
             category: {
                 name: '',
-            }
+            },
+            creationDate: ''
         },
         isTask: true,
         participants: [],
@@ -109,6 +111,21 @@ class Task extends Component<any, IState> {
          }
     }
 
+    renderTaskPhotos = () => {
+        if (this.state.task.photos.length === 0) {
+            return (
+                <Carousel.Item>
+                    <img className="d-block" src={taskImg} alt=""/>
+                </Carousel.Item>
+            );
+        }
+        return this.state.task.photos.map((photoUrl: String , index: number) => (
+            <Carousel.Item key={index}>
+                <img className="d-block" src={photoUrl as any} alt=""/>
+            </Carousel.Item>
+        ));
+    }
+
     render () {
         if (this.state.task.id !== 0) {
             return (
@@ -118,25 +135,10 @@ class Task extends Component<any, IState> {
                             <div className="col-12 col-lg-5">
                                 <div className="task-photos default-task-block">
                                     <Carousel nextIcon={(<i className="fas fa-chevron-right  task-carousel-arrow"/>)}
-                                              prevIcon={(<i className="fas fa-chevron-left  task-carousel-arrow"/>)}>
-                                        <Carousel.Item>
-                                            <img className="d-block w-100" src={taskImg} alt="First slide"/>
-                                        </Carousel.Item>
-                                        <Carousel.Item>
-                                            <img className="d-block w-100" src={taskImg} alt="Second slide"/>
-                                        </Carousel.Item>
-                                        <Carousel.Item>
-                                            <img className="d-block w-100" src={taskImg} alt="Third slide"/>
-                                        </Carousel.Item>
-                                        <Carousel.Item>
-                                            <img className="d-block w-100" src={taskImg} alt="Fourth slide"/>
-                                        </Carousel.Item>
-                                        <Carousel.Item>
-                                            <img className="d-block w-100" src={taskImg} alt="Fifth slide"/>
-                                        </Carousel.Item>
-                                        <Carousel.Item>
-                                            <img className="d-block w-100" src={taskImg} alt="Sixth slide"/>
-                                        </Carousel.Item>
+                                              prevIcon={(<i className="fas fa-chevron-left  task-carousel-arrow"/>)}
+                                              controls={this.state.task.photos.length > 1}
+                                              indicators={this.state.task.photos.length > 1}>
+                                        {this.renderTaskPhotos()}
                                     </Carousel>
                                 </div>
                             </div>

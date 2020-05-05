@@ -6,5 +6,7 @@ export default interface ITask {
     approvedParticipants: number,
     numberOfParticipants: number,
     priority: any,
-    category: any
+    category: any,
+    photos: String[],
+    creationDate: String
 }

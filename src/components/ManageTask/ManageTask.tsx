@@ -371,7 +371,6 @@ class ManageTask extends Component <Props> {
                             <div className="form-group">
                                 <label>Category</label>
                                 <select className="form-control" name="priority" onChange={(event: any) => this.onChangeHandler(event, "category")}>
-                                    <option/>
                                     {this.renderOptionsForSelect()}
                                 </select>
                             </div>
