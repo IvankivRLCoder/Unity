@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.example.utils.CalculatingUtils.calculateTaskPriority;
-
 import static java.lang.Math.toIntExact;
 
 @Service
@@ -82,6 +81,7 @@ public class TaskServiceImpl implements TaskService {
     public PaginationDto<MainTaskDto> getAllTasks(Integer offset, Integer limit, String criteria, String priority,
                                                   String category, String order) {
         List<Task> tasksFromDB = taskDao.getAll();
+        System.out.println(tasksFromDB);
         tasksFromDB.forEach(task -> {
             task.setApprovedParticipants(
                     (int) task.getUserTasks()
@@ -105,6 +105,7 @@ public class TaskServiceImpl implements TaskService {
         List<MainTaskDto> categorySorted = TaskFilter.filterByCategory(criteriaSorted, category, order);
         List<MainTaskDto> prioritySorted = TaskFilter.filterByPriority(categorySorted, priority, order);
         List<MainTaskDto> mainTaskDtos = TaskFilter.initialFilter(prioritySorted, order);
+        System.out.println(mainTaskDtos);
 
         if (limit != null && offset != null) {
             return PaginationUtils.paginate(mainTaskDtos, offset, limit);
@@ -132,11 +133,16 @@ public class TaskServiceImpl implements TaskService {
             throw new UserIsNotCreatorException("User is not creator of task: " + task.getId());
         }
         Task newTask = modelMapper.map(taskDto, Task.class);
-        task.setCategory(newTask.getCategory());
-        task.setCreationDate(newTask.getCreationDate());
-        task.setDescription(newTask.getDescription());
+        if (newTask.getEndDate() != null) {
+            task.setEndDate(newTask.getEndDate());
+        }
+        if (newTask.getDescription() != null) {
+            task.setDescription(newTask.getDescription());
+        }
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
-        task.setTitle(newTask.getTitle());
+        if (newTask.getTitle() != null) {
+            task.setTitle(newTask.getTitle());
+        }
         task.setPhotos(newTask.getPhotos());
         calculateTaskPriority(task);
 

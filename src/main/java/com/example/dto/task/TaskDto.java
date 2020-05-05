@@ -31,7 +31,6 @@ public class TaskDto {
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
-    @Pattern(regexp = "^[a-z A-z]{10,150}$", message = "{description.regex}")
     @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
     private String description;
 
