@@ -181,15 +181,16 @@ class ManageTask extends Component <Props> {
         this.state.formControls.images.forEach((photo: { url: any; }) => {
             photos.push(photo.url);
         });
+        let categoryId:any = parseInt(this.state.formControls.category.value, 10);
         let data = {
             apiKey: Auth.loggedApiKey,
             title: this.state.formControls.title.value,
             description: this.state.formControls.description.value,
             photos: photos,
+            category: categoryId,
             possibleNumberOfParticipants: this.state.formControls.possibleNumberOfParticipants.value,
             endDate: this.parseDate(this.state.formControls.endDate.value)
         };
-        let categoryId:any = parseInt(this.state.formControls.category.value, 10);
         if (isNaN(categoryId))
             categoryId = null;
         if (isValid) {
