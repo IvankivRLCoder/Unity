@@ -87,6 +87,8 @@ export class Main extends Component<any, IState> {
                     priority={task.priority}
                     category={task.category}
                     endDate={task.endDate}
+                    photos={task.photos}
+                    creationDate={task.creationDate}
                 />
             )
         );

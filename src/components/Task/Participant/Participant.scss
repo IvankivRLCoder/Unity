@@ -1,15 +1,14 @@
 @import './public/assets/_vars.scss';
 
 .task-participant-img-wrapper {
-  width: 100%;
-  padding-bottom: 100%;
-  height: 0;
+  width: 80px;
+  height: 80px;
   border-radius: 100%;
   overflow: hidden;
 
   img {
-    width: 100%;
-    transition: 0.3s;
+    min-width: 100%;
+    height:100%;
   }
 }
 .default-task-block.task-participant-block {
@@ -24,11 +23,6 @@
     text-decoration: none;
     color: lighten($default-text-color, 10%);
 
-    img {
-      width: 110%;
-      margin-top: -5%;
-      margin-left: -5%;
-    }
   }
 }
 

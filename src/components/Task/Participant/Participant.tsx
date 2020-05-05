@@ -60,17 +60,19 @@ class Participant extends Component<IProps, IState> {
     }
 
     render() {
+        const avatar = this.props.participant.user.photo ? this.props.participant.user.photo : "/img/avatar.png";
+
         return (
             <div className="card mb-3 default-task-block task-participant-block">
                 <div className="row no-gutters">
-                    <div className="col-1 justify-content-center align-items-center d-flex">
+                    <div className="col-2 col-lg-1 justify-content-center align-items-center d-flex">
                         <div className="task-participant-img-wrapper">
                             <Link className="task-participant-link" to={"/user/" + this.props.participant.user.id}>
-                                <img src="/img/avatar.png" alt=""/>
+                                <img src={avatar} alt=""/>
                             </Link>
                         </div>
                     </div>
-                    <div className="col-11 col-md-9">
+                    <div className="col-10 col-lg-11">
                         <div className="card-body">
                             <h4 className="card-title">
                                 <Link className="task-participant-link" to={"/user/" + this.props.participant.user.id}>
