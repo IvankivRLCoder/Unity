@@ -109,11 +109,19 @@ class Task extends Component<any, IState> {
                             onClick={() => {
                                 this.setState({isShownModalParticipate: true})
                             }}>Participate</button>);
-        } else {
+
+        }
+        if (this.isCreator()==true) {
             return (<button className="btn participate-btn"
+                    onClick={() => {
+                        this.setState({openedModal: true})
+                    }}>Edit task</button>);
+        }else {
+            return (<button className="btn participate-btn"
+                            disabled={true}
                             onClick={() => {
-                                this.setState({openedModal: true})
-                            }}>Edit task</button>);
+                                this.setState({isShownModalParticipate: true})
+                            }}>Participate</button>);
         }
     };
 
