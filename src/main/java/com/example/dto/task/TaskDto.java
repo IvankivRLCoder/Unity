@@ -1,10 +1,5 @@
 package com.example.dto.task;
 
-import com.example.dto.category.MainCategoryDto;
-import com.example.validation.CategoryType;
-import com.example.validation.LocalDateType;
-import com.example.validation.PriorityType;
-import com.example.validation.StatusType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

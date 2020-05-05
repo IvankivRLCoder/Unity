@@ -66,8 +66,7 @@ public class TaskServiceImpl implements TaskService {
         task.setCreationDate(LocalDate.now());
         task.setStatus(Status.PENDING);
         calculateTaskPriority(task);
-        taskDao.save(task);
-        return null;
+        return modelMapper.map(taskDao.save(task), MainTaskDto.class);
     }
 
     @Override
