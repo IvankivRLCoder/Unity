@@ -4,6 +4,7 @@ import com.example.dto.apiKey.ApiKeyDto;
 import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.task.UpdateTaskDto;
 import com.example.error.ApiError;
 import com.example.service.TaskService;
 import com.example.service.impl.AmazonClient;
@@ -58,7 +59,7 @@ public class TaskController {
             @ApiResponse(code = 400, message = "Validation error", response = ApiError.class),
             @ApiResponse(code = 404, message = "Non-existing task id", response = ApiError.class)
     })
-    public MainTaskDto updateTask(@Valid @RequestBody TaskDto taskDto, @PathVariable int id) {
+    public MainTaskDto updateTask(@Valid @RequestBody UpdateTaskDto taskDto, @PathVariable int id) {
         return taskService.updateTask(taskDto, id);
     }
 

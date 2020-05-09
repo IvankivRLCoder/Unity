@@ -8,6 +8,7 @@ import com.example.dto.pagination.PaginationDto;
 import com.example.dto.task.MainTaskDto;
 import com.example.dto.task.MainUserTaskDto;
 import com.example.dto.task.TaskDto;
+import com.example.dto.task.UpdateTaskDto;
 import com.example.dto.user.ParticipantDto;
 import com.example.error.BadCredentialsException;
 import com.example.error.EntityNotFountException;
@@ -124,24 +125,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public MainTaskDto updateTask(TaskDto taskDto, int id) {
+    public MainTaskDto updateTask(UpdateTaskDto taskDto, int id) {
         int userId = userService.getByApiKey(taskDto.getApiKey());
 
         Task task = getByTaskId(id);
         if (task.getCreator().getId() != userId) {
             throw new UserIsNotCreatorException("User is not creator of task: " + task.getId());
         }
-        Task newTask = modelMapper.map(taskDto, Task.class);
-        if (newTask.getEndDate() != null) {
-            task.setEndDate(newTask.getEndDate());
-        }
-        if (newTask.getDescription() != null) {
-            task.setDescription(newTask.getDescription());
-        }
+
+        Category category = getByCategoryId(taskDto.getCategory());
+        TaskDto newTaskDto = modelMapper.map(taskDto, TaskDto.class);
+        Task newTask = modelMapper.map(newTaskDto, Task.class);
+        task.setEndDate(newTask.getEndDate());
+        task.setCategory(category);
+        task.setDescription(newTask.getDescription());
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
-        if (newTask.getTitle() != null) {
-            task.setTitle(newTask.getTitle());
-        }
+        task.setTitle(newTask.getTitle());
         task.setPhotos(newTask.getPhotos());
         calculateTaskPriority(task);
 
@@ -209,6 +208,14 @@ public class TaskServiceImpl implements TaskService {
             throw new EntityNotFountException("User is not found with id = " + id);
         }
         return user;
+    }
+
+    private Category getByCategoryId(int id) {
+        Category category = categoryDao.getById(id);
+        if (category == null) {
+            throw new EntityNotFountException("Category is not found with id = " + id);
+        }
+        return category;
     }
 
 }

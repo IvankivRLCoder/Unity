@@ -15,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ApiModel(description = "Model that represents Task. Used for CREATE requests")
-public class TaskDto {
+@ApiModel(description = "Model that represents Task. Used for UPDATE requests")
+public class UpdateTaskDto {
 
     @NotNull(message = "{task.title.null}")
     @NotBlank(message = "{task.title.blank}")
@@ -40,6 +40,7 @@ public class TaskDto {
     @ApiModelProperty(example = "2020-12-31")
     private String endDate;
 
+    private int category;
 
     @NotNull(message = "{user.api.key.null}")
     @NotBlank(message = "{user.api.key.blank}")
