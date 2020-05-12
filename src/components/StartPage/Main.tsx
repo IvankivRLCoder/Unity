@@ -7,6 +7,7 @@ import Task from './Task/Task';
 import ITask from './Task/ITask';
 import {CONFIG} from "../../config";
 import IFilterParam from "./Task/IFilterParam";
+import DateFormat from "../../utils/DateFormat/DateFormat";
 
 interface IState {
     tasksFromApi: ITask[],
@@ -88,7 +89,7 @@ export class Main extends Component<any, IState> {
                     category={task.category}
                     endDate={task.endDate}
                     photos={task.photos}
-                    creationDate={task.creationDate}
+                    creationDate={new DateFormat().getDefaultDateFormat(task.creationDate)}
                 />
             )
         );

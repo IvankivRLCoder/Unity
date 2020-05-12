@@ -317,7 +317,7 @@ class ManageTask extends Component <Props> {
                 }
             },
             category: {
-                value: ""
+                value: this.state.categories[0]
             },
             endDate: {
                 value: new Date(),

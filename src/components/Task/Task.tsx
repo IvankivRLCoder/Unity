@@ -10,6 +10,7 @@ import IParticipant from "./Participant/IParticipant";
 import Auth from "../../utils/Auth/Auth";
 import ParticipateModal from "./ParticipateModal/ParticipateModal";
 import EditTask from "../EditTask/EditTask";
+import DateFormat from "../../utils/DateFormat/DateFormat"
 
 interface IState {
     openedModal: boolean,
@@ -47,6 +48,13 @@ class Task extends Component<any, IState> {
         isShownModalParticipate: false,
         canUserParticipate: false
     };
+
+    onSaveTask = (task: ITask) => {
+        this.setState({
+            task: task
+        });
+    }
+
     togglePopup = (openedModal: boolean) => {
         this.setState({openedModal: openedModal})
     };
@@ -65,7 +73,11 @@ class Task extends Component<any, IState> {
                 }
             }
             axios(CONFIG.apiServer + 'participants/' + this.props.match.params.id + "/users").then(res1 => {
-                this.setState({participants: res1.data});
+                let participants = res1.data;
+                participants.forEach((participant: IParticipant, index: number) => {
+                    participants[index].participationDate = new DateFormat().getDefaultDateFormat(participants[index].participationDate);
+                });
+                this.setState({participants: participants});
             });
 
         }).catch(error => {
@@ -96,6 +108,7 @@ class Task extends Component<any, IState> {
 
     onSuccessParticipate = (participant: IParticipant) => {
         const participants: IParticipant[] = [...this.state.participants];
+        participant.participationDate = new DateFormat().getDefaultDateFormat(participant.participationDate);
         participants.push(participant);
         this.setState({
             participants: participants,
@@ -185,7 +198,7 @@ class Task extends Component<any, IState> {
                             </div>
                         </div>
                     </div>
-                    <EditTask task={this.state.task} togglePopup={this.togglePopup} isPopupShown={this.state.openedModal}/>
+                    <EditTask onSaveTask={this.onSaveTask} task={this.state.task} togglePopup={this.togglePopup} isPopupShown={this.state.openedModal}/>
                 </div>
             );
         } else if (this.state.isTask) {

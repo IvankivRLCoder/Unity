@@ -72,7 +72,7 @@ class Participant extends Component<IProps, IState> {
                             </Link>
                         </div>
                     </div>
-                    <div className="col-10 col-lg-11">
+                    <div className="col-8 col-lg-9">
                         <div className="card-body">
                             <h4 className="card-title">
                                 <Link className="task-participant-link" to={"/user/" + this.props.participant.user.id}>
