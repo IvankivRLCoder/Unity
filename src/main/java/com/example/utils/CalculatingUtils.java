@@ -4,13 +4,14 @@ import com.example.model.Priority;
 import com.example.model.Task;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class CalculatingUtils {
 
     public static void calculateTaskPriority(Task task) {
-        LocalDate creationDate = task.getCreationDate();
+        LocalDate creationDate = task.getCreationDate().toLocalDate();
         LocalDate endDate = task.getEndDate();
 
         int possibleNumberOfParticipants = task.getPossibleNumberOfParticipants();

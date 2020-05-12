@@ -23,6 +23,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,16 +57,18 @@ public class TaskServiceImpl implements TaskService {
         }
         Task task = modelMapper.map(taskDto, Task.class);
         Set<String> photos = new HashSet<>();
-        taskDto.getPhotos().forEach(photo -> {
-            photos.add(amazonClient.uploadFile(photo));
-        });
+//        taskDto.getPhotos().forEach(photo -> {
+//            photos.add(amazonClient.uploadFile(photo));
+//        });
         if (categoryId == null)
             task.setCategory(null);
         else
             task.setCategory(categoryDao.getById(toIntExact(categoryId)));
         task.setPhotos(photos);
         task.setCreator(getByUserId(userId));
-        task.setCreationDate(LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String time = LocalDateTime.now().format(formatter);
+        task.setCreationDate(LocalDateTime.parse(time, formatter));
         task.setStatus(Status.PENDING);
         calculateTaskPriority(task);
         return modelMapper.map(taskDao.save(task), MainTaskDto.class);
@@ -171,7 +175,6 @@ public class TaskServiceImpl implements TaskService {
                 .quantity(0)
                 .entitiesLeft(0)
                 .build();
-
     }
 
     @Override

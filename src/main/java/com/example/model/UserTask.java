@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Data
@@ -27,7 +28,7 @@ public class UserTask implements Serializable {
     private Task task;
 
     @Column(name = "participation_date")
-    private LocalDate participationDate;
+    private LocalDateTime participationDate;
 
     @Column(name = "comment")
     private String comment;

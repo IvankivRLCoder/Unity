@@ -26,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -74,8 +76,8 @@ public class UserServiceImpl implements UserService {
     public MainUserDto updateUser(UpdateUserDto userDto) {
         int id = getByApiKey(userDto.getApiKey());
         User oldUser = getById(id);
-        if (userDto.getPhoto() != null)
-            oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
+//        if (userDto.getPhoto() != null)
+//            oldUser.setPhoto(amazonClient.uploadFile(userDto.getPhoto()));
         oldUser.setFirstName(userDto.getFirstName());
         oldUser.setLastName(userDto.getLastName());
         oldUser.setAboutUser(userDto.getAboutUser());
@@ -101,7 +103,9 @@ public class UserServiceImpl implements UserService {
         Task participatedTask = getTaskById(taskId);
         userTask.setUser(participant);
         userTask.setTask(participatedTask);
-        userTask.setParticipationDate(LocalDate.now());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String time = LocalDateTime.now().format(formatter);
+        userTask.setParticipationDate(LocalDateTime.parse(time, formatter));
 
         if (userTask.getTask().getStatus().getTaskStatus().equalsIgnoreCase("done")) {
             throw new TaskIsNotActiveException("Task is not active.");
