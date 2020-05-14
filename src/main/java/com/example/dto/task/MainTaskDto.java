@@ -29,4 +29,5 @@ public class MainTaskDto {
     private TaskCategoryDto category;
     private TaskUserDto creator;
     private Set<String> photos;
+
 }

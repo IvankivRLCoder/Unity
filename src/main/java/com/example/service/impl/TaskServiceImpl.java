@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -57,9 +56,9 @@ public class TaskServiceImpl implements TaskService {
         }
         Task task = modelMapper.map(taskDto, Task.class);
         Set<String> photos = new HashSet<>();
-//        taskDto.getPhotos().forEach(photo -> {
-//            photos.add(amazonClient.uploadFile(photo));
-//        });
+        taskDto.getPhotos().forEach(photo -> {
+            photos.add(amazonClient.uploadFile(photo));
+        });
         if (categoryId == null)
             task.setCategory(null);
         else
@@ -119,7 +118,6 @@ public class TaskServiceImpl implements TaskService {
                 .quantity(0)
                 .entitiesLeft(0)
                 .build();
-
     }
 
     @Override
@@ -140,12 +138,14 @@ public class TaskServiceImpl implements TaskService {
         Category category = getByCategoryId(taskDto.getCategory());
         TaskDto newTaskDto = modelMapper.map(taskDto, TaskDto.class);
         Task newTask = modelMapper.map(newTaskDto, Task.class);
+        Set<String> photos = new HashSet<>();
+        newTask.getPhotos().forEach(photo -> photos.add(amazonClient.uploadFile(photo)));
         task.setEndDate(newTask.getEndDate());
         task.setCategory(category);
         task.setDescription(newTask.getDescription());
         task.setPossibleNumberOfParticipants(newTask.getPossibleNumberOfParticipants());
         task.setTitle(newTask.getTitle());
-        task.setPhotos(newTask.getPhotos());
+        task.setPhotos(photos);
         calculateTaskPriority(task);
 
         return modelMapper.map(taskDao.update(task), MainTaskDto.class);

@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -46,6 +48,6 @@ public class UpdateTaskDto {
     @NotBlank(message = "{user.api.key.blank}")
     private String apiKey;
 
-    private List<String> photos = new ArrayList<>();
+    private Set<String> photos = new HashSet<>();
 
 }

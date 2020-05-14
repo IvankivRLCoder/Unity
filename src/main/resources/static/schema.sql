@@ -1,70 +1,70 @@
-CREATE TABLE IF NOT EXISTS volunteer
-(
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    first_name    VARCHAR(20)        NOT NULL,
-    last_name     VARCHAR(20),
-    email         VARCHAR(30) UNIQUE NOT NULL,
-    password      VARCHAR(30)        NOT NULL,
-    phone         VARCHAR(11) UNIQUE,
-    about_user    VARCHAR(2048),
-    photo         VARCHAR(2048),
-    date_of_birth DATE,
-    trust_level   VARCHAR(32),
-    is_blocked    BOOLEAN DEFAULT FALSE,
-    api_key       VARCHAR(50) UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS category
-(
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    category_name VARCHAR(50)  NOT NULL,
-    description   VARCHAR(128) NOT NULL
-);
-
-
-ALTER TABLE category
-    ADD UNIQUE (category_name, description);
-
-CREATE TABLE IF NOT EXISTS task
-(
-    id            INT AUTO_INCREMENT PRIMARY KEY,
-    description   VARCHAR(255) NOT NULL,
-    creation_date DATE,
-    title         VARCHAR(30)  NOT NULL,
-    participants  INT,
-    status        VARCHAR(30)  NOT NULL ,
-    end_date      DATE         NOT NULL,
-    priority      VARCHAR(30),
-    category_id   INT          NOT NULL,
-    creator_id    INT          NOT NULL,
-
-    CONSTRAINT fk_category
-        FOREIGN KEY (category_id)
-            REFERENCES category (id),
-
-    CONSTRAINT fk_creator
-        FOREIGN KEY (creator_id)
-            REFERENCES volunteer (id)
-
-);
-
-CREATE TABLE IF NOT EXISTS volunteer_task
-(
-    volunteer_id       INT  NOT NULL,
-    task_id            INT  NOT NULL,
-    participation_date DATE NOT NULL,
-    comment            VARCHAR(50),
-    approved           BOOLEAN DEFAULT FALSE,
-    PRIMARY KEY (volunteer_id, task_id),
-
-    CONSTRAINT fk_volunteer_volunteer_task
-        FOREIGN KEY (volunteer_id)
-            REFERENCES volunteer (id),
-
-    CONSTRAINT fk_task_volunteer_task
-        FOREIGN KEY (task_id)
-            REFERENCES task (id)
-);
+-- CREATE TABLE IF NOT EXISTS volunteer
+-- (
+--     id            INT AUTO_INCREMENT PRIMARY KEY,
+--     first_name    VARCHAR(20)        NOT NULL,
+--     last_name     VARCHAR(20),
+--     email         VARCHAR(30) UNIQUE NOT NULL,
+--     password      VARCHAR(30)        NOT NULL,
+--     phone         VARCHAR(11) UNIQUE,
+--     about_user    VARCHAR(2048),
+--     photo         VARCHAR(2048),
+--     date_of_birth DATE,
+--     trust_level   VARCHAR(32),
+--     is_blocked    BOOLEAN DEFAULT FALSE,
+--     api_key       VARCHAR(50) UNIQUE
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS category
+-- (
+--     id            INT AUTO_INCREMENT PRIMARY KEY,
+--     category_name VARCHAR(50)  NOT NULL,
+--     description   VARCHAR(128) NOT NULL
+-- );
+--
+--
+-- ALTER TABLE category
+--     ADD UNIQUE (category_name, description);
+--
+-- CREATE TABLE IF NOT EXISTS task
+-- (
+--     id            INT AUTO_INCREMENT PRIMARY KEY,
+--     description   VARCHAR(255) NOT NULL,
+--     creation_date DATETIME,
+--     title         VARCHAR(30)  NOT NULL,
+--     participants  INT,
+--     status        VARCHAR(30)  NOT NULL ,
+--     end_date      DATE         NOT NULL,
+--     priority      VARCHAR(30),
+--     category_id   INT          NOT NULL,
+--     creator_id    INT          NOT NULL,
+--
+--     CONSTRAINT fk_category
+--         FOREIGN KEY (category_id)
+--             REFERENCES category (id),
+--
+--     CONSTRAINT fk_creator
+--         FOREIGN KEY (creator_id)
+--             REFERENCES volunteer (id)
+--
+-- );
+--
+-- CREATE TABLE IF NOT EXISTS volunteer_task
+-- (
+--     volunteer_id       INT  NOT NULL,
+--     task_id            INT  NOT NULL,
+--     participation_date DATETIME NOT NULL,
+--     comment            VARCHAR(50),
+--     approved           BOOLEAN DEFAULT FALSE,
+--     PRIMARY KEY (volunteer_id, task_id),
+--
+--     CONSTRAINT fk_volunteer_volunteer_task
+--         FOREIGN KEY (volunteer_id)
+--             REFERENCES volunteer (id),
+--
+--     CONSTRAINT fk_task_volunteer_task
+--         FOREIGN KEY (task_id)
+--             REFERENCES task (id)
+-- );
 
 INSERT INTO category (id, category_name, description)
 VALUES (1, 'Disabled', 'Helping disabled people'),

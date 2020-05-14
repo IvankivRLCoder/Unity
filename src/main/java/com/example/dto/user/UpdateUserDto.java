@@ -33,8 +33,6 @@ public class UpdateUserDto {
     @ApiModelProperty(example = "Lorem ipsum kfldkflsdkl", notes = "Minimum 2 characters, maximum 255, not blank")
     private String aboutUser;
 
-    @NotNull(message = "{user.photo.null}")
-    @NotBlank(message = "{user.photo.blank}")
     private String photo;
 
     @NotNull(message = "{user.api.key.null}")
