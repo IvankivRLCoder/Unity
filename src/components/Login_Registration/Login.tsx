@@ -167,18 +167,6 @@ class Login extends Component {
                                         <input type="submit" id="signin" className="form-submit" value="Log in"/>
                                     </div>
                                 </form>
-                                <div className="social-login">
-                                    <span className="social-label">Or login with</span>
-                                    <ul className="socials">
-                                        <li><a href="https://uk-ua.facebook.com"><i className="fab fa-facebook-f"/></a>
-                                        </li>
-                                        <li><a href="https://twitter.com/?lang=uk"><i className="fab fa-twitter"/></a>
-                                        </li>
-                                        <li><a href="https://www.google.com.ua/?hl=ru"><i
-                                            className="fab fa-google"/></a>
-                                        </li>
-                                    </ul>
-                                </div>
                                 <span className="login-label">Not a member?</span>
                                 <Link to="/registration" className="signin-image-link">Sign Up</Link>
                             </div>

@@ -11,16 +11,14 @@ import NumericInput from 'react-numeric-input';
 import Validation from "../../utils/Validation/Validation";
 import ITask from "../StartPage/Task/ITask";
 
-
-
-
 type Props = {
     task: ITask;
     togglePopup: Function;
     isPopupShown: any;
+    onSaveTask: Function;
 }
 
-class ManageTask extends Component <Props> {
+class EditTask extends Component <Props> {
 
     state: { [id: string]: any; } = {
         formControls: {
@@ -47,7 +45,7 @@ class ManageTask extends Component <Props> {
                 }
             },
             category: {
-                value: this.props.task.category
+                value: this.props.task.category.id
             },
             endDate: {
                 value: new Date(this.props.task.endDate),
@@ -181,30 +179,26 @@ class ManageTask extends Component <Props> {
         this.state.formControls.images.forEach((photo: { url: any; }) => {
             photos.push(photo.url);
         });
-        let categoryId:any = parseInt(this.state.formControls.category.value, 10);
+
         let data = {
             apiKey: Auth.loggedApiKey,
             title: this.state.formControls.title.value,
             description: this.state.formControls.description.value,
-            photos: photos,
             category: this.state.formControls.category.value,
+            photos: photos,
             possibleNumberOfParticipants: this.state.formControls.possibleNumberOfParticipants.value,
             endDate: this.parseDate(this.state.formControls.endDate.value)
         };
-        if (isNaN(categoryId))
-            categoryId = null;
         if (isValid) {
-            console.log(data);
             axios({
                 url: CONFIG.apiServer + 'tasks/'+this.props.task.id.toString(),
                 data: data,
                 method: 'put',
                 params: {
-                    userId: Auth.loggedUserId,
-                    categoryId: categoryId
+                    userId: Auth.loggedUserId
                 }
-            }).then(() => {
-                this.clearModal();
+            }).then((res) => {
+                this.props.onSaveTask(res.data);
                 this.props.togglePopup(false);
             }).catch();
         }
@@ -298,60 +292,6 @@ class ManageTask extends Component <Props> {
         return options;
     }
 
-    clearModal() {
-        let formControls = {
-            title: {
-                value: "",
-                valid: false,
-                errorMessage: 'Enter valid name',
-                showValidate: false,
-                validation: {
-                    required: true,
-                    minLength: 5,
-                    maxLength: 100
-                }
-            },
-            description: {
-                value: "",
-                valid: false,
-                errorMessage: 'Enter valid description',
-                showValidate: false,
-                validation: {
-                    required: true,
-                    minLength: 10,
-                    maxLength: 150
-                }
-            },
-            category: {
-                value: ""
-            },
-            endDate: {
-                value: new Date(),
-                valid: false,
-                errorMessage: 'Enter valid end date',
-                showValidate: false,
-                validation: {
-                    minDate: new Date()
-                }
-            },
-            possibleNumberOfParticipants: {
-                value: '',
-                valid: false,
-                errorMessage: 'Enter valid number of participants',
-                showValidate: false,
-                validation: {
-                    minNumber: 2,
-                    maxNumber: 100
-                }
-            },
-            images: []
-        };
-        this.props.togglePopup(false);
-        this.setState({formControls: formControls});
-    }
-
-
-
     render() {
         return (<Modal size="lg" show={this.props.isPopupShown} onHide={() => this.props.togglePopup(false)}>
                 <Modal.Header closeButton>
@@ -382,7 +322,6 @@ class ManageTask extends Component <Props> {
                             <div className="form-group">
                                 <label>Category</label>
                                 <select className="form-control" name="priority" onChange={(event: any) => this.onChangeHandler(event, "category")}>
-                                    <option/>
                                     {this.renderOptionsForSelect()}
                                 </select>
                             </div>
@@ -401,7 +340,7 @@ class ManageTask extends Component <Props> {
                             <div className="form-group">
                                 <label>Participants</label>
                                 <NumericInput className={"form-control " + (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'validation' : '')} onChange={(numeric: any) => this.handleNumericChange(numeric, 'possibleNumberOfParticipants')}
-                                              placeholder={this.props.task.numberOfParticipants.toString()}/>
+                                              value={this.props.task.numberOfParticipants.toString()}/>
                                 <p style={{display: (this.state.formControls.possibleNumberOfParticipants.showValidate ? 'block' : 'none'), color: "red"}}>{this.state.formControls.possibleNumberOfParticipants.errorMessage}</p>
 
                             </div>
@@ -420,7 +359,7 @@ class ManageTask extends Component <Props> {
                     {this.renderPhotos()}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={() => this.clearModal()}>
+                    <Button variant="danger" onClick={() => this.props.togglePopup(false)}>
                         Close
                     </Button>
                     <Button variant="success" onClick={() => this.onSubmitHandler()}>
@@ -433,4 +372,4 @@ class ManageTask extends Component <Props> {
 
 }
 
-export default ManageTask;
+export default EditTask;
