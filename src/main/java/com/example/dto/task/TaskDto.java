@@ -26,7 +26,7 @@ public class TaskDto {
 
     @NotBlank(message = "{task.description.blank}")
     @NotNull(message = "{task.description.null}")
-    @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 150, not blank")
+    @ApiModelProperty(example = "Helping old granny with some housework", notes = "Minimum 15 characters, maximum 1500, not blank")
     private String description;
 
     @Min(value = 2, message = "{task.participants.minimum}")
