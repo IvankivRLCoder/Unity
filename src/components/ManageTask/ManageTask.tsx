@@ -41,7 +41,7 @@ class ManageTask extends Component <Props> {
                 validation: {
                     required: true,
                     minLength: 10,
-                    maxLength: 150
+                    maxLength: 1500
                 }
             },
             category: {
