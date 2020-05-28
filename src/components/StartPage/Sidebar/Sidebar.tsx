@@ -93,8 +93,8 @@ export class Sidebar extends Component<any, IState> {
                             <label htmlFor="filterBlockOrderParam">Order:</label>
                             <select className="form-control" name="order" value={this.state.filterParams.order}
                                     onChange={event => this.handleChange(event)}>
-                                <option value="asc">From New</option>
-                                <option value="desc">From Old</option>
+                                <option value="desc">From New</option>
+                                <option value="asc">From Old</option>
                             </select>
                         </div>
                         <div className="form-group">

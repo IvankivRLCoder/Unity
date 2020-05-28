@@ -3,7 +3,7 @@ class DateFormat {
         const date = new Date(str + "Z");
 
         return this.getTwoSymbolsNumber(date.getDate()) +
-            "/" + this.getTwoSymbolsNumber(date.getMonth()) +
+            "/" + this.getTwoSymbolsNumber(date.getMonth() + 1) +
             "/" + this.getTwoSymbolsNumber(date.getFullYear()) +
             " " + this.getTwoSymbolsNumber(date.getHours()) +
             ":" + this.getTwoSymbolsNumber(date.getMinutes()) +

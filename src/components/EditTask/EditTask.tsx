@@ -363,7 +363,7 @@ class EditTask extends Component <Props> {
                         Close
                     </Button>
                     <Button variant="success" onClick={() => this.onSubmitHandler()}>
-                        Edit
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -28,6 +28,10 @@
     "react-scripts": "3.4.0",
     "typescript": "^3.7.5"
   },
+  "resolutions": {
+    "@babel/preset-env": "7.5.5",
+    "**/@babel/runtime": "7.5.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

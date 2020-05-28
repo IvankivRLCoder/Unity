@@ -64,15 +64,15 @@ class Participant extends Component<IProps, IState> {
 
         return (
             <div className="card mb-3 default-task-block task-participant-block">
-                <div className="row no-gutters">
-                    <div className="col-2 col-lg-1 justify-content-center align-items-center d-flex">
+                <div className="row">
+                    <div className="col-3 col-xl-2 justify-content-center align-items-center d-flex">
                         <div className="task-participant-img-wrapper">
                             <Link className="task-participant-link" to={"/user/" + this.props.participant.user.id}>
                                 <img src={avatar} alt=""/>
                             </Link>
                         </div>
                     </div>
-                    <div className="col-8 col-lg-9">
+                    <div className="col-7 col-xl-8">
                         <div className="card-body">
                             <h4 className="card-title">
                                 <Link className="task-participant-link" to={"/user/" + this.props.participant.user.id}>
@@ -83,7 +83,7 @@ class Participant extends Component<IProps, IState> {
                             <p className="card-text"><small className="text-muted">{this.props.participant.participationDate}</small></p>
                         </div>
                     </div>
-                    <div className="col-md-2 d-flex align-items-center justify-content-center">
+                    <div className="col-2 d-flex align-items-center justify-content-center">
                         {this.generateApproveButton()}
                     </div>
                     {this.renderCommentBlock()}
